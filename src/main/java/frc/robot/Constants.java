@@ -63,4 +63,5 @@ public class Constants {
     public static final String HOOD_OFFSET_ENTRY_NAME = "Hood Offset";
     public static final String DRIVER_READOUT_TAB_NAME = "Driver Readout";
     public static final int CLAW_MOTOR_PORT = 17;
+    public static final int CANDLE_ID = 27;
 }

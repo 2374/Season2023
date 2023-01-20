@@ -4,11 +4,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-// import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.CharacterizeDrivetrainCommand;
 import frc.robot.commands.automationCommands.AutoBalenceCommand;
-// import frc.robot.commands.ZeroClimberCommand;
-// import frc.robot.commands.ZeroHoodCommand;
 import frc.robot.util.DriverReadout;
 
 public class Robot extends TimedRobot {
@@ -25,6 +23,9 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         SmartDashboard.putData("Auto Balence", new AutoBalenceCommand(m_robotContainer).withTimeout(5));
+        SmartDashboard.putData("Signal Cone", new InstantCommand(m_robotContainer.getLightsSubsystem()::turnOnYellow));
+        SmartDashboard.putData("Signal Cube", new InstantCommand(m_robotContainer.getLightsSubsystem()::turnOnPurple));
+        SmartDashboard.putData("Signal Off", new InstantCommand(m_robotContainer.getLightsSubsystem()::turnOff));
     }
 
     @Override

@@ -11,8 +11,7 @@ import frc.robot.util.AutonomousTrajectories;
 
 public class RobotContainer {
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
-    // private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
-    // private final ClawSubsystem m_clawSubsystem = new ClawSubsystem();
+    private final LightsSubsystem m_lightsSubsystem = new LightsSubsystem();
 
     private final AutonomousChooser autonomousChooser = new AutonomousChooser(
             new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS));
@@ -22,6 +21,7 @@ public class RobotContainer {
     public RobotContainer() {
         CommandScheduler.getInstance().registerSubsystem(m_drivetrainSubsystem);
         // CommandScheduler.getInstance().registerSubsystem(m_armSubsystem);
+
         resetDrive();
 
         configureButtonBindings();
@@ -73,5 +73,9 @@ public class RobotContainer {
 
     public DrivetrainSubsystem getDrivetrain() {
         return m_drivetrainSubsystem;
+    }
+
+    public LightsSubsystem getLightsSubsystem() {
+        return m_lightsSubsystem;
     }
 }
