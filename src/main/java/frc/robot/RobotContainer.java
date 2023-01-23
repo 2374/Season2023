@@ -11,7 +11,7 @@ import frc.robot.util.AutonomousTrajectories;
 
 public class RobotContainer {
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
-    private final LightsSubsystem m_lightsSubsystem = new LightsSubsystem();
+    // private final LightsSubsystem m_lightsSubsystem = new LightsSubsystem();
 
     private final AutonomousChooser autonomousChooser = new AutonomousChooser(
             new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS));
@@ -75,7 +75,7 @@ public class RobotContainer {
         return m_drivetrainSubsystem;
     }
 
-    public LightsSubsystem getLightsSubsystem() {
-        return m_lightsSubsystem;
-    }
+    // public LightsSubsystem getLightsSubsystem() {
+    // return m_lightsSubsystem;
+    // }
 }

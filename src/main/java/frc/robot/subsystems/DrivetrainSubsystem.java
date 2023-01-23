@@ -1,16 +1,17 @@
 package frc.robot.subsystems;
 
 import java.util.Map;
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix.sensors.Pigeon2;
-import com.kauailabs.navx.frc.AHRS;
 import com.swervedrivespecialties.swervelib.Mk3ModuleConfiguration;
 import com.swervedrivespecialties.swervelib.Mk3SwerveModuleHelper;
 // import com.swervedrivespecialties.swervelib.Mk4ModuleConfiguration;
 // import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,16 +22,18 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.util.PhotonCameraWrapper;
 import frc.robot.util.Utilities;
 import frc.common.control.*;
 import frc.common.math.Vector2;
@@ -44,7 +47,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public static final double SPEED_MULTIPLIER = .1;
     public static final double MAX_VOLTAGE = 12.0;
     public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0
-            * SdsModuleConfigurations.MK4_L3.getDriveReduction() * SdsModuleConfigurations.MK4_L3.getWheelDiameter()
+            * SdsModuleConfigurations.MK3_FAST.getDriveReduction() * SdsModuleConfigurations.MK3_FAST.getWheelDiameter()
             * Math.PI;
     public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND
             / Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
@@ -76,7 +79,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator estimator;
 
     private final Pigeon2 pigeon = new Pigeon2(DRIVETRAIN_PIGEON_ID, Constants.DRIVETRAIN_CAN_BUS_NAME);
-    private final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP for error managment
 
     private final SwerveModule frontLeftModule;
     private final SwerveModule frontRightModule;
@@ -90,7 +92,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private double motorOutputLimiter;
 
+    private final Field2d m_field = new Field2d();
+
+    private final PhotonCameraWrapper pcw;
+
     public DrivetrainSubsystem() {
+        pcw = new PhotonCameraWrapper();
         getGyroscopeRotation().getRadians();
         // Mk4ModuleConfiguration mk4ModuleConfiguration = new Mk4ModuleConfiguration();
         // mk4ModuleConfiguration.setDriveCurrentLimit(DRIVETRAIN_CURRENT_LIMIT);
@@ -175,6 +182,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         });
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees());
         pigeon.configFactoryDefault();
+        SmartDashboard.putData("Field", m_field);
     }
 
     private Rotation2d getGyroscopeRotation() {
@@ -246,6 +254,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         estimator.update(getGyroscopeRotation(), getSwerveModulePositions());
 
+        // Vision stuff
+        Optional<EstimatedRobotPose> result = pcw.getEstimatedGlobalPose(estimator.getEstimatedPosition());
+        if (result.isPresent()) {
+            EstimatedRobotPose camPose = result.get();
+            estimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+            m_field.getObject("Cam Est Pos").setPose(camPose.estimatedPose.toPose2d());
+        } else {
+            m_field.getObject("Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
+        }
+        m_field.getObject("Actual Pos").setPose(getPose());
+        m_field.setRobotPose(estimator.getEstimatedPosition());
+
         var driveSignalOpt = follower.update(Utilities.poseToRigidTransform(getPose()),
                 new Vector2(currentVelocity.vxMetersPerSecond, currentVelocity.vyMetersPerSecond),
                 currentVelocity.omegaRadiansPerSecond, Timer.getFPGATimestamp(), Robot.kDefaultPeriod);
@@ -275,10 +295,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 states[3].angle.getRadians());
     }
 
+    public void simulationPeriodic() {
+
+    }
+
     public void autoBalenceTick() {
         double theta;
-        double pitch = (pigeon.getPitch() + m_navx.getPitch()) / 2;
-        double roll = (pigeon.getRoll() + m_navx.getRoll()) / 2;
+        double pitch = pigeon.getPitch();
+        double roll = pigeon.getRoll();
         if (Math.abs(roll) <= 2)
             if (Math.abs(pitch) <= 2)
                 theta = Double.NaN;
@@ -289,11 +313,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
         else
             theta = Math.toDegrees(Math
                     .atan(Math.sin(Math.toRadians(roll)) / Math.sin(Math.toRadians(pitch))));
-        System.out.println("Average Pitch" + pitch);
-        System.out.println("Average Roll" + roll);
-        System.out.println(theta);
+        System.out.println("Pitch - " + pitch);
+        System.out.println("Roll - " + roll);
+        System.out.println("Theta - " + theta);
         SmartDashboard.putNumber("Theta", theta);
         if (theta != Double.NaN)
-            drive(new ChassisSpeeds(Math.sin(Math.toRadians(theta)), Math.cos(Math.toRadians(theta)), -theta));
+            drive(new ChassisSpeeds(Math.sin(Math.toRadians(theta)) / 2, Math.cos(Math.toRadians(theta)) / 2, -theta));
     }
 }

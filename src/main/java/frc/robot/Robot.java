@@ -22,10 +22,20 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
+        // drivetrain
         SmartDashboard.putData("Auto Balence", new AutoBalenceCommand(m_robotContainer).withTimeout(5));
-        SmartDashboard.putData("Signal Cone", new InstantCommand(m_robotContainer.getLightsSubsystem()::turnOnYellow));
-        SmartDashboard.putData("Signal Cube", new InstantCommand(m_robotContainer.getLightsSubsystem()::turnOnPurple));
-        SmartDashboard.putData("Signal Off", new InstantCommand(m_robotContainer.getLightsSubsystem()::turnOff));
+
+        // lights
+        // SmartDashboard.putData("Signal Cone", new
+        // InstantCommand(m_robotContainer.getLightsSubsystem()::turnOnYellow,
+        // m_robotContainer.getLightsSubsystem()));
+        // SmartDashboard.putData("Signal Cube", new
+        // InstantCommand(m_robotContainer.getLightsSubsystem()::turnOnPurple,
+        // m_robotContainer.getLightsSubsystem()));
+        // SmartDashboard.putData("Signal Off", new
+        // InstantCommand(m_robotContainer.getLightsSubsystem()::turnOff,
+        // m_robotContainer.getLightsSubsystem()));
+
     }
 
     @Override
@@ -35,7 +45,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        // robotContainer.getShooter().setHoodBrakeMode(false);
+        // lights
+        // m_robotContainer.getLightsSubsystem().turnOff();
     }
 
     @Override
