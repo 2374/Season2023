@@ -24,12 +24,14 @@ public class AlignWithAprilTagCommand extends CommandBase {
                                                                                                           // if all tags
                                                                                                           // exist on
                                                                                                           // field
+        double targetAngle = Math.toDegrees(target.pose.getRotation().getAngle());
         m_drivetrainSubsystem.getFollower().follow(new Trajectory(
                 new SimplePathBuilder(
                         new Vector2(m_drivetrainSubsystem.getPose().getX(), m_drivetrainSubsystem.getPose().getY()),
                         Rotation2.fromDegrees(m_drivetrainSubsystem.getPose().getRotation().getDegrees()))
-                        .lineTo(new Vector2(target.pose.getX() - 1, target.pose.getY()), // 1 meter to left of tag
-                                Rotation2.fromDegrees(Math.toDegrees(target.pose.getRotation().getAngle()) + 180))
+                        .lineTo(new Vector2(target.pose.getX() + Math.cos(targetAngle),
+                                target.pose.getY() + Math.sin(targetAngle)), // 1 meter away from face
+                                Rotation2.fromDegrees(targetAngle + 180))
                         .build(),
                 DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS, 0));
     }
