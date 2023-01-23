@@ -1,29 +1,27 @@
 package frc.robot.commands.automationCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
+import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class AutoBalenceCommand extends CommandBase {
 
-    private final RobotContainer m_robotContainer;
+    private final DrivetrainSubsystem m_drivetrainSubsystem;
 
-    public AutoBalenceCommand(RobotContainer robotContainer) {
-        this.m_robotContainer = robotContainer;
-        addRequirements(m_robotContainer.getDrivetrain());
+    public AutoBalenceCommand(DrivetrainSubsystem drivetrainSubsystem) {
+        this.m_drivetrainSubsystem = drivetrainSubsystem;
+        addRequirements(m_drivetrainSubsystem);
     }
 
     @Override
     public void initialize() {
-        m_robotContainer.getDrivetrain().getDefaultCommand().end(true);
     }
 
     @Override
     public void execute() {
-        m_robotContainer.getDrivetrain().autoBalenceTick();
+        m_drivetrainSubsystem.autoBalenceTick();
     }
 
     @Override
     public void end(boolean interupted) {
-        m_robotContainer.resetDrive();
     }
 }

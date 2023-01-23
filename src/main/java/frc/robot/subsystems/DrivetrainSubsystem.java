@@ -295,8 +295,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 states[3].angle.getRadians());
     }
 
-    public void simulationPeriodic() {
-
+    public PhotonCameraWrapper getPhotonCameraWrapper() {
+        return pcw;
     }
 
     public void autoBalenceTick() {

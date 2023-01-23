@@ -1,5 +1,8 @@
 package frc.robot;
 
+import java.util.ArrayList;
+
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -84,4 +87,5 @@ public class Constants {
     public static final String CAMERA_NAME = "photonCamera";
     public static final Transform3d ROBOT_TO_CAMERA = new Transform3d(new Translation3d(0, 0, 0.5),
             new Rotation3d(0, 0, 0));
+    public static final Pose3d TAG_1_POSE3D = new Pose3d(FIELD_LENGTH, FIELD_WIDTH / 2, 0, new Rotation3d(0, 0, 180));
 }

@@ -35,7 +35,6 @@ public class AutonomousTrajectories {
                         .arcTo(new Vector2(-1, 1), new Vector2(0, 1), Rotation2.fromDegrees(270))
                         .arcTo(new Vector2(0, 0), new Vector2(0, 1), Rotation2.fromDegrees(0)).build(),
                 trajectoryConstraints, SAMPLE_DISTANCE);
-
     }
 
     public Trajectory getOneMeterF() {

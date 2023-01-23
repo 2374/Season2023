@@ -23,7 +23,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         // drivetrain
-        SmartDashboard.putData("Auto Balence", new AutoBalenceCommand(m_robotContainer).withTimeout(5));
+        SmartDashboard.putData("Auto Balence", new AutoBalenceCommand(m_robotContainer.getDrivetrain()).withTimeout(5));
 
         // lights
         // SmartDashboard.putData("Signal Cone", new
