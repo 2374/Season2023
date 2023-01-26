@@ -30,7 +30,7 @@ public class AlignWithAprilTagCommand extends CommandBase {
                         new Vector2(m_drivetrainSubsystem.getPose().getX(), m_drivetrainSubsystem.getPose().getY()),
                         Rotation2.fromDegrees(m_drivetrainSubsystem.getPose().getRotation().getDegrees()))
                         .lineTo(new Vector2(target.pose.getX() + Math.cos(targetAngle),
-                                target.pose.getY() + Math.sin(targetAngle)), // 1 meter away from face
+                                target.pose.getY() + Math.sin(targetAngle) + -.5), // 1 meter away from face
                                 Rotation2.fromDegrees(targetAngle + 180))
                         .build(),
                 DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS, 0));

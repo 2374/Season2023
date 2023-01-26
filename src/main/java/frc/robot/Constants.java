@@ -31,7 +31,7 @@ public class Constants {
     // -Math.toRadians(127.64 + 180.0); // color tag
     // public static final double FRONT_LEFT_MODULE_STEER_OFFSET =
     // -Math.toRadians(90.87 + 180.0);
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(10.27); // label tag
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(190.27); // label tag
 
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 2; // 3;
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 12; // 4;
@@ -40,7 +40,7 @@ public class Constants {
     // -Math.toRadians(65.96 + 180.0); // color tag
     // public static final double FRONT_RIGHT_MODULE_STEER_OFFSET =
     // -Math.toRadians(35.59 + 180.0);
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(81.88); // label tag
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(261.88); // label tag
 
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 3; // 5;
     public static final int BACK_LEFT_MODULE_STEER_MOTOR = 13; // 6;
@@ -49,7 +49,7 @@ public class Constants {
     // -Math.toRadians(93.24 + 180.0); // color tag
     // public static final double BACK_LEFT_MODULE_STEER_OFFSET =
     // -Math.toRadians(110.21 + 180.0);
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(306.02); // label tag
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(126.02); // label tag
 
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 4; // 1;
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 14; // 2;
@@ -84,8 +84,8 @@ public class Constants {
     public static final double FIELD_WIDTH = Units.feetToMeters(27);
 
     // Vision Stuff
-    public static final String CAMERA_NAME = "photonCamera";
-    public static final Transform3d ROBOT_TO_CAMERA = new Transform3d(new Translation3d(0, 0, 0.5),
+    public static final String CAMERA_NAME = "photonvision";
+    public static final Transform3d ROBOT_TO_CAMERA = new Transform3d(new Translation3d(.3, 0, 0.2),
             new Rotation3d(0, 0, 0));
-    public static final Pose3d TAG_1_POSE3D = new Pose3d(FIELD_LENGTH, FIELD_WIDTH / 2, 0, new Rotation3d(0, 0, 180));
+    public static final Pose3d TAG_1_POSE3D = new Pose3d(FIELD_LENGTH, FIELD_WIDTH / 2, 4.5, new Rotation3d(0, 0, 180));
 }

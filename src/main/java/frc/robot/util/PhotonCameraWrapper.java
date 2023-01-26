@@ -27,13 +27,12 @@ public class PhotonCameraWrapper {
         tagList.add(tag1);
         fieldLayout = new AprilTagFieldLayout(tagList, Constants.FIELD_LENGTH,
                 Constants.FIELD_WIDTH);
-        // try {
-        // AprilTagFieldLayout fieldLayout =
-        // AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
-        // } catch (IOException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
+        try {
+            fieldLayout = AprilTagFieldLayout
+                    .loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         camera = new PhotonCamera(Constants.CAMERA_NAME);
         estimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera,
                 Constants.ROBOT_TO_CAMERA);

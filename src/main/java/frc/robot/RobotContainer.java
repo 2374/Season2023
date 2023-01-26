@@ -39,6 +39,7 @@ public class RobotContainer {
 
     public void configureButtonBindings() {
         new Trigger(m_controller::getBackButton).onTrue(new InstantCommand(m_drivetrainSubsystem::zeroRotation));
+        new Trigger(m_controller::getYButton).onTrue(new InstantCommand(m_drivetrainSubsystem::printAngles));
     }
 
     private static double deadband(double value, double tolerance) {

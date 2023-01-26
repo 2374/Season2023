@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -44,7 +43,7 @@ import frc.common.util.HolonomicFeedforward;
 import static frc.robot.Constants.*;
 
 public class DrivetrainSubsystem extends SubsystemBase {
-    public static final double SPEED_MULTIPLIER = .1;
+    public static final double SPEED_MULTIPLIER = .3;
     public static final double MAX_VOLTAGE = 12.0;
     public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0
             * SdsModuleConfigurations.MK3_FAST.getDriveReduction() * SdsModuleConfigurations.MK3_FAST.getWheelDiameter()
@@ -98,6 +97,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public DrivetrainSubsystem() {
         pcw = new PhotonCameraWrapper();
+        pigeon.configMountPose(pigeon.getYaw(), pigeon.getPitch(), pigeon.getRoll());
         getGyroscopeRotation().getRadians();
         // Mk4ModuleConfiguration mk4ModuleConfiguration = new Mk4ModuleConfiguration();
         // mk4ModuleConfiguration.setDriveCurrentLimit(DRIVETRAIN_CURRENT_LIMIT);
@@ -255,15 +255,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
         estimator.update(getGyroscopeRotation(), getSwerveModulePositions());
 
         // Vision stuff
-        Optional<EstimatedRobotPose> result = pcw.getEstimatedGlobalPose(estimator.getEstimatedPosition());
-        if (result.isPresent()) {
-            EstimatedRobotPose camPose = result.get();
-            estimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
-            m_field.getObject("Cam Est Pos").setPose(camPose.estimatedPose.toPose2d());
-        } else {
-            m_field.getObject("Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
-        }
-        m_field.getObject("Actual Pos").setPose(getPose());
+        // Optional<EstimatedRobotPose> result =
+        // pcw.getEstimatedGlobalPose(estimator.getEstimatedPosition());
+        // if (result.isPresent()) {
+        // EstimatedRobotPose camPose = result.get();
+        // estimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), // REMOVE
+        // THE ROTATION PART
+        // camPose.timestampSeconds);
+        // m_field.getObject("Cam Est Pos").setPose(camPose.estimatedPose.toPose2d());
+        // } else {
+        // m_field.getObject("Cam Est Pos").setPose(new Pose2d(-100, -100, new
+        // Rotation2d()));
+        // }
+        // m_field.getObject("Actual Pos").setPose(getPose());
+
         m_field.setRobotPose(estimator.getEstimatedPosition());
 
         var driveSignalOpt = follower.update(Utilities.poseToRigidTransform(getPose()),
@@ -273,11 +278,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
         if (driveSignalOpt.isPresent()) {
             HolonomicDriveSignal driveSignal = driveSignalOpt.get();
             if (driveSignalOpt.get().isFieldOriented()) {
-                chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveSignal.getTranslation().x,
-                        driveSignal.getTranslation().y, driveSignal.getRotation(), getPose().getRotation());
+                chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveSignal.getTranslation().x * SPEED_MULTIPLIER,
+                        driveSignal.getTranslation().y * SPEED_MULTIPLIER, driveSignal.getRotation() * SPEED_MULTIPLIER,
+                        getPose().getRotation());
             } else {
-                chassisSpeeds = new ChassisSpeeds(driveSignal.getTranslation().x, driveSignal.getTranslation().y,
-                        driveSignal.getRotation());
+                chassisSpeeds = new ChassisSpeeds(driveSignal.getTranslation().x * SPEED_MULTIPLIER,
+                        driveSignal.getTranslation().y * SPEED_MULTIPLIER,
+                        driveSignal.getRotation() * SPEED_MULTIPLIER);
             }
         }
 
@@ -312,12 +319,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
             theta = 90;
         else
             theta = Math.toDegrees(Math
-                    .atan(Math.sin(Math.toRadians(roll)) / Math.sin(Math.toRadians(pitch))));
+                    .atan(Math.sin(Math.toRadians(roll)) / Math.sin(Math.toRadians(pitch)))) + 90;
         System.out.println("Pitch - " + pitch);
         System.out.println("Roll - " + roll);
         System.out.println("Theta - " + theta);
         SmartDashboard.putNumber("Theta", theta);
         if (theta != Double.NaN)
-            drive(new ChassisSpeeds(Math.sin(Math.toRadians(theta)) / 2, Math.cos(Math.toRadians(theta)) / 2, -theta));
+            drive(new ChassisSpeeds(Math.sin(Math.toRadians(theta)) * SPEED_MULTIPLIER,
+                    Math.cos(Math.toRadians(theta)) * SPEED_MULTIPLIER, 0));
+    }
+
+    public void printAngles() {
+        System.out.println("Pitch - " + pigeon.getPitch());
+        System.out.println("Roll - " + pigeon.getRoll());
     }
 }

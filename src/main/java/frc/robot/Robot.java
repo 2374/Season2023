@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.CharacterizeDrivetrainCommand;
+import frc.robot.commands.automationCommands.AlignWithAprilTagCommand;
 import frc.robot.commands.automationCommands.AutoBalenceCommand;
 import frc.robot.util.DriverReadout;
 
@@ -13,9 +14,10 @@ public class Robot extends TimedRobot {
     private final RobotContainer m_robotContainer = new RobotContainer();
     private Command m_autonomousCommand;
 
-    @SuppressWarnings("unused")
-    private final CharacterizeDrivetrainCommand characterizeCommand = new CharacterizeDrivetrainCommand(
-            m_robotContainer.getDrivetrain());
+    // @SuppressWarnings("unused")
+    // private final CharacterizeDrivetrainCommand characterizeCommand = new
+    // CharacterizeDrivetrainCommand(
+    // m_robotContainer.getDrivetrain());
 
     @SuppressWarnings("unused")
     private final DriverReadout driverReadout = new DriverReadout(m_robotContainer);
@@ -24,6 +26,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         // drivetrain
         SmartDashboard.putData("Auto Balence", new AutoBalenceCommand(m_robotContainer.getDrivetrain()).withTimeout(5));
+        SmartDashboard.putData("Align With Apriltag", new AlignWithAprilTagCommand(m_robotContainer.getDrivetrain()));
 
         // lights
         // SmartDashboard.putData("Signal Cone", new
