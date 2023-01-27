@@ -20,8 +20,8 @@ public class Constants {
     public static final int FEEDER_SENSOR_FULL_PORT = 0; // 1;
     public static final int FEEDER_SENSOR_ENTRY_PORT = 0;
 
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = Units.inchesToMeters(19.75);
-    public static final double DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(19.5);
+    public static final double DRIVETRAIN_LENGTH_METERS = Units.inchesToMeters(19.75);
+    public static final double DRIVETRAIN_WIDTH_METERS = Units.inchesToMeters(19.5);
     public static final int DRIVETRAIN_PIGEON_ID = 29; // 1;
 
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; // 7;
