@@ -6,12 +6,15 @@ import frc.robot.Constants;
 
 public class LightsSubsystem extends SubsystemBase {
 
-    CANdle candle;
+    private CANdle candle;
+
+    private static LightsSubsystem instance;
 
     public LightsSubsystem() {
         candle = new CANdle(Constants.CANDLE_ID, Constants.CANIVORE_CAN_BUS_NAME);
         candle.configLEDType(CANdle.LEDStripType.RGB);
         candle.configBrightnessScalar(0.5);
+        instance = this;
     }
 
     public void turnOnYellow() {
@@ -30,4 +33,10 @@ public class LightsSubsystem extends SubsystemBase {
         candle.setLEDs(0, 0, 0);
     }
 
+    public static LightsSubsystem getLightsInstance() {
+        if (instance == null) {
+            instance = new LightsSubsystem();
+        }
+        return instance;
+    }
 }
