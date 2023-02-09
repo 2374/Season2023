@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
@@ -22,10 +21,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         System.out.println("container created");
-        // CommandScheduler.getInstance().registerSubsystem(m_drivetrainSubsystem);
-        CommandScheduler.getInstance().registerSubsystem(m_ArmSubsystem);
-        // CommandScheduler.getInstance().registerSubsystem(m_ManipulatorSubsystem);
-
+    
         resetDrive();
 
         configureButtonBindings();
