@@ -22,43 +22,27 @@ public class Constants {
 
     public static final double DRIVETRAIN_LENGTH_METERS = Units.inchesToMeters(19.75);
     public static final double DRIVETRAIN_WIDTH_METERS = Units.inchesToMeters(19.5);
-    public static final int DRIVETRAIN_PIGEON_ID = 29; // 1;
+    public static final int DRIVETRAIN_PIGEON_ID = 29;
 
-    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; // 7;
-    public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 11; // 8;
-    public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 21; // 4;
-    // public static final double FRONT_LEFT_MODULE_STEER_OFFSET =
-    // -Math.toRadians(127.64 + 180.0); // color tag
-    // public static final double FRONT_LEFT_MODULE_STEER_OFFSET =
-    // -Math.toRadians(90.87 + 180.0);
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(190.27); // label tag
+    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1;
+    public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 11;
+    public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 21;
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(190.27); // Swervee Module Offset
 
-    public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 2; // 3;
-    public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 12; // 4;
-    public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 22; // 3;
-    // public static final double FRONT_RIGHT_MODULE_STEER_OFFSET =
-    // -Math.toRadians(65.96 + 180.0); // color tag
-    // public static final double FRONT_RIGHT_MODULE_STEER_OFFSET =
-    // -Math.toRadians(35.59 + 180.0);
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(261.88); // label tag
+    public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 2;
+    public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 12;
+    public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 22;
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(261.88); // Swervee Module Offset
 
-    public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 3; // 5;
-    public static final int BACK_LEFT_MODULE_STEER_MOTOR = 13; // 6;
-    public static final int BACK_LEFT_MODULE_STEER_ENCODER = 23; // 2;
-    // public static final double BACK_LEFT_MODULE_STEER_OFFSET =
-    // -Math.toRadians(93.24 + 180.0); // color tag
-    // public static final double BACK_LEFT_MODULE_STEER_OFFSET =
-    // -Math.toRadians(110.21 + 180.0);
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(126.02); // label tag
+    public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 3;
+    public static final int BACK_LEFT_MODULE_STEER_MOTOR = 13;
+    public static final int BACK_LEFT_MODULE_STEER_ENCODER = 23;
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(126.02); // Swervee Module Offset
 
-    public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 4; // 1;
-    public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 14; // 2;
-    public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 24; // 1;
-    // public static final double BACK_RIGHT_MODULE_STEER_OFFSET =
-    // -Math.toRadians(146.59 + 180.0); // color tag
-    // public static final double BACK_RIGHT_MODULE_STEER_OFFSET =
-    // -Math.toRadians(78.13 + 180.0);
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(263.67); // label tag
+    public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 4;
+    public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 14;
+    public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 24;
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(263.67); // Swervee Module Offset
 
     public static final int HOOD_MOTOR_PORT = 0; // 14;
     public static final int FLYWHEEL_PRIMARY_MOTOR_PORT = 0; // 15;
