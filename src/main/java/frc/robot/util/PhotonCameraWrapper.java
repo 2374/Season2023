@@ -20,6 +20,7 @@ public class PhotonCameraWrapper {
     public PhotonCamera camera;
     public PhotonPoseEstimator estimator;
     public AprilTagFieldLayout fieldLayout;
+    public PhotonTrackedTarget lastTarget;
 
     public PhotonCameraWrapper() {
         final AprilTag tag1 = new AprilTag(1, Constants.TAG_1_POSE3D);
@@ -39,7 +40,11 @@ public class PhotonCameraWrapper {
     }
 
     public PhotonTrackedTarget getBestTarget() {
-        return camera.getLatestResult().getBestTarget();
+        PhotonTrackedTarget t = camera.getLatestResult().getBestTarget();
+        if (lastTarget != null && t.getPoseAmbiguity() >= .2) {
+            return lastTarget;
+        }
+        return t;
     }
 
     public AprilTagFieldLayout getFieldLayout() {

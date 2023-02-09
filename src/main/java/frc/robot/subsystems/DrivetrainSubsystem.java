@@ -250,7 +250,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         estimator.update(getGyroscopeRotation(), getSwerveModulePositions());
 
-        // Vision stuff
+        // Vision stuff // No Field relative until need to align // do not uncomment
         // Optional<EstimatedRobotPose> result =
         // pcw.getEstimatedGlobalPose(estimator.getEstimatedPosition());
         // if (result.isPresent()) {

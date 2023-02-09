@@ -12,6 +12,8 @@ import frc.robot.util.AutonomousTrajectories;
 public class RobotContainer {
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
     // private final LightsSubsystem m_lightsSubsystem = new LightsSubsystem();
+    private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+    private final ManipulatorSubsystem m_ManipulatorSubsystem = new ManipulatorSubsystem();
 
     private final AutonomousChooser autonomousChooser = new AutonomousChooser(
             new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS));
@@ -19,8 +21,10 @@ public class RobotContainer {
     private final XboxController m_controller = new XboxController(Constants.CONTROLLER_PORT);
 
     public RobotContainer() {
-        CommandScheduler.getInstance().registerSubsystem(m_drivetrainSubsystem);
-        // CommandScheduler.getInstance().registerSubsystem(m_armSubsystem);
+        System.out.println("container created");
+        // CommandScheduler.getInstance().registerSubsystem(m_drivetrainSubsystem);
+        CommandScheduler.getInstance().registerSubsystem(m_ArmSubsystem);
+        // CommandScheduler.getInstance().registerSubsystem(m_ManipulatorSubsystem);
 
         resetDrive();
 
@@ -74,6 +78,14 @@ public class RobotContainer {
 
     public DrivetrainSubsystem getDrivetrain() {
         return m_drivetrainSubsystem;
+    }
+
+    public ArmSubsystem getArmSubsystem() {
+        return m_ArmSubsystem;
+    }
+
+    public ManipulatorSubsystem getManipulatorSubsystem() {
+        return m_ManipulatorSubsystem;
     }
 
     // public LightsSubsystem getLightsSubsystem() {

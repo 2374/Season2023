@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
 import frc.robot.commands.*;
+import frc.robot.commands.automationCommands.AutoHorizontalIntake;
+import frc.robot.commands.automationCommands.TopConeScoreCommand;
+import frc.robot.commands.helperCommands.AlignArmFrontGroundCommand;
 import frc.common.control.Path;
 import frc.common.control.Trajectory;
 
@@ -22,6 +25,7 @@ public class AutonomousChooser {
         autonomousModeChooser.setDefaultOption("1 meter F", AutonomousMode.ONE_METER_F);
         autonomousModeChooser.addOption("1 meter B", AutonomousMode.ONE_METER_B);
         autonomousModeChooser.addOption("Figure Eight", AutonomousMode.FIGURE_EIGHT);
+        autonomousModeChooser.addOption("Red Outer No Charge", AutonomousMode.RED_OUTER_NO_CHARGE);
     }
 
     public SendableChooser<AutonomousMode> getModeChooser() {
@@ -54,9 +58,38 @@ public class AutonomousChooser {
         resetRobotPose(command, container, trajectories.getFigureEight());
 
         command.addCommands(follow(container, trajectories.getFigureEight()));
-        command.addCommands(follow(container, null));
 
         return command;
+    }
+
+    public Command getRedOuterNoChargeCommand(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        resetRobotPose(command, container, trajectories.getFourPointSevenMeterF());
+
+        topConeScore(command, container);
+        fourPointSevenMeterWithFrontArmMovement(command, container);
+        intakeGroundThenRest(command, container);
+        command.addCommands(follow(container,
+                trajectories.getFourPointNineFiveMeterB()),
+                follow(container, trajectories.getSideOneMeter()));
+        topConeScore(command, container);
+
+        return command;
+    }
+
+    private void topConeScore(SequentialCommandGroup command, RobotContainer container) {
+        command.addCommands(new TopConeScoreCommand(container.getArmSubsystem(), container.getManipulatorSubsystem()));
+    }
+
+    private void fourPointSevenMeterWithFrontArmMovement(SequentialCommandGroup command, RobotContainer container) {
+        command.addCommands(follow(container, trajectories.getFourPointSevenMeterF())
+                .alongWith(new AlignArmFrontGroundCommand(container.getArmSubsystem())));
+    }
+
+    private void intakeGroundThenRest(SequentialCommandGroup command, RobotContainer container) {
+        command.addCommands(new AutoHorizontalIntake(container.getDrivetrain(), container.getArmSubsystem(),
+                container.getManipulatorSubsystem()));
     }
 
     // private void shootAtTarget(SequentialCommandGroup command, RobotContainer
@@ -104,11 +137,15 @@ public class AutonomousChooser {
                 return getOneMeterBAuto(container);
             case FIGURE_EIGHT:
                 return getFigureEightAuto(container);
+            case RED_OUTER_NO_CHARGE:
+                return getRedOuterNoChargeCommand(container);
+            default:
+                break;
         }
         return new InstantCommand();
     }
 
     private enum AutonomousMode {
-        ONE_METER_F, ONE_METER_B, FIGURE_EIGHT
+        ONE_METER_F, ONE_METER_B, FIGURE_EIGHT, RED_OUTER_NO_CHARGE
     }
 }

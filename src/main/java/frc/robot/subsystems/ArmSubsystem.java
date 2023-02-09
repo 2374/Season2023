@@ -25,4 +25,9 @@ public class ArmSubsystem extends SubsystemBase {
         shoulderGroup = new MotorControllerGroup(leftShoulderMotor, rightShoulderMotorTwo);
     }
 
+    @Override
+    public void periodic() {
+        System.out.println("Why");
+    }
+
 }

@@ -9,11 +9,14 @@ import frc.common.math.Vector2;
 
 public class AutonomousTrajectories {
 
-    private static final double SAMPLE_DISTANCE = Units.inchesToMeters(0.1);
+    public static final double SAMPLE_DISTANCE = Units.inchesToMeters(0.1);
 
     private final Trajectory oneMeterF;
     private final Trajectory oneMeterB;
     private final Trajectory figureEight;
+    private final Trajectory fourPointSevenMeterF;
+    private final Trajectory fourPointNineFiveMeterB;
+    private final Trajectory sideOneMeter;
 
     public AutonomousTrajectories(TrajectoryConstraint[] trajectoryConstraints) {
         oneMeterF = new Trajectory(
@@ -35,6 +38,18 @@ public class AutonomousTrajectories {
                         .arcTo(new Vector2(-1, 1), new Vector2(0, 1), Rotation2.fromDegrees(270))
                         .arcTo(new Vector2(0, 0), new Vector2(0, 1), Rotation2.fromDegrees(0)).build(),
                 trajectoryConstraints, SAMPLE_DISTANCE);
+        fourPointSevenMeterF = new Trajectory(
+                new SimplePathBuilder(new Vector2(0, 0), Rotation2.fromDegrees(0))
+                        .lineTo(new Vector2(4.7, 0), Rotation2.fromDegrees(0)).build(),
+                trajectoryConstraints, SAMPLE_DISTANCE);
+        fourPointNineFiveMeterB = new Trajectory(
+                new SimplePathBuilder(new Vector2(0, 0), Rotation2.fromDegrees(0))
+                        .lineTo(new Vector2(-4.95, 0), Rotation2.fromDegrees(0)).build(),
+                trajectoryConstraints, SAMPLE_DISTANCE);
+        sideOneMeter = new Trajectory(
+                new SimplePathBuilder(new Vector2(0, 0), Rotation2.fromDegrees(0))
+                        .lineTo(new Vector2(0, 1), Rotation2.fromDegrees(0)).build(),
+                trajectoryConstraints, SAMPLE_DISTANCE);
     }
 
     public Trajectory getOneMeterF() {
@@ -49,4 +64,15 @@ public class AutonomousTrajectories {
         return figureEight;
     }
 
+    public Trajectory getFourPointSevenMeterF() {
+        return fourPointSevenMeterF;
+    }
+
+    public Trajectory getFourPointNineFiveMeterB() {
+        return fourPointNineFiveMeterB;
+    }
+
+    public Trajectory getSideOneMeter() {
+        return sideOneMeter;
+    }
 }
