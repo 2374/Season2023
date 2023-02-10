@@ -1,6 +1,5 @@
 package frc.robot;
 
-
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -13,8 +12,8 @@ public class Constants {
     public static final String DRIVETRAIN_CAN_BUS_NAME = CANIVORE_CAN_BUS_NAME;
 
     // IO Controller definitions
-    public static final int CONTROLLER_PORT = 0;  // Drivers Controller
-    public static final int GAMEPIECE_PORT  = 1;  // Ordanence operators controller
+    public static final int CONTROLLER_PORT = 0; // Drivers Controller
+    public static final int GAMEPIECE_PORT = 1; // Ordanence operators controller
 
     // ARM Subsystem
     public static final int ARM_MOTOR_PORT = 8;
@@ -26,11 +25,11 @@ public class Constants {
     // DRIVETRAIN Subsystem
     public static final double DRIVETRAIN_LENGTH_METERS = Units.inchesToMeters(19.75);
     public static final double DRIVETRAIN_WIDTH_METERS = Units.inchesToMeters(19.5);
-    public static final int    DRIVETRAIN_PIGEON_ID = 29;
-    //  Front Left Swerve Module
-    public static final int    FRONT_LEFT_MODULE_DRIVE_MOTOR = 1;
-    public static final int    FRONT_LEFT_MODULE_STEER_MOTOR = 11;
-    public static final int    FRONT_LEFT_MODULE_STEER_ENCODER = 21;
+    public static final int DRIVETRAIN_PIGEON_ID = 29;
+    // Front Left Swerve Module
+    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1;
+    public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 11;
+    public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 21;
     public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(190.27); // Swervee Module Offset
     // Front Right Swerve Module
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 2;
@@ -63,7 +62,10 @@ public class Constants {
     public static final int CLAW_MOTOR_PORT = 17;
 
     // CHASSIS Subsystem
-    public static final int CANDLE_ID = 27;  // the CAN ID for the FASTFD CAN Bus
+    public static final int CANDLE_ID = 27; // the CAN ID for the FASTFD CAN Bus
+
+    // MANIPULATOR Subsystem
+    public static final int MANIPULATOR_MOTOR_PORT = 19;
 
     // Field measurements
     public static final double FIELD_LENGTH = Units.feetToMeters(54);
@@ -74,4 +76,5 @@ public class Constants {
     public static final Transform3d ROBOT_TO_CAMERA = new Transform3d(new Translation3d(.3, 0, 0.2),
             new Rotation3d(0, 0, 0));
     public static final Pose3d TAG_1_POSE3D = new Pose3d(FIELD_LENGTH, FIELD_WIDTH / 2, 4.5, new Rotation3d(0, 0, 180));
+
 }
