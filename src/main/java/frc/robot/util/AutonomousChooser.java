@@ -24,8 +24,19 @@ public class AutonomousChooser {
 
         autonomousModeChooser.setDefaultOption("1 meter F", AutonomousMode.ONE_METER_F);
         autonomousModeChooser.addOption("1 meter B", AutonomousMode.ONE_METER_B);
-        autonomousModeChooser.addOption("Figure Eight", AutonomousMode.FIGURE_EIGHT);
+        //autonomousModeChooser.addOption("Figure Eight", AutonomousMode.FIGURE_EIGHT);
         autonomousModeChooser.addOption("Red Outer No Charge", AutonomousMode.RED_OUTER_NO_CHARGE);
+        autonomousModeChooser.addOption("Red Outer Charge", AutonomousMode.RED_OUTER_CHARGE);
+        autonomousModeChooser.addOption("Red Middle No Charge", AutonomousMode.RED_MIDDLE_NO_CHARGE);
+        autonomousModeChooser.addOption("Red Middle Charge", AutonomousMode.RED_MIDDLE_CHARGE);
+        autonomousModeChooser.addOption("Red Inner No Charge", AutonomousMode.RED_INNER_NO_CHARGE);
+        autonomousModeChooser.addOption("Red Inner  Charge", AutonomousMode.RED_INNER_CHARGE);
+        autonomousModeChooser.addOption("Blue Outer No Charge", AutonomousMode.BLUE_OUTER_NO_CHARGE);
+        autonomousModeChooser.addOption("Blue Outer Charge", AutonomousMode.BLUE_OUTER_CHARGE);
+        autonomousModeChooser.addOption("Blue Middle No Charge", AutonomousMode.BLUE_MIDDLE_NO_CHARGE);
+        autonomousModeChooser.addOption("Blue Middle Charge", AutonomousMode.BLUE_MIDDLE_CHARGE);
+        autonomousModeChooser.addOption("Blue Inner No Charge", AutonomousMode.BLUE_INNER_NO_CHARGE);
+        autonomousModeChooser.addOption("Blue Inner Charge", AutonomousMode.BLUE_INNER_CHARGE);
     }
 
     public SendableChooser<AutonomousMode> getModeChooser() {
@@ -65,15 +76,37 @@ public class AutonomousChooser {
     public Command getRedOuterNoChargeCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
+        // assumes robot starts in front of the outer scoring poles
         resetRobotPose(command, container, trajectories.getFourPointSevenMeterF());
-
+        // score the cone on the top row
         topConeScore(command, container);
+        // move the arm to rest while moving to pickup the cube 4.7 meters toward the middle of the field
         fourPointSevenMeterWithFrontArmMovement(command, container);
+        // intake the cone from the ground
         intakeGroundThenRest(command, container);
+        // move back toward the scoring area and slide toward the middle to align to score
         command.addCommands(follow(container,
                 trajectories.getFourPointNineFiveMeterB()),
                 follow(container, trajectories.getSideOneMeter()));
+        // score the top row of the 2nd cone in from the outer wall
         topConeScore(command, container);
+
+        return command;
+    }
+
+    public Command getRedOuterChargeCommand(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        // assumes robot starts in front of the outer scoring poles
+        resetRobotPose(command, container, trajectories.getFourPointSevenMeterF());
+        // score the cone on the top row
+        topConeScore(command, container);
+        // move 4.7 meters toward the center of the field so as to clear the charge station
+        fourPointSevenMeterWithFrontArmMovement(command, container);
+        // move 2 meters toward the middle of the charge station to align for climbing
+        // move 1.5 meeters to get onto charge station
+        // auto balance
+        
 
         return command;
     }
@@ -129,6 +162,7 @@ public class AutonomousChooser {
                 start.getPosition().y, new Rotation2d(start.getRotation().toRadians())))));
     }
 
+    // Handler to determine what command was requested for the autonmous routine to execute
     public Command getCommand(RobotContainer container) {
         switch (autonomousModeChooser.getSelected()) {
             case ONE_METER_F:
@@ -139,6 +173,28 @@ public class AutonomousChooser {
                 return getFigureEightAuto(container);
             case RED_OUTER_NO_CHARGE:
                 return getRedOuterNoChargeCommand(container);
+            case RED_OUTER_CHARGE:
+                return getRedOuterChargeCommand(container);
+            case RED_MIDDLE_NO_CHARGE:
+                return getRedOuterNoChargeCommand(container);
+            case RED_MIDDLE_CHARGE:
+                return getRedOuterChargeCommand(container);
+            case RED_INNER_NO_CHARGE:
+                return getRedOuterNoChargeCommand(container);
+            case RED_INNER_CHARGE:
+                return getRedOuterChargeCommand(container);
+            case BLUE_OUTER_NO_CHARGE:
+                return getRedOuterChargeCommand(container);
+            case BLUE_OUTER_CHARGE:
+                return getRedOuterChargeCommand(container);
+            case BLUE_MIDDLE_NO_CHARGE:
+                return getRedOuterNoChargeCommand(container);
+            case BLUE_MIDDLE_CHARGE:
+                return getRedOuterChargeCommand(container);
+            case BLUE_INNER_NO_CHARGE:
+                return getRedOuterNoChargeCommand(container);
+            case BLUE_INNER_CHARGE:
+                return getRedOuterChargeCommand(container);
             default:
                 break;
         }
@@ -146,6 +202,7 @@ public class AutonomousChooser {
     }
 
     private enum AutonomousMode {
-        ONE_METER_F, ONE_METER_B, FIGURE_EIGHT, RED_OUTER_NO_CHARGE
+        ONE_METER_F, ONE_METER_B, FIGURE_EIGHT, RED_OUTER_NO_CHARGE, RED_OUTER_CHARGE, RED_MIDDLE_NO_CHARGE, RED_MIDDLE_CHARGE, RED_INNER_NO_CHARGE, RED_INNER_CHARGE,
+        BLUE_OUTER_NO_CHARGE, BLUE_OUTER_CHARGE, BLUE_MIDDLE_NO_CHARGE, BLUE_MIDDLE_CHARGE, BLUE_INNER_NO_CHARGE, BLUE_INNER_CHARGE
     }
 }
