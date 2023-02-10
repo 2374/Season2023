@@ -14,8 +14,8 @@ public class AutonomousTrajectories {
     private final Trajectory oneMeterF;
     private final Trajectory oneMeterB;
     private final Trajectory figureEight;
-    private final Trajectory fourPointSevenMeterF;
-    private final Trajectory fourPointNineFiveMeterB;
+    private final Trajectory fourPointSevenMeterB;
+    private final Trajectory fourPointNineFiveMeterF;
     private final Trajectory sideOneMeter;
 
     public AutonomousTrajectories(TrajectoryConstraint[] trajectoryConstraints) {
@@ -38,17 +38,17 @@ public class AutonomousTrajectories {
                         .arcTo(new Vector2(-1, 1), new Vector2(0, 1), Rotation2.fromDegrees(270))
                         .arcTo(new Vector2(0, 0), new Vector2(0, 1), Rotation2.fromDegrees(0)).build(),
                 trajectoryConstraints, SAMPLE_DISTANCE);
-        fourPointSevenMeterF = new Trajectory(
+        fourPointSevenMeterB = new Trajectory(
                 new SimplePathBuilder(new Vector2(0, 0), Rotation2.fromDegrees(0))
                         .lineTo(new Vector2(4.7, 0), Rotation2.fromDegrees(0)).build(),
                 trajectoryConstraints, SAMPLE_DISTANCE);
-        fourPointNineFiveMeterB = new Trajectory(
+        fourPointNineFiveMeterF = new Trajectory(
                 new SimplePathBuilder(new Vector2(0, 0), Rotation2.fromDegrees(0))
                         .lineTo(new Vector2(-4.95, 0), Rotation2.fromDegrees(0)).build(),
                 trajectoryConstraints, SAMPLE_DISTANCE);
         sideOneMeter = new Trajectory(
                 new SimplePathBuilder(new Vector2(0, 0), Rotation2.fromDegrees(0))
-                        .lineTo(new Vector2(0, 1), Rotation2.fromDegrees(0)).build(),
+                        .lineTo(new Vector2(0, -2), Rotation2.fromDegrees(0)).build(),
                 trajectoryConstraints, SAMPLE_DISTANCE);
     }
 
@@ -64,12 +64,12 @@ public class AutonomousTrajectories {
         return figureEight;
     }
 
-    public Trajectory getFourPointSevenMeterF() {
-        return fourPointSevenMeterF;
+    public Trajectory getFourPointSevenMeterB() {
+        return fourPointSevenMeterB;
     }
 
-    public Trajectory getFourPointNineFiveMeterB() {
-        return fourPointNineFiveMeterB;
+    public Trajectory getFourPointNineFiveMeterF() {
+        return fourPointNineFiveMeterF;
     }
 
     public Trajectory getSideOneMeter() {

@@ -77,19 +77,20 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         // assumes robot starts in front of the outer scoring poles
-        resetRobotPose(command, container, trajectories.getFourPointSevenMeterF());
+        resetRobotPose(command, container, trajectories.getFourPointNineFiveMeterF());
         // score the cone on the top row
-        topConeScore(command, container);
+        //topConeScore(command, container);
         // move the arm to rest while moving to pickup the cube 4.7 meters toward the middle of the field
-        fourPointSevenMeterWithFrontArmMovement(command, container);
+        command.addCommands(follow(container, trajectories.getFourPointNineFiveMeterF()));
+        //fourPointSevenMeterWithFrontArmMovement(command, container);
         // intake the cone from the ground
-        intakeGroundThenRest(command, container);
+        //  THIS IS BROKEN intakeGroundThenRest(command, container);
         // move back toward the scoring area and slide toward the middle to align to score
         command.addCommands(follow(container,
-                trajectories.getFourPointNineFiveMeterB()),
+                trajectories.getFourPointSevenMeterB()),
                 follow(container, trajectories.getSideOneMeter()));
         // score the top row of the 2nd cone in from the outer wall
-        topConeScore(command, container);
+        // topConeScore(command, container);
 
         return command;
     }
@@ -98,7 +99,7 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         // assumes robot starts in front of the outer scoring poles
-        resetRobotPose(command, container, trajectories.getFourPointSevenMeterF());
+        resetRobotPose(command, container, trajectories.getFourPointSevenMeterB());
         // score the cone on the top row
         topConeScore(command, container);
         // move 4.7 meters toward the center of the field so as to clear the charge station
@@ -116,7 +117,7 @@ public class AutonomousChooser {
     }
 
     private void fourPointSevenMeterWithFrontArmMovement(SequentialCommandGroup command, RobotContainer container) {
-        command.addCommands(follow(container, trajectories.getFourPointSevenMeterF())
+        command.addCommands(follow(container, trajectories.getFourPointSevenMeterB())
                 .alongWith(new AlignArmFrontGroundCommand(container.getArmSubsystem())));
     }
 
