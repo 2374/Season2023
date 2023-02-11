@@ -3,8 +3,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ArmSetpoints;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.util.AutonomousChooser;
 import frc.robot.util.AutonomousTrajectories;
 
@@ -21,7 +23,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         System.out.println("container created");
-    
+
         resetDrive();
 
         configureButtonBindings();
@@ -40,6 +42,8 @@ public class RobotContainer {
     public void configureButtonBindings() {
         new Trigger(m_controller::getBackButton).onTrue(new InstantCommand(m_drivetrainSubsystem::zeroRotation));
         new Trigger(m_controller::getYButton).onTrue(new InstantCommand(m_drivetrainSubsystem::printAngles));
+        new Trigger(m_controller::getBButton)
+                .onTrue(new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.MID_NODE)));
     }
 
     private static double deadband(double value, double tolerance) {

@@ -1,7 +1,7 @@
 package frc.robot.commands.automationCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
 
 public class TopConeScoreCommand extends CommandBase {

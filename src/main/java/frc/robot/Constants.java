@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DutyCycle;
 import frc.robot.subsystems.arm.Setpoint;
 import frc.robot.util.Gains;
 
@@ -80,6 +81,13 @@ public class Constants {
     public static final Transform3d ROBOT_TO_CAMERA = new Transform3d(new Translation3d(.3, 0, 0.2),
             new Rotation3d(0, 0, 0));
     public static final Pose3d TAG_1_POSE3D = new Pose3d(FIELD_LENGTH, FIELD_WIDTH / 2, 4.5, new Rotation3d(0, 0, 180));
+    public static final boolean TEST_MODE = false;
+    public static final int UPPER_ENCODER_ARM = 0;
+    public static final int LOWER_ENCODER_ARM = 0;
+    public static final int UPPER_JOINT_LEFT_MOTOR = 0;
+    public static final int LOWER_JOINT_LEFT_MOTOR = 0;
+    public static final int LOWER_JOINT_RIGHT_MOTOR = 0;
+    public static final int UPPER_JOINT_RIGHT_MOTOR = 0;
 
     public static final class ArmConstants {
 

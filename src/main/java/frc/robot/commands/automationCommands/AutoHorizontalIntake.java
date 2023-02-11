@@ -8,7 +8,7 @@ import frc.common.math.Vector2;
 import frc.robot.commands.FollowTrajectoryCommand;
 import frc.robot.commands.helperCommands.ControlIntakeCommand;
 import frc.robot.commands.helperCommands.armToRestCommand;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
 

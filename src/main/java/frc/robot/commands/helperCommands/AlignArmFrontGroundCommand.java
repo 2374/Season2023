@@ -1,7 +1,7 @@
 package frc.robot.commands.helperCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.arm.ArmSubsystem;
 
 public class AlignArmFrontGroundCommand extends CommandBase {
 

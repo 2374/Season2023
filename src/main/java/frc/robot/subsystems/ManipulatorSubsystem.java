@@ -33,6 +33,10 @@ public class ManipulatorSubsystem extends SubsystemBase {
         motor.stopMotor();
     }
 
+    public double getDistance() {
+        return sensor.getRange();
+    }
+
     public void periodic() {
         // System.out.println("Sensor="+sensor.getRange());
     }
