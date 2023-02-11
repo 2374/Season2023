@@ -7,7 +7,9 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ManipulatorSubsystem;
 
 public class IntakeGroundFrontHorizontalCommand extends SequentialCommandGroup {
-    public IntakeGroundFrontHorizontalCommand(ArmSubsystem armSubsystem, ManipulatorSubsystem manipulatorSubsystem) {
-        addCommands(new AlignArmFrontGroundCommand(armSubsystem), new ControlIntakeCommand(manipulatorSubsystem));
+    public IntakeGroundFrontHorizontalCommand(ArmSubsystem armSubsystem, ManipulatorSubsystem manipulatorSubsystem,
+            boolean cone) {
+        addCommands(new AlignArmFrontGroundCommand(armSubsystem),
+                new ControlIntakeCommand(manipulatorSubsystem, true, true));
     }
 }

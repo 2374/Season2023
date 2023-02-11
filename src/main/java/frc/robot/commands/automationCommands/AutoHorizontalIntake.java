@@ -14,12 +14,12 @@ import frc.robot.subsystems.ManipulatorSubsystem;
 
 public class AutoHorizontalIntake extends SequentialCommandGroup {
     public AutoHorizontalIntake(DrivetrainSubsystem drivetrainSubsystem, ArmSubsystem armSubsystem,
-            ManipulatorSubsystem manipulatorSubsystem) {
+            ManipulatorSubsystem manipulatorSubsystem, boolean cone) {
         addCommands(
                 new FollowTrajectoryCommand(drivetrainSubsystem,
                         new Trajectory(new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
                                 .lineTo(new Vector2(.25, 0)).build(), DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS, 0))
-                        .alongWith(new ControlIntakeCommand(manipulatorSubsystem)),
+                        .alongWith(new ControlIntakeCommand(manipulatorSubsystem, true, cone)),
                 new armToRestCommand(armSubsystem));
     }
 }
