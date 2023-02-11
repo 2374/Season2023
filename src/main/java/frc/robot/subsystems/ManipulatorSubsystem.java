@@ -15,7 +15,10 @@ public class ManipulatorSubsystem extends SubsystemBase {
     public ManipulatorSubsystem() {
         motor = new WPI_TalonFX(Constants.MANIPULATOR_MOTOR_PORT, Constants.CANIVORE_CAN_BUS_NAME);
         motor.setNeutralMode(NeutralMode.Brake);
+        // set the sensor to short range 1300 or less and sample evry 50ms
         sensor.setRangingMode(RangingMode.Short, 50);
+        // restrict the image to the center of the  sensor
+        sensor.setRangeOfInterest( 8, 8, 12, 12);
     }
 
     public void intake() {
