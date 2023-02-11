@@ -10,13 +10,15 @@ import frc.robot.Constants;
 
 public class ManipulatorSubsystem extends SubsystemBase {
     private final WPI_TalonFX motor;
-    private final TimeOfFlight sensor;
+    TimeOfFlight sensor = new TimeOfFlight(18);
 
     public ManipulatorSubsystem() {
         motor = new WPI_TalonFX(Constants.MANIPULATOR_MOTOR_PORT, Constants.CANIVORE_CAN_BUS_NAME);
         motor.setNeutralMode(NeutralMode.Brake);
-        sensor = new TimeOfFlight(Constants.MANIPULATOR_DISTANCE_SENSOR);
-        sensor.setRangingMode(RangingMode.Short, 40);
+        // set the sensor to short range 1300 or less and sample evry 50ms
+        sensor.setRangingMode(RangingMode.Short, 50);
+        // restrict the image to the center of the sensor
+        sensor.setRangeOfInterest(8, 8, 12, 12);
     }
 
     public void intake() {
@@ -31,7 +33,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         motor.stopMotor();
     }
 
-    public double getDistance() {
-        return sensor.getRange();
+    public void periodic() {
+        // System.out.println("Sensor="+sensor.getRange());
     }
 }
