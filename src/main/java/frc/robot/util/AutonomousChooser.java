@@ -103,10 +103,10 @@ public class AutonomousChooser {
         // assumes robot starts in front of the outer scoring poles
         resetRobotPose(command, container, trajectories.getFourPointSevenMeterB());
         // score the cone on the top row
-        topConeScore(command, container);
+        // topConeScore(command, container);
         // move 4.7 meters toward the center of the field so as to clear the charge
         // station
-        fourPointSevenMeterWithFrontArmMovement(command, container);
+        // fourPointSevenMeterWithFrontArmMovement(command, container);
         // move 2 meters toward the middle of the charge station to align for climbing
         // move 1.5 meeters to get onto charge station
         // auto balance
@@ -114,19 +114,24 @@ public class AutonomousChooser {
         return command;
     }
 
-    private void topConeScore(SequentialCommandGroup command, RobotContainer container) {
-        command.addCommands(new TopConeScoreCommand(container.getArmSubsystem(), container.getManipulatorSubsystem()));
-    }
+    // private void topConeScore(SequentialCommandGroup command, RobotContainer
+    // container) {
+    // command.addCommands(new TopConeScoreCommand(container.getArmSubsystem(),
+    // container.getManipulatorSubsystem()));
+    // }
 
-    private void fourPointSevenMeterWithFrontArmMovement(SequentialCommandGroup command, RobotContainer container) {
-        command.addCommands(follow(container, trajectories.getFourPointSevenMeterB())
-                .alongWith(new AlignArmFrontGroundCommand(container.getArmSubsystem())));
-    }
+    // private void fourPointSevenMeterWithFrontArmMovement(SequentialCommandGroup
+    // command, RobotContainer container) {
+    // command.addCommands(follow(container, trajectories.getFourPointSevenMeterB())
+    // .alongWith(new AlignArmFrontGroundCommand(container.getArmSubsystem())));
+    // }
 
-    private void intakeGroundThenRest(SequentialCommandGroup command, RobotContainer container) {
-        command.addCommands(new AutoHorizontalIntake(container.getDrivetrain(), container.getArmSubsystem(),
-                container.getManipulatorSubsystem(), true));
-    }
+    // private void intakeGroundThenRest(SequentialCommandGroup command,
+    // RobotContainer container) {
+    // command.addCommands(new AutoHorizontalIntake(container.getDrivetrain(),
+    // container.getArmSubsystem(),
+    // container.getManipulatorSubsystem(), true));
+    // }
 
     // private void shootAtTarget(SequentialCommandGroup command, RobotContainer
     // container, double timeToWait) {

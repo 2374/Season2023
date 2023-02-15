@@ -27,29 +27,37 @@ public class Constants {
     public static final int FEEDER_SENSOR_ENTRY_PORT = 0;
 
     // DRIVETRAIN Subsystem
-    public static final double DRIVETRAIN_LENGTH_METERS = Units.inchesToMeters(19.75);
-    public static final double DRIVETRAIN_WIDTH_METERS = Units.inchesToMeters(19.5);
+    public static final double DRIVETRAIN_LENGTH_METERS = Units.inchesToMeters(20.5);
+    public static final double DRIVETRAIN_WIDTH_METERS = Units.inchesToMeters(20.5);
     public static final int DRIVETRAIN_PIGEON_ID = 29;
     // Front Left Swerve Module
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1;
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 11;
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 21;
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(190.27); // Swervee Module Offset
+    // public static final double FRONT_LEFT_MODULE_STEER_OFFSET =
+    // -Math.toRadians(190.27); // Swervee Module Offset
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(182.19 + 180); // Comp Module Offset
     // Front Right Swerve Module
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 2;
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 12;
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 22;
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(261.88); // Swervee Module Offset
+    // public static final double FRONT_RIGHT_MODULE_STEER_OFFSET =
+    // -Math.toRadians(261.88); // Swervee Module Offset
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(214.1 + 180); // Comp Module Offset
     // Back Left Swerve Module
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 3;
     public static final int BACK_LEFT_MODULE_STEER_MOTOR = 13;
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = 23;
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(126.02); // Swervee Module Offset
+    // public static final double BACK_LEFT_MODULE_STEER_OFFSET =
+    // -Math.toRadians(126.02); // Swervee Module Offset
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(57.83); // Comp Module Offset
     // Back Right Swerve Module
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 4;
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 14;
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 24;
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(263.67); // Swervee Module Offset
+    // public static final double BACK_RIGHT_MODULE_STEER_OFFSET =
+    // -Math.toRadians(263.67); // Swervee Module Offset
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(154.41 + 180); // Comp Module Offset
 
     // SHOOTER Subsystem
     public static final int HOOD_MOTOR_PORT = 0; // 14;
@@ -82,12 +90,12 @@ public class Constants {
             new Rotation3d(0, 0, 0));
     public static final Pose3d TAG_1_POSE3D = new Pose3d(FIELD_LENGTH, FIELD_WIDTH / 2, 4.5, new Rotation3d(0, 0, 180));
     public static final boolean TEST_MODE = false;
-    public static final int UPPER_ENCODER_ARM = 0;
-    public static final int LOWER_ENCODER_ARM = 0;
-    public static final int UPPER_JOINT_LEFT_MOTOR = 0;
-    public static final int LOWER_JOINT_LEFT_MOTOR = 0;
-    public static final int LOWER_JOINT_RIGHT_MOTOR = 0;
-    public static final int UPPER_JOINT_RIGHT_MOTOR = 0;
+    public static final int UPPER_ENCODER_ARM = 25;
+    public static final int LOWER_ENCODER_ARM = 26;
+    public static final int UPPER_JOINT_LEFT_MOTOR = 5;
+    public static final int UPPER_JOINT_RIGHT_MOTOR = 6;
+    public static final int LOWER_JOINT_LEFT_MOTOR = 7;
+    public static final int LOWER_JOINT_RIGHT_MOTOR = 8;
 
     public static final class ArmConstants {
 
