@@ -16,6 +16,7 @@ public class RobotContainer {
     // private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
     // private final ManipulatorSubsystem m_ManipulatorSubsystem = new
     // ManipulatorSubsystem();
+    private final SimpleASubsystem m_ASubsystem = new SimpleASubsystem();
 
     private final AutonomousChooser autonomousChooser = new AutonomousChooser(
             new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS));
@@ -41,8 +42,14 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        new Trigger(m_controller::getBackButton).onTrue(new InstantCommand(m_drivetrainSubsystem::zeroRotation));
-        new Trigger(m_controller::getYButton).onTrue(new InstantCommand(m_drivetrainSubsystem::printAngles));
+        new Trigger(m_controller::getBackButton)
+                .onTrue(new InstantCommand(m_drivetrainSubsystem::zeroRotation, m_drivetrainSubsystem));
+        new Trigger(m_controller::getYButton)
+                .onTrue(new InstantCommand(m_drivetrainSubsystem::printAngles, m_drivetrainSubsystem));
+        new Trigger(m_controller::getXButton).onTrue(new InstantCommand(m_ASubsystem::f, m_ASubsystem));
+        new Trigger(m_controller::getXButton).onFalse(new InstantCommand(m_ASubsystem::s, m_ASubsystem));
+        new Trigger(m_controller::getAButton).onTrue(new InstantCommand(m_ASubsystem::b, m_ASubsystem));
+        new Trigger(m_controller::getAButton).onFalse(new InstantCommand(m_ASubsystem::s, m_ASubsystem));
         // new Trigger(m_controller::getBButton)
         // .onTrue(new InstantCommand(() ->
         // m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.MID_NODE)));
