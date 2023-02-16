@@ -27,13 +27,13 @@ import frc.robot.util.GamePiece.GamePieceType;
 
 public class ArmSubsystem extends SubsystemBase {
     /** Creates a new ArmSubsystem. */
-    private WPI_TalonFX m_lowerLeftJoint = new WPI_TalonFX(Constants.LOWER_JOINT_LEFT_MOTOR);
-    private WPI_TalonFX m_upperLeftJoint = new WPI_TalonFX(Constants.UPPER_JOINT_LEFT_MOTOR);
-    private WPI_TalonFX m_lowerRightJoint = new WPI_TalonFX(Constants.LOWER_JOINT_RIGHT_MOTOR);
-    private WPI_TalonFX m_upperRightJoint = new WPI_TalonFX(Constants.UPPER_JOINT_RIGHT_MOTOR);
+    private WPI_TalonFX m_lowerLeftJoint = new WPI_TalonFX(Constants.LOWER_JOINT_LEFT_MOTOR_CAN_ID);
+    private WPI_TalonFX m_upperLeftJoint = new WPI_TalonFX(Constants.UPPER_JOINT_LEFT_MOTOR_CAN_ID);
+    private WPI_TalonFX m_lowerRightJoint = new WPI_TalonFX(Constants.LOWER_JOINT_RIGHT_MOTOR_CAN_ID);
+    private WPI_TalonFX m_upperRightJoint = new WPI_TalonFX(Constants.UPPER_JOINT_RIGHT_MOTOR_CAN_ID);
 
-    private CANCoder m_upperEncoder = new CANCoder(Constants.UPPER_ENCODER_ARM);
-    private CANCoder m_lowerEncoder = new CANCoder(Constants.LOWER_ENCODER_ARM);
+    private CANCoder m_upperEncoder = new CANCoder(Constants.UPPER_ENCODER_ARM_CAN_ID);
+    private CANCoder m_lowerEncoder = new CANCoder(Constants.LOWER_ENCODER_ARM_CAN_ID);
 
     private TrapezoidProfile.Constraints lowerConstraints = new TrapezoidProfile.Constraints(ArmConstants.UPPER_CRUISE,
             ArmConstants.UPPER_ACCELERATION);

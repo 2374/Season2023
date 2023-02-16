@@ -15,9 +15,9 @@ public class SimpleASubsystem extends SubsystemBase {
     private WPI_TalonFX right;
 
     public SimpleASubsystem() {
-        encoder = new CANCoder(Constants.UPPER_ENCODER_ARM);
-        left = new WPI_TalonFX(Constants.UPPER_JOINT_LEFT_MOTOR, Constants.RIO_CAN_BUS_NAME);
-        right = new WPI_TalonFX(Constants.UPPER_JOINT_RIGHT_MOTOR, Constants.RIO_CAN_BUS_NAME);
+        encoder = new CANCoder(Constants.UPPER_ENCODER_ARM_CAN_ID);
+        left = new WPI_TalonFX(Constants.UPPER_JOINT_LEFT_MOTOR_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
+        right = new WPI_TalonFX(Constants.UPPER_JOINT_RIGHT_MOTOR_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
         left.setInverted(true);
         left.follow(right);
         left.setNeutralMode(NeutralMode.Brake);
