@@ -73,7 +73,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private final SwerveDrivePoseEstimator estimator;
 
-    private final Pigeon2 pigeon = new Pigeon2(DRIVETRAIN_PIGEON_ID, Constants.DRIVETRAIN_CAN_BUS_NAME);
+    private final Pigeon2 pigeon = new Pigeon2(DRIVETRAIN_PIGEON_CAN_ID, Constants.CAN_BUS_NAME_DRIVETRAIN);
 
     private final SwerveModule frontLeftModule;
     private final SwerveModule frontRightModule;
@@ -130,20 +130,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // BACK_RIGHT_MODULE_STEER_OFFSET);
         frontLeftModule = Mk3SwerveModuleHelper.createFalcon500(
                 tab.getLayout("Front Left Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(0, 0),
-                mk3ModuleConfiguration, Mk3SwerveModuleHelper.GearRatio.FAST, FRONT_LEFT_MODULE_DRIVE_MOTOR,
-                FRONT_LEFT_MODULE_STEER_MOTOR, FRONT_LEFT_MODULE_STEER_ENCODER, FRONT_LEFT_MODULE_STEER_OFFSET);
+                mk3ModuleConfiguration, Mk3SwerveModuleHelper.GearRatio.FAST, FRONT_LEFT_MODULE_DRIVE_MOTOR_CAN_ID,
+                FRONT_LEFT_MODULE_STEER_MOTOR_CAN_ID, FRONT_LEFT_MODULE_STEER_ENCODER_CAN_ID, FRONT_LEFT_MODULE_STEER_OFFSET);
         frontRightModule = Mk3SwerveModuleHelper.createFalcon500(
                 tab.getLayout("Front Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(2, 0),
-                mk3ModuleConfiguration, Mk3SwerveModuleHelper.GearRatio.FAST, FRONT_RIGHT_MODULE_DRIVE_MOTOR,
-                FRONT_RIGHT_MODULE_STEER_MOTOR, FRONT_RIGHT_MODULE_STEER_ENCODER, FRONT_RIGHT_MODULE_STEER_OFFSET);
+                mk3ModuleConfiguration, Mk3SwerveModuleHelper.GearRatio.FAST, FRONT_RIGHT_MODULE_DRIVE_MOTOR_CAN_ID,
+                FRONT_RIGHT_MODULE_STEER_MOTOR_CAN_ID, FRONT_RIGHT_MODULE_STEER_ENCODER_CAN_ID, FRONT_RIGHT_MODULE_STEER_OFFSET);
         backLeftModule = Mk3SwerveModuleHelper.createFalcon500(
                 tab.getLayout("Back Left Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(4, 0),
-                mk3ModuleConfiguration, Mk3SwerveModuleHelper.GearRatio.FAST, BACK_LEFT_MODULE_DRIVE_MOTOR,
-                BACK_LEFT_MODULE_STEER_MOTOR, BACK_LEFT_MODULE_STEER_ENCODER, BACK_LEFT_MODULE_STEER_OFFSET);
+                mk3ModuleConfiguration, Mk3SwerveModuleHelper.GearRatio.FAST, BACK_LEFT_MODULE_DRIVE_MOTOR_CAN_ID,
+                BACK_LEFT_MODULE_STEER_MOTOR_CAN_ID, BACK_LEFT_MODULE_STEER_ENCODER_CAN_ID, BACK_LEFT_MODULE_STEER_OFFSET);
         backRightModule = Mk3SwerveModuleHelper.createFalcon500(
                 tab.getLayout("Back Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(6, 0),
-                mk3ModuleConfiguration, Mk3SwerveModuleHelper.GearRatio.FAST, BACK_RIGHT_MODULE_DRIVE_MOTOR,
-                BACK_RIGHT_MODULE_STEER_MOTOR, BACK_RIGHT_MODULE_STEER_ENCODER, BACK_RIGHT_MODULE_STEER_OFFSET);
+                mk3ModuleConfiguration, Mk3SwerveModuleHelper.GearRatio.FAST, BACK_RIGHT_MODULE_DRIVE_MOTOR_CAN_ID,
+                BACK_RIGHT_MODULE_STEER_MOTOR_CAN_ID, BACK_RIGHT_MODULE_STEER_ENCODER_CAN_ID, BACK_RIGHT_MODULE_STEER_OFFSET);
 
         estimator = new SwerveDrivePoseEstimator(kinematics, getGyroscopeRotation(), getSwerveModulePositions(),
                 new Pose2d()); // Vision (x, y, rotation) std-devs

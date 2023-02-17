@@ -3,7 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.ArmSetpoints;
+// import frc.robot.Constants.ArmSetpoints;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.arm.ArmSubsystem;
@@ -12,16 +12,15 @@ import frc.robot.util.AutonomousTrajectories;
 
 public class RobotContainer {
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
-    // private final LightsSubsystem m_lightsSubsystem = new LightsSubsystem();
-    // private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-    // private final ManipulatorSubsystem m_ManipulatorSubsystem = new
-    // ManipulatorSubsystem();
+    private final ChassisSubsystem m_ChassisSubsystem = new ChassisSubsystem();
+    private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+    private final ManipulatorSubsystem m_ManipulatorSubsystem = new ManipulatorSubsystem(this);
     private final SimpleASubsystem m_ASubsystem = new SimpleASubsystem();
 
     private final AutonomousChooser autonomousChooser = new AutonomousChooser(
             new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS));
 
-    private final XboxController m_controller = new XboxController(Constants.CONTROLLER_PORT);
+    private final XboxController m_controller = new XboxController(Constants.CONTROLLER_USB_PORT);
 
     public RobotContainer() {
         System.out.println("container created");
@@ -41,6 +40,7 @@ public class RobotContainer {
         return m_controller;
     }
 
+    // setup all of the button controls for the robot
     public void configureButtonBindings() {
         new Trigger(m_controller::getBackButton)
                 .onTrue(new InstantCommand(m_drivetrainSubsystem::zeroRotation, m_drivetrainSubsystem));
@@ -85,19 +85,23 @@ public class RobotContainer {
         return autonomousChooser;
     }
 
+    // accessor to return the  arm subsystem
+    public ArmSubsystem getArmSubsystem() {
+    return m_ArmSubsystem;
+    }
+
+    // accessor to return the manipulator subsystem
+    public ManipulatorSubsystem getManipulatorSubsystem() {
+    return m_ManipulatorSubsystem;
+    }
+
+    // accessor to return the CANDle/light subsystem
+    public ChassisSubsystem getChassisSubsystem() {
+    return m_ChassisSubsystem;
+    }
+
+    // accessor to return the drive train subsystem
     public DrivetrainSubsystem getDrivetrain() {
         return m_drivetrainSubsystem;
     }
-
-    // public ArmSubsystem getArmSubsystem() {
-    // return m_ArmSubsystem;
-    // }
-
-    // public ManipulatorSubsystem getManipulatorSubsystem() {
-    // return m_ManipulatorSubsystem;
-    // }
-
-    // public LightsSubsystem getLightsSubsystem() {
-    // return m_lightsSubsystem;
-    // }
 }
