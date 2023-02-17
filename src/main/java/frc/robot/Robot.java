@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
 
         // game piece determination
         SmartDashboard.putData("Signal Cone", new InstantCommand(m_robotContainer.getChassisSubsystem()::setWantACone, m_robotContainer.getChassisSubsystem()));
-        SmartDashboard.putData("Signal Cone", new InstantCommand(m_robotContainer.getChassisSubsystem()::setWantACube, m_robotContainer.getChassisSubsystem()));
+        SmartDashboard.putData("Signal Cube", new InstantCommand(m_robotContainer.getChassisSubsystem()::setWantACube, m_robotContainer.getChassisSubsystem()));
     }
 
     @Override
