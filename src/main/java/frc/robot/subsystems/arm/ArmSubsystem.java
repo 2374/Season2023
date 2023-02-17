@@ -290,11 +290,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public double getLowerJointDegrees() {
-        return getLowerJointPos() + ArmConstants.LOWER_ANGLE_OFFSET;
+        return (getLowerJointPos() + ArmConstants.LOWER_ANGLE_OFFSET + 180) % 360 - 180;
     }
 
     public double getUpperJointDegrees() {
-        return getUpperJointPos() + ArmConstants.UPPER_ANGLE_OFFSET;
+        return (getUpperJointPos() + ArmConstants.UPPER_ANGLE_OFFSET + 180) % 360 - 180;
     }
 
     public double degreesToCTREUnits(double degrees) {

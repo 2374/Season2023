@@ -99,8 +99,8 @@ public class Constants {
 
     public static final class ArmConstants {
 
-        public static final double LOWER_ANGLE_OFFSET = -210.6;
-        public static final double UPPER_ANGLE_OFFSET = 0;
+        public static final double LOWER_ANGLE_OFFSET = -60.91;
+        public static final double UPPER_ANGLE_OFFSET = -211.55;
 
         public static final Gains GAINS_UPPER_JOINT = new Gains(0.02, 0.0, 0.00, 0.0, 50);
 

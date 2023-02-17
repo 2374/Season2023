@@ -10,14 +10,18 @@ import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 
 public class SimpleASubsystem extends SubsystemBase {
-    private CANCoder encoder;
+    private CANCoder upperEncoder;
+    private CANCoder lowerEncoder;
     private WPI_TalonFX left;
     private WPI_TalonFX right;
 
     public SimpleASubsystem() {
-        encoder = new CANCoder(Constants.UPPER_ENCODER_ARM);
-        left = new WPI_TalonFX(Constants.UPPER_JOINT_LEFT_MOTOR, Constants.RIO_CAN_BUS_NAME);
-        right = new WPI_TalonFX(Constants.UPPER_JOINT_RIGHT_MOTOR, Constants.RIO_CAN_BUS_NAME);
+        upperEncoder = new CANCoder(Constants.UPPER_ENCODER_ARM);
+        lowerEncoder = new CANCoder(Constants.LOWER_ENCODER_ARM);
+        left = new WPI_TalonFX(Constants.UPPER_JOINT_LEFT_MOTOR,
+                Constants.RIO_CAN_BUS_NAME);
+        right = new WPI_TalonFX(Constants.UPPER_JOINT_RIGHT_MOTOR,
+                Constants.RIO_CAN_BUS_NAME);
         left.setInverted(true);
         left.follow(right);
         left.setNeutralMode(NeutralMode.Brake);
@@ -38,8 +42,12 @@ public class SimpleASubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("encoder", encoder.getAbsolutePosition());
-        SmartDashboard.putNumber("true", encoder.getAbsolutePosition() + ArmConstants.UPPER_ANGLE_OFFSET);
+        SmartDashboard.putNumber("upperEncoder", upperEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("upperTrue",
+                (upperEncoder.getAbsolutePosition() + ArmConstants.UPPER_ANGLE_OFFSET + 180) % 360 - 180);
+        SmartDashboard.putNumber("lowerEncoder", lowerEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("lowerTrue",
+                (lowerEncoder.getAbsolutePosition() + ArmConstants.LOWER_ANGLE_OFFSET + 180) % 360 - 180);
     }
 
 }

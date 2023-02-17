@@ -302,27 +302,37 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return pcw;
     }
 
+    // public void autoBalenceTick() {
+    // double theta;
+    // double pitch = pigeon.getPitch();
+    // double roll = pigeon.getRoll();
+    // if (Math.abs(roll) <= 2)
+    // if (Math.abs(pitch) <= 2)
+    // theta = Double.NaN;
+    // else
+    // theta = 0;
+    // else if (Math.abs(pitch) <= 2)
+    // theta = 90;
+    // else
+    // theta = Math.toDegrees(Math
+    // .atan(Math.sin(Math.toRadians(roll)) / Math.sin(Math.toRadians(pitch)))) +
+    // 90;
+    // System.out.println("Pitch - " + pitch);
+    // System.out.println("Roll - " + roll);
+    // System.out.println("Theta - " + theta);
+    // SmartDashboard.putNumber("Theta", theta);
+    // if (theta != Double.NaN)
+    // drive(new ChassisSpeeds(Math.sin(Math.toRadians(theta)) * SPEED_MULTIPLIER,
+    // Math.cos(Math.toRadians(theta)) * SPEED_MULTIPLIER, 0));
+    // }
+
     public void autoBalenceTick() {
-        double theta;
         double pitch = pigeon.getPitch();
-        double roll = pigeon.getRoll();
-        if (Math.abs(roll) <= 2)
-            if (Math.abs(pitch) <= 2)
-                theta = Double.NaN;
-            else
-                theta = 0;
-        else if (Math.abs(pitch) <= 2)
-            theta = 90;
-        else
-            theta = Math.toDegrees(Math
-                    .atan(Math.sin(Math.toRadians(roll)) / Math.sin(Math.toRadians(pitch)))) + 90;
-        System.out.println("Pitch - " + pitch);
-        System.out.println("Roll - " + roll);
-        System.out.println("Theta - " + theta);
-        SmartDashboard.putNumber("Theta", theta);
-        if (theta != Double.NaN)
-            drive(new ChassisSpeeds(Math.sin(Math.toRadians(theta)) * SPEED_MULTIPLIER,
-                    Math.cos(Math.toRadians(theta)) * SPEED_MULTIPLIER, 0));
+        if (pitch > 2.5) {
+            drive(new ChassisSpeeds(0.05 * MAX_VELOCITY_METERS_PER_SECOND, 0, 0));
+        } else if (pitch < -2.5) {
+            drive(new ChassisSpeeds(-0.05 * MAX_VELOCITY_METERS_PER_SECOND, 0, 0));
+        }
     }
 
     public void printAngles() {
