@@ -12,32 +12,52 @@ import frc.robot.Constants.ArmConstants;
 public class SimpleASubsystem extends SubsystemBase {
     private CANCoder upperEncoder;
     private CANCoder lowerEncoder;
-    private WPI_TalonFX left;
-    private WPI_TalonFX right;
+    private WPI_TalonFX upperLeft;
+    private WPI_TalonFX upperRight;
+    private WPI_TalonFX lowerLeft;
+    private WPI_TalonFX lowerRight;
 
     public SimpleASubsystem() {
         upperEncoder = new CANCoder(Constants.UPPER_ENCODER_ARM_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
         lowerEncoder = new CANCoder(Constants.LOWER_ENCODER_ARM_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
-        left = new WPI_TalonFX(Constants.UPPER_JOINT_LEFT_MOTOR_CAN_ID,
+        upperLeft = new WPI_TalonFX(Constants.UPPER_JOINT_LEFT_MOTOR_CAN_ID,
                 Constants.CAN_BUS_NAME_ROBORIO);
-        right = new WPI_TalonFX(Constants.UPPER_JOINT_RIGHT_MOTOR_CAN_ID,
+        upperRight = new WPI_TalonFX(Constants.UPPER_JOINT_RIGHT_MOTOR_CAN_ID,
                 Constants.CAN_BUS_NAME_ROBORIO);
-        left.setInverted(true);
-        left.follow(right);
-        left.setNeutralMode(NeutralMode.Brake);
-        right.setNeutralMode(NeutralMode.Brake);
+        lowerLeft = new WPI_TalonFX(Constants.LOWER_JOINT_LEFT_MOTOR_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
+        lowerRight = new WPI_TalonFX(Constants.LOWER_JOINT_RIGHT_MOTOR_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
+        upperLeft.setInverted(true);
+        upperLeft.follow(upperRight);
+        lowerLeft.setInverted(true);
+        lowerLeft.follow(lowerRight);
+        upperLeft.setNeutralMode(NeutralMode.Brake);
+        upperRight.setNeutralMode(NeutralMode.Brake);
+        lowerLeft.setNeutralMode(NeutralMode.Brake);
+        lowerRight.setNeutralMode(NeutralMode.Brake);
     }
 
-    public void f() {
-        right.set(0.2);
+    public void upperForward() {
+        upperRight.set(0.2);
     }
 
-    public void b() {
-        right.set(-0.2);
+    public void upperBack() {
+        upperRight.set(-0.2);
     }
 
-    public void s() {
-        right.stopMotor();
+    public void upperStop() {
+        upperRight.stopMotor();
+    }
+
+    public void lowerForward() {
+        lowerRight.set(0.2);
+    }
+
+    public void lowerBack() {
+        lowerRight.set(-0.2);
+    }
+
+    public void lowerStop() {
+        lowerRight.stopMotor();
     }
 
     @Override

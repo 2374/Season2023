@@ -28,28 +28,32 @@ public class Constants {
     public static final double DRIVETRAIN_WIDTH_METERS = Units.inchesToMeters(20.5);
     public static final int DRIVETRAIN_PIGEON_CAN_ID = 29; // the CAN ID for the FASTFD CAN Bus
     // Front Left Swerve Module
-    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR_CAN_ID = 1;    // the CAN ID for the FASTFD CAN Bus
-    public static final int FRONT_LEFT_MODULE_STEER_MOTOR_CAN_ID = 11;   // the CAN ID for the FASTFD CAN Bus
+    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR_CAN_ID = 1; // the CAN ID for the FASTFD CAN Bus
+    public static final int FRONT_LEFT_MODULE_STEER_MOTOR_CAN_ID = 11; // the CAN ID for the FASTFD CAN Bus
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER_CAN_ID = 21; // the CAN ID for the FASTFD CAN Bus
-    // public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(190.27); // Swervee Module Offset
+    // public static final double FRONT_LEFT_MODULE_STEER_OFFSET =
+    // -Math.toRadians(190.27); // Swervee Module Offset
     public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(182.19 + 180); // Comp Module Offset
     // Front Right Swerve Module
-    public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR_CAN_ID = 2;    // the CAN ID for the FASTFD CAN Bus
-    public static final int FRONT_RIGHT_MODULE_STEER_MOTOR_CAN_ID = 12;   // the CAN ID for the FASTFD CAN Bus
+    public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR_CAN_ID = 2; // the CAN ID for the FASTFD CAN Bus
+    public static final int FRONT_RIGHT_MODULE_STEER_MOTOR_CAN_ID = 12; // the CAN ID for the FASTFD CAN Bus
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER_CAN_ID = 22; // the CAN ID for the FASTFD CAN Bus
-    // public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(261.88); // Swervee Module Offset
+    // public static final double FRONT_RIGHT_MODULE_STEER_OFFSET =
+    // -Math.toRadians(261.88); // Swervee Module Offset
     public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(214.1 + 180); // Comp Module Offset
     // Back Left Swerve Module
-    public static final int BACK_LEFT_MODULE_DRIVE_MOTOR_CAN_ID = 3;    // the CAN ID for the FASTFD CAN Bus
-    public static final int BACK_LEFT_MODULE_STEER_MOTOR_CAN_ID = 13;   // the CAN ID for the FASTFD CAN Bus
+    public static final int BACK_LEFT_MODULE_DRIVE_MOTOR_CAN_ID = 3; // the CAN ID for the FASTFD CAN Bus
+    public static final int BACK_LEFT_MODULE_STEER_MOTOR_CAN_ID = 13; // the CAN ID for the FASTFD CAN Bus
     public static final int BACK_LEFT_MODULE_STEER_ENCODER_CAN_ID = 23; // the CAN ID for the FASTFD CAN Bus
-    // public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(126.02); // Swervee Module Offset
+    // public static final double BACK_LEFT_MODULE_STEER_OFFSET =
+    // -Math.toRadians(126.02); // Swervee Module Offset
     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(57.83); // Comp Module Offset
     // Back Right Swerve Module
-    public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR_CAN_ID = 4;    // the CAN ID for the FASTFD CAN Bus
-    public static final int BACK_RIGHT_MODULE_STEER_MOTOR_CAN_ID = 14;   // the CAN ID for the FASTFD CAN Bus
+    public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR_CAN_ID = 4; // the CAN ID for the FASTFD CAN Bus
+    public static final int BACK_RIGHT_MODULE_STEER_MOTOR_CAN_ID = 14; // the CAN ID for the FASTFD CAN Bus
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER_CAN_ID = 24; // the CAN ID for the FASTFD CAN Bus
-    // public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(263.67); // Swervee Module Offset
+    // public static final double BACK_RIGHT_MODULE_STEER_OFFSET =
+    // -Math.toRadians(263.67); // Swervee Module Offset
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(154.41 + 180); // Comp Module Offset
 
     // SHOOTER Subsystem
@@ -70,7 +74,7 @@ public class Constants {
     public static final int CANDLE_CAN_ID = 27; // the CAN ID for the FASTFD CAN Bus
 
     // MANIPULATOR Subsystem
-    public static final int MANIPULATOR_MOTOR_CAN_ID = 19; // the CAN ID for the RIO CAN Bus
+    public static final int MANIPULATOR_MOTOR_CAN_ID = 9; // the CAN ID for the RIO CAN Bus
     public static final int MANIPULATOR_DISTANCE_SENSOR_CAN_ID = 18; // the CAN ID for the RIO CAN Bus
 
     // Field measurements
@@ -79,15 +83,17 @@ public class Constants {
 
     // Vision Stuff
     public static final String CAMERA_NAME = "photonvision";
-    public static final Transform3d ROBOT_TO_CAMERA = new Transform3d(new Translation3d(.3, 0, 0.2), new Rotation3d(0, 0, 0));
+    public static final Transform3d ROBOT_TO_CAMERA = new Transform3d(new Translation3d(.3, 0, 0.2),
+            new Rotation3d(0, 0, 0));
     public static final Pose3d TAG_1_POSE3D = new Pose3d(FIELD_LENGTH, FIELD_WIDTH / 2, 4.5, new Rotation3d(0, 0, 180));
     public static final boolean TEST_MODE = false;
-    public static final int UPPER_ENCODER_ARM_CAN_ID = 25;      // the CAN ID for the RIO CAN Bus
-    public static final int LOWER_ENCODER_ARM_CAN_ID = 26;      // the CAN ID for the RIO CAN Bus
-    public static final int UPPER_JOINT_LEFT_MOTOR_CAN_ID = 5;  // the CAN ID for the RIO CAN Bus
+    public static final int UPPER_ENCODER_ARM_CAN_ID = 25; // the CAN ID for the RIO CAN Bus
+    public static final int LOWER_ENCODER_ARM_CAN_ID = 26; // the CAN ID for the RIO CAN Bus
+    public static final int UPPER_JOINT_LEFT_MOTOR_CAN_ID = 5; // the CAN ID for the RIO CAN Bus
     public static final int UPPER_JOINT_RIGHT_MOTOR_CAN_ID = 6; // the CAN ID for the RIO CAN Bus
-    public static final int LOWER_JOINT_LEFT_MOTOR_CAN_ID = 7;  // the CAN ID for the RIO CAN Bus
+    public static final int LOWER_JOINT_LEFT_MOTOR_CAN_ID = 7; // the CAN ID for the RIO CAN Bus
     public static final int LOWER_JOINT_RIGHT_MOTOR_CAN_ID = 8; // the CAN ID for the RIO CAN Bus
+    public static final int MANIPULATOR_WRIST_MOTOR_CAN_ID = 10;
 
     public static final class ArmConstants {
 
