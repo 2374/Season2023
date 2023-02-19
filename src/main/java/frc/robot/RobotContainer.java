@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 // import frc.robot.Constants.ArmSetpoints;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.arm.ArmDefault;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.util.AutonomousChooser;
 import frc.robot.util.AutonomousTrajectories;
@@ -26,6 +27,7 @@ public class RobotContainer {
         System.out.println("container created");
 
         resetDrive();
+        // resetArm();
 
         configureButtonBindings();
     }
@@ -35,6 +37,11 @@ public class RobotContainer {
                 new DefaultDriveCommand(m_drivetrainSubsystem, this::getForwardInput, this::getStrafeInput,
                         this::getRotationInput));
     }
+
+    // public void resetArm() {
+    // m_ArmSubsystem.setDefaultCommand(new ArmDefault(m_ArmSubsystem, null, null,
+    // null))
+    // }
 
     public XboxController getController() {
         return m_controller;
@@ -48,41 +55,41 @@ public class RobotContainer {
         // .onTrue(new InstantCommand(m_drivetrainSubsystem::printAngles,
         // m_drivetrainSubsystem));
         // upper
-        // new Trigger(m_controller::getXButton).onTrue(new
-        // InstantCommand(m_ASubsystem::upperForward, m_ASubsystem));
-        // new Trigger(m_controller::getXButton).onFalse(new
-        // InstantCommand(m_ASubsystem::upperStop, m_ASubsystem));
-        // new Trigger(m_controller::getAButton).onTrue(new
-        // InstantCommand(m_ASubsystem::upperBack, m_ASubsystem));
-        // new Trigger(m_controller::getAButton).onFalse(new
-        // InstantCommand(m_ASubsystem::upperStop, m_ASubsystem));
+        new Trigger(m_controller::getXButton).onTrue(new InstantCommand(m_ASubsystem::upperForward, m_ASubsystem));
+        new Trigger(m_controller::getXButton).onFalse(new InstantCommand(m_ASubsystem::upperStop, m_ASubsystem));
+        new Trigger(m_controller::getAButton).onTrue(new InstantCommand(m_ASubsystem::upperBack, m_ASubsystem));
+        new Trigger(m_controller::getAButton).onFalse(new InstantCommand(m_ASubsystem::upperStop, m_ASubsystem));
         // lower
-        // new Trigger(m_controller::getYButton).onTrue(new
-        // InstantCommand(m_ASubsystem::lowerForward, m_ASubsystem));
-        // new Trigger(m_controller::getYButton).onFalse(new
-        // InstantCommand(m_ASubsystem::lowerStop, m_ASubsystem));
-        // new Trigger(m_controller::getBButton).onTrue(new
-        // InstantCommand(m_ASubsystem::lowerBack, m_ASubsystem));
-        // new Trigger(m_controller::getBButton).onFalse(new
-        // InstantCommand(m_ASubsystem::lowerStop, m_ASubsystem));
+        new Trigger(m_controller::getYButton).onTrue(new InstantCommand(m_ASubsystem::lowerForward, m_ASubsystem));
+        new Trigger(m_controller::getYButton).onFalse(new InstantCommand(m_ASubsystem::lowerStop, m_ASubsystem));
+        new Trigger(m_controller::getBButton).onTrue(new InstantCommand(m_ASubsystem::lowerBack, m_ASubsystem));
+        new Trigger(m_controller::getBButton).onFalse(new InstantCommand(m_ASubsystem::lowerStop, m_ASubsystem));
         // wrist
-        new Trigger(m_controller::getXButton)
-                .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateLeft, m_ManipulatorSubsystem));
-        new Trigger(m_controller::getXButton)
-                .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation, m_ManipulatorSubsystem));
-        new Trigger(m_controller::getAButton)
-                .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateRight, m_ManipulatorSubsystem));
-        new Trigger(m_controller::getAButton)
-                .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation, m_ManipulatorSubsystem));
+        // new Trigger(m_controller::getXButton)
+        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateLeft,
+        // m_ManipulatorSubsystem));
+        // new Trigger(m_controller::getXButton)
+        // .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation,
+        // m_ManipulatorSubsystem));
+        // new Trigger(m_controller::getAButton)
+        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateRight,
+        // m_ManipulatorSubsystem));
+        // new Trigger(m_controller::getAButton)
+        // .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation,
+        // m_ManipulatorSubsystem));
         // claw
-        new Trigger(m_controller::getYButton)
-                .onTrue(new InstantCommand(m_ManipulatorSubsystem::intake, m_ManipulatorSubsystem));
-        new Trigger(m_controller::getYButton)
-                .onFalse(new InstantCommand(m_ManipulatorSubsystem::stoptake, m_ManipulatorSubsystem));
-        new Trigger(m_controller::getBButton)
-                .onTrue(new InstantCommand(m_ManipulatorSubsystem::outtake, m_ManipulatorSubsystem));
-        new Trigger(m_controller::getBButton)
-                .onFalse(new InstantCommand(m_ManipulatorSubsystem::stoptake, m_ManipulatorSubsystem));
+        // new Trigger(m_controller::getYButton)
+        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::intake,
+        // m_ManipulatorSubsystem));
+        // new Trigger(m_controller::getYButton)
+        // .onFalse(new InstantCommand(m_ManipulatorSubsystem::stoptake,
+        // m_ManipulatorSubsystem));
+        // new Trigger(m_controller::getBButton)
+        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::outtake,
+        // m_ManipulatorSubsystem));
+        // new Trigger(m_controller::getBButton)
+        // .onFalse(new InstantCommand(m_ManipulatorSubsystem::stoptake,
+        // m_ManipulatorSubsystem));
 
         // new Trigger(m_controller::getBButton)
         // .onTrue(new InstantCommand(() ->
