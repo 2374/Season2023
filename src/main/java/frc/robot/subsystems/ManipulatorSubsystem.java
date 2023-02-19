@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -30,11 +31,11 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void intake() {
-        intakeMotor.set(.1);
+        intakeMotor.set(.5);
     }
 
     public void outtake() {
-        intakeMotor.set(-.1);
+        intakeMotor.set(-.5);
     }
 
     public void stoptake() {
@@ -42,15 +43,16 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void rotateLeft() { // Use PID for this later
-        wristRotationMotor.set(-.05);
+        wristRotationMotor.set(-.1);
     }
 
     public void rotateRight() {
-        wristRotationMotor.set(.05);
+        wristRotationMotor.set(.1);
     }
 
     public void stopRotation() {
         wristRotationMotor.stopMotor();
+        wristRotationMotor.set(ControlMode.Position, 0);
     }
 
     // public double getDistance() {

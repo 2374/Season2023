@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -34,6 +35,8 @@ public class SimpleASubsystem extends SubsystemBase {
         upperRight.setNeutralMode(NeutralMode.Brake);
         lowerLeft.setNeutralMode(NeutralMode.Brake);
         lowerRight.setNeutralMode(NeutralMode.Brake);
+        upperStop();
+        lowerStop();
     }
 
     public void upperForward() {
@@ -45,7 +48,7 @@ public class SimpleASubsystem extends SubsystemBase {
     }
 
     public void upperStop() {
-        upperRight.stopMotor();
+        upperRight.set(ControlMode.Position, upperRight.getSelectedSensorPosition());
     }
 
     public void lowerForward() {
@@ -57,7 +60,7 @@ public class SimpleASubsystem extends SubsystemBase {
     }
 
     public void lowerStop() {
-        lowerRight.stopMotor();
+        lowerRight.set(ControlMode.Position, lowerRight.getSelectedSensorPosition());
     }
 
     @Override

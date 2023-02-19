@@ -326,13 +326,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // Math.cos(Math.toRadians(theta)) * SPEED_MULTIPLIER, 0));
     // }
 
-    public void autoBalenceTick() {
+    public boolean autoBalenceTick() {
         double pitch = pigeon.getPitch();
         if (pitch > 2.5) {
             drive(new ChassisSpeeds(0.05 * MAX_VELOCITY_METERS_PER_SECOND, 0, 0));
         } else if (pitch < -2.5) {
             drive(new ChassisSpeeds(-0.05 * MAX_VELOCITY_METERS_PER_SECOND, 0, 0));
+        } else {
+            return true;
         }
+        return false;
     }
 
     public void printAngles() {

@@ -74,7 +74,7 @@ public class Constants {
     public static final int CANDLE_CAN_ID = 27; // the CAN ID for the FASTFD CAN Bus
 
     // MANIPULATOR Subsystem
-    public static final int MANIPULATOR_MOTOR_CAN_ID = 9; // the CAN ID for the RIO CAN Bus
+    public static final int MANIPULATOR_MOTOR_CAN_ID = 10; // the CAN ID for the RIO CAN Bus
     public static final int MANIPULATOR_DISTANCE_SENSOR_CAN_ID = 18; // the CAN ID for the RIO CAN Bus
 
     // Field measurements
@@ -93,7 +93,7 @@ public class Constants {
     public static final int UPPER_JOINT_RIGHT_MOTOR_CAN_ID = 6; // the CAN ID for the RIO CAN Bus
     public static final int LOWER_JOINT_LEFT_MOTOR_CAN_ID = 7; // the CAN ID for the RIO CAN Bus
     public static final int LOWER_JOINT_RIGHT_MOTOR_CAN_ID = 8; // the CAN ID for the RIO CAN Bus
-    public static final int MANIPULATOR_WRIST_MOTOR_CAN_ID = 10;
+    public static final int MANIPULATOR_WRIST_MOTOR_CAN_ID = 9;
 
     public static final class ArmConstants {
 
