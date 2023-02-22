@@ -12,8 +12,8 @@ import frc.robot.util.AutonomousChooser;
 import frc.robot.util.AutonomousTrajectories;
 
 public class RobotContainer {
-    private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
     private final ChassisSubsystem m_ChassisSubsystem = new ChassisSubsystem();
+    private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(this);
     // private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
     // private final ManipulatorSubsystem m_ManipulatorSubsystem = new
     // ManipulatorSubsystem(this);

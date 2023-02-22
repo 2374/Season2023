@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.led.CANdle;
+
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.GamePiece.GamePieceType;
@@ -9,6 +11,7 @@ public class ChassisSubsystem extends SubsystemBase {
 
     private CANdle candle;
     private GamePieceType gamePiece = GamePieceType.Cone;  // is the robot working with a Cone or a Cube? default to CUBE as one will be preloaded
+    private String serialNumber = "unknown";
 
     private static ChassisSubsystem instance;
 
@@ -17,6 +20,8 @@ public class ChassisSubsystem extends SubsystemBase {
         candle.configLEDType(CANdle.LEDStripType.RGB);
         candle.configBrightnessScalar(0.5);
         instance = this;
+        serialNumber = RobotController.getSerialNumber();
+        System.out.println("SERIALNUMBER="+serialNumber);
     }
 
     private void turnOnYellow() {
@@ -69,5 +74,12 @@ public class ChassisSubsystem extends SubsystemBase {
     public void setWantNothing() {
         turnOff();
         gamePiece = GamePieceType.None;
+    }
+
+    // Is this Swervee?
+    public Boolean isTestRobot() {
+        Boolean result = serialNumber.equalsIgnoreCase(Constants.TEST_ROBORIO_SERIAL_NUMBER);
+        System.out.println("RIOTEST="+result);
+        return result;
     }
 }
