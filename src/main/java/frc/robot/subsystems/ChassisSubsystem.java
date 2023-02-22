@@ -31,10 +31,10 @@ public class ChassisSubsystem extends SubsystemBase {
     }
 
     // this should only be called during testing as we should always be looking for a CONE or a CUBE
-    // private void turnOff() { 
-    //     System.out.println("off");
-    //     candle.setLEDs(0, 0, 0);
-    // }
+    private void turnOff() { 
+        System.out.println("off");
+        candle.setLEDs(0, 0, 0);
+    }
 
     public static ChassisSubsystem getChassisInstance() {
         if (instance == null) {
@@ -63,5 +63,11 @@ public class ChassisSubsystem extends SubsystemBase {
     public void setWantACube() {
         turnOnPurple();
         gamePiece = GamePieceType.Cube;
+    }
+
+    // tell the robot it doesn't want to work with game pieces
+    public void setWantNothing() {
+        turnOff();
+        gamePiece = GamePieceType.None;
     }
 }

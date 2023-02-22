@@ -52,6 +52,11 @@ public class RobotContainer {
     public void configureButtonBindings() {
         new Trigger(m_controller::getBackButton)
                 .onTrue(new InstantCommand(m_drivetrainSubsystem::zeroRotation, m_drivetrainSubsystem));
+        new Trigger(m_controller::getAButtonPressed)
+                .onTrue(new InstantCommand(getChassisSubsystem()::setWantACone, getChassisSubsystem()));
+        new Trigger(m_controller::getYButtonPressed)
+                .onTrue(new InstantCommand(getChassisSubsystem()::setWantACube, getChassisSubsystem()));
+            
         // new Trigger(m_controller::getYButton)
         // .onTrue(new InstantCommand(m_drivetrainSubsystem::printAngles,
         // m_drivetrainSubsystem));

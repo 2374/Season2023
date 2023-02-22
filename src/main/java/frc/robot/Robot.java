@@ -42,7 +42,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         // lights
-        // m_robotContainer.getLightsSubsystem().turnOff();
+        m_robotContainer.getChassisSubsystem().setWantNothing();
     }
 
     @Override
