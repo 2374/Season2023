@@ -31,30 +31,30 @@ public class Constants {
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR_CAN_ID = 1; // the CAN ID for the FASTFD CAN Bus
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR_CAN_ID = 11; // the CAN ID for the FASTFD CAN Bus
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER_CAN_ID = 21; // the CAN ID for the FASTFD CAN Bus
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(190.27); // Swervee Module Offset
     // public static final double FRONT_LEFT_MODULE_STEER_OFFSET =
-    // -Math.toRadians(190.27); // Swervee Module Offset
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(182.19 + 180); // Comp Module Offset
+    // -Math.toRadians(182.19 + 180); // Comp Module Offset
     // Front Right Swerve Module
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR_CAN_ID = 2; // the CAN ID for the FASTFD CAN Bus
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR_CAN_ID = 12; // the CAN ID for the FASTFD CAN Bus
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER_CAN_ID = 22; // the CAN ID for the FASTFD CAN Bus
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(261.88); // Swervee Module Offset
     // public static final double FRONT_RIGHT_MODULE_STEER_OFFSET =
-    // -Math.toRadians(261.88); // Swervee Module Offset
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(214.1 + 180); // Comp Module Offset
+    // -Math.toRadians(214.1 + 180); // Comp Module Offset
     // Back Left Swerve Module
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR_CAN_ID = 3; // the CAN ID for the FASTFD CAN Bus
     public static final int BACK_LEFT_MODULE_STEER_MOTOR_CAN_ID = 13; // the CAN ID for the FASTFD CAN Bus
     public static final int BACK_LEFT_MODULE_STEER_ENCODER_CAN_ID = 23; // the CAN ID for the FASTFD CAN Bus
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(126.02); // Swervee Module Offset
     // public static final double BACK_LEFT_MODULE_STEER_OFFSET =
-    // -Math.toRadians(126.02); // Swervee Module Offset
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(57.83); // Comp Module Offset
+    // -Math.toRadians(57.83); // Comp Module Offset
     // Back Right Swerve Module
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR_CAN_ID = 4; // the CAN ID for the FASTFD CAN Bus
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR_CAN_ID = 14; // the CAN ID for the FASTFD CAN Bus
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER_CAN_ID = 24; // the CAN ID for the FASTFD CAN Bus
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(263.67); // Swervee Module Offset
     // public static final double BACK_RIGHT_MODULE_STEER_OFFSET =
-    // -Math.toRadians(263.67); // Swervee Module Offset
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(154.41 + 180); // Comp Module Offset
+    // -Math.toRadians(154.41 + 180); // Comp Module Offset
 
     // SHOOTER Subsystem
     public static final int HOOD_MOTOR_CAN_ID = 0; // 14;
@@ -100,9 +100,9 @@ public class Constants {
         public static final double LOWER_ANGLE_OFFSET = -60.91;
         public static final double UPPER_ANGLE_OFFSET = -211.55;
 
-        public static final Gains GAINS_UPPER_JOINT = new Gains(0.02, 0.0, 0.00, 0.0, 50);
+        public static final Gains GAINS_UPPER_JOINT = new Gains(0.02, 0.001, 0.01, 0.0, 50);
 
-        public static final Gains GAINS_LOWER_JOINT = new Gains(0.02, 0.0, 0.00, 0.00, 50);
+        public static final Gains GAINS_LOWER_JOINT = new Gains(0.02, 0.001, 0.01, 0.00, 50);
 
         public static final double kSUpper = 0.04;
         public static final double kGUpper = 0.25;
