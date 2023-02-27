@@ -18,26 +18,33 @@ public class ControlIntakeCommand extends CommandBase {
     }
 
     @Override
-    public void execute() {
-        // if (in) {
-        // if (cone && m_ManipulatorSubsystem.getDistance() > 30) {
-        // m_ManipulatorSubsystem.intake();
-        // } else if (!cone && m_ManipulatorSubsystem.getDistance() > 60) {
-        // m_ManipulatorSubsystem.intake();
-        // } else {
-        // end(true);
-        // }
-        // } else {
-        // if (m_ManipulatorSubsystem.getDistance() < 150) {
-        // m_ManipulatorSubsystem.outtake();
-        // } else {
-        // end(true);
-        // }
-        // }
+    public void initialize() {
+        System.out.println(cone);
+        if (in) {
+            m_ManipulatorSubsystem.intake();
+        } else {
+            m_ManipulatorSubsystem.outtake();
+        }
+    }
+
+    @Override
+    public boolean isFinished() {
+        if (in) {
+            if ((cone && m_ManipulatorSubsystem.getDistance() < 30)
+                    || (!cone && m_ManipulatorSubsystem.getDistance() < 100)) {
+                return true;
+            }
+        } else {
+            if (m_ManipulatorSubsystem.getDistance() > 350) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public void end(boolean interrupted) {
+        System.out.println("Stop");
         m_ManipulatorSubsystem.stoptake();
     }
 }

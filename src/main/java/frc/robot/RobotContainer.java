@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 // import frc.robot.Constants.ArmSetpoints;
 import frc.robot.commands.*;
+import frc.robot.commands.helperCommands.ControlIntakeCommand;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.arm.ArmDefault;
 import frc.robot.subsystems.arm.ArmSubsystem;
@@ -15,8 +16,7 @@ public class RobotContainer {
     private final ChassisSubsystem m_ChassisSubsystem = new ChassisSubsystem();
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(this);
     // private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-    // private final ManipulatorSubsystem m_ManipulatorSubsystem = new
-    // ManipulatorSubsystem(this);
+    private final ManipulatorSubsystem m_ManipulatorSubsystem = new ManipulatorSubsystem(this);
     // private final SimpleASubsystem m_ASubsystem = new SimpleASubsystem();
 
     private final AutonomousChooser autonomousChooser = new AutonomousChooser(
@@ -28,7 +28,7 @@ public class RobotContainer {
         System.out.println("container created");
 
         resetDrive();
-        // resetArm();
+        resetArm();
 
         configureButtonBindings();
     }
@@ -39,10 +39,9 @@ public class RobotContainer {
                         this::getRotationInput));
     }
 
-    // public void resetArm() {
-    // m_ArmSubsystem.setDefaultCommand(new ArmDefault(m_ArmSubsystem, null, null,
-    // null))
-    // }
+    public void resetArm() {
+        // m_ArmSubsystem.setDefaultCommand(new ArmDefault(m_ArmSubsystem));
+    }
 
     public XboxController getController() {
         return m_controller;
@@ -52,11 +51,12 @@ public class RobotContainer {
     public void configureButtonBindings() {
         new Trigger(m_controller::getBackButton)
                 .onTrue(new InstantCommand(m_drivetrainSubsystem::zeroRotation, m_drivetrainSubsystem));
-        new Trigger(m_controller::getAButtonPressed)
-                .onTrue(new InstantCommand(getChassisSubsystem()::setWantACone, getChassisSubsystem()));
-        new Trigger(m_controller::getYButtonPressed)
-                .onTrue(new InstantCommand(getChassisSubsystem()::setWantACube, getChassisSubsystem()));
-            
+        new Trigger(m_controller::getLeftBumper)
+                .onTrue(new InstantCommand(getChassisSubsystem()::setWantACone,
+                        getChassisSubsystem()));
+        new Trigger(m_controller::getRightBumper)
+                .onTrue(new InstantCommand(getChassisSubsystem()::setWantACube,
+                        getChassisSubsystem()));
         // new Trigger(m_controller::getYButton)
         // .onTrue(new InstantCommand(m_drivetrainSubsystem::printAngles,
         // m_drivetrainSubsystem));
@@ -105,6 +105,25 @@ public class RobotContainer {
         // .onFalse(new InstantCommand(m_ManipulatorSubsystem::stoptake,
         // m_ManipulatorSubsystem));
 
+        // temp claw
+        // new Trigger(m_controller::getYButton)
+        // .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, true,
+        // true).withTimeout(3));
+        // new Trigger(m_controller::getBButton)
+        // .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, false,
+        // true).withTimeout(3));
+        // new Trigger(m_controller::getXButton)
+        // .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, true,
+        // false).withTimeout(3));
+        // new Trigger(m_controller::getAButton)
+        // .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, false,
+        // false).withTimeout(3));
+
+        new Trigger(m_controller::getYButton)
+                .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, true, m_ChassisSubsystem.getWantACone()));
+        new Trigger(m_controller::getBButton)
+                .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, false, m_ChassisSubsystem.getWantACone()));
+
         // new Trigger(m_controller::getBButton)
         // .onTrue(new InstantCommand(() ->
         // m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.MID_NODE)));
@@ -146,9 +165,9 @@ public class RobotContainer {
     // }
 
     // accessor to return the manipulator subsystem
-    // public ManipulatorSubsystem getManipulatorSubsystem() {
-    // return m_ManipulatorSubsystem;
-    // }
+    public ManipulatorSubsystem getManipulatorSubsystem() {
+        return m_ManipulatorSubsystem;
+    }
 
     // accessor to return the CANDle/light subsystem
     public ChassisSubsystem getChassisSubsystem() {

@@ -10,33 +10,34 @@ import frc.robot.util.GamePiece.GamePieceType;
 public class ChassisSubsystem extends SubsystemBase {
 
     private CANdle candle;
-    private GamePieceType gamePiece = GamePieceType.Cone;  // is the robot working with a Cone or a Cube? default to CUBE as one will be preloaded
+    private GamePieceType gamePiece = GamePieceType.Cone; // is the robot working with a Cone or a Cube? default to CONE
+                                                          // as one will be preloaded
     private String serialNumber = "unknown";
 
     private static ChassisSubsystem instance;
 
     public ChassisSubsystem() {
-        candle = new CANdle(Constants.CANDLE_CAN_ID, Constants.CAN_BUS_NAME_CANIVORE);
+        candle = new CANdle(Constants.CANDLE_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
         candle.configLEDType(CANdle.LEDStripType.RGB);
         candle.configBrightnessScalar(0.5);
         instance = this;
         serialNumber = RobotController.getSerialNumber();
-        System.out.println("SERIALNUMBER="+serialNumber);
+        System.out.println("SERIALNUMBER=" + serialNumber);
     }
 
     private void turnOnYellow() {
         System.out.println("yellow");
         candle.setLEDs(255, 255, 0);
-        System.out.println(candle.getTemperature());
     }
 
     private void turnOnPurple() {
         System.out.println("purple");
-        candle.setLEDs(196, 0, 255);
+        candle.setLEDs(255, 0, 255);
     }
 
-    // this should only be called during testing as we should always be looking for a CONE or a CUBE
-    private void turnOff() { 
+    // this should only be called during testing as we should always be looking for
+    // a CONE or a CUBE
+    private void turnOff() {
         System.out.println("off");
         candle.setLEDs(0, 0, 0);
     }
@@ -79,7 +80,7 @@ public class ChassisSubsystem extends SubsystemBase {
     // Is this Swervee?
     public Boolean isTestRobot() {
         Boolean result = serialNumber.equalsIgnoreCase(Constants.TEST_ROBORIO_SERIAL_NUMBER);
-        System.out.println("RIOTEST="+result);
+        System.out.println("RIOTEST=" + result);
         return result;
     }
 }

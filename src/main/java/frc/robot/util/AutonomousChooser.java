@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
 import frc.robot.commands.*;
 import frc.robot.commands.automationCommands.AutoHorizontalIntake;
-import frc.robot.commands.automationCommands.TopConeScoreCommand;
+import frc.robot.commands.automationCommands.ScoreTopCommand;
 import frc.robot.commands.helperCommands.AlignArmFrontGroundCommand;
+import frc.robot.commands.helperCommands.ArmToSetPointCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.arm.Setpoint;
 import frc.common.control.Path;
 import frc.common.control.SimplePathBuilder;
 import frc.common.control.Trajectory;
@@ -118,22 +120,24 @@ public class AutonomousChooser {
         return command;
     }
 
-    private void topConeScore(SequentialCommandGroup command, RobotContainer container) {
-        command.addCommands(new TopConeScoreCommand(container.getArmSubsystem(),
-                container.getManipulatorSubsystem()));
-    }
+    // private void scoreTop(SequentialCommandGroup command, RobotContainer
+    // container) {
+    // command.addCommands(new ScoreTopCommand(container.getArmSubsystem(),
+    // container.getManipulatorSubsystem()));
+    // }
 
-    private void fourPointSevenMeterWithFrontArmMovement(SequentialCommandGroup command, RobotContainer container) {
-        command.addCommands(follow(container, trajectories.getFourPointSevenMeterB())
-                .alongWith(new AlignArmFrontGroundCommand(container.getArmSubsystem())));
-    }
+    // private void fourPointSevenMeterWithFrontArmMovement(SequentialCommandGroup
+    // command, RobotContainer container) {
+    // command.addCommands(follow(container, trajectories.getFourPointSevenMeterB())
+    // .alongWith(new AlignArmFrontGroundCommand(container.getArmSubsystem())));
+    // }
 
-    private void intakeGroundThenRest(SequentialCommandGroup command,
-            RobotContainer container) {
-        command.addCommands(new AutoHorizontalIntake(container.getDrivetrain(),
-                container.getArmSubsystem(),
-                container.getManipulatorSubsystem(), true));
-    }
+    // private void intakeGroundThenRest(SequentialCommandGroup command,
+    // RobotContainer container) {
+    // command.addCommands(new AutoHorizontalIntake(container.getDrivetrain(),
+    // container.getArmSubsystem(),
+    // container.getManipulatorSubsystem(), true));
+    // }
 
     private Command follow(RobotContainer container, Trajectory trajectory) {
         return new FollowTrajectoryCommand(container.getDrivetrain(), trajectory);
@@ -150,6 +154,10 @@ public class AutonomousChooser {
     private Command followLine(RobotContainer container, int x, int y) {
         return followLine(container, x, y, 0);
     }
+
+    // private Command gotoSetPoint(RobotContainer container, Setpoint setpoint) {
+    // return new ArmToSetPointCommand(container.getArmSubsystem(), setpoint);
+    // }
 
     public void resetRobotPose(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
         Path.State start = trajectory.getPath().calculate(0.0);

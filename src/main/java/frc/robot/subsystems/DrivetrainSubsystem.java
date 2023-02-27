@@ -133,22 +133,26 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 tab.getLayout("Front Left Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(0, 0),
                 mk3ModuleConfiguration, Mk3SwerveModuleHelper.GearRatio.FAST, FRONT_LEFT_MODULE_DRIVE_MOTOR_CAN_ID,
                 FRONT_LEFT_MODULE_STEER_MOTOR_CAN_ID, FRONT_LEFT_MODULE_STEER_ENCODER_CAN_ID,
-                container.getChassisSubsystem().isTestRobot()? FRONT_LEFT_MODULE_STEER_OFFSET_TEST : FRONT_LEFT_MODULE_STEER_OFFSET);
+                container.getChassisSubsystem().isTestRobot() ? FRONT_LEFT_MODULE_STEER_OFFSET_TEST
+                        : FRONT_LEFT_MODULE_STEER_OFFSET);
         frontRightModule = Mk3SwerveModuleHelper.createFalcon500(
                 tab.getLayout("Front Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(2, 0),
                 mk3ModuleConfiguration, Mk3SwerveModuleHelper.GearRatio.FAST, FRONT_RIGHT_MODULE_DRIVE_MOTOR_CAN_ID,
                 FRONT_RIGHT_MODULE_STEER_MOTOR_CAN_ID, FRONT_RIGHT_MODULE_STEER_ENCODER_CAN_ID,
-                container.getChassisSubsystem().isTestRobot()? FRONT_RIGHT_MODULE_STEER_OFFSET_TEST :FRONT_RIGHT_MODULE_STEER_OFFSET);
+                container.getChassisSubsystem().isTestRobot() ? FRONT_RIGHT_MODULE_STEER_OFFSET_TEST
+                        : FRONT_RIGHT_MODULE_STEER_OFFSET);
         backLeftModule = Mk3SwerveModuleHelper.createFalcon500(
                 tab.getLayout("Back Left Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(4, 0),
                 mk3ModuleConfiguration, Mk3SwerveModuleHelper.GearRatio.FAST, BACK_LEFT_MODULE_DRIVE_MOTOR_CAN_ID,
                 BACK_LEFT_MODULE_STEER_MOTOR_CAN_ID, BACK_LEFT_MODULE_STEER_ENCODER_CAN_ID,
-                container.getChassisSubsystem().isTestRobot()? BACK_LEFT_MODULE_STEER_OFFSET_TEST :BACK_LEFT_MODULE_STEER_OFFSET);
+                container.getChassisSubsystem().isTestRobot() ? BACK_LEFT_MODULE_STEER_OFFSET_TEST
+                        : BACK_LEFT_MODULE_STEER_OFFSET);
         backRightModule = Mk3SwerveModuleHelper.createFalcon500(
                 tab.getLayout("Back Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(6, 0),
                 mk3ModuleConfiguration, Mk3SwerveModuleHelper.GearRatio.FAST, BACK_RIGHT_MODULE_DRIVE_MOTOR_CAN_ID,
                 BACK_RIGHT_MODULE_STEER_MOTOR_CAN_ID, BACK_RIGHT_MODULE_STEER_ENCODER_CAN_ID,
-                container.getChassisSubsystem().isTestRobot()? BACK_RIGHT_MODULE_STEER_OFFSET_TEST : BACK_RIGHT_MODULE_STEER_OFFSET);
+                container.getChassisSubsystem().isTestRobot() ? BACK_RIGHT_MODULE_STEER_OFFSET_TEST
+                        : BACK_RIGHT_MODULE_STEER_OFFSET);
 
         estimator = new SwerveDrivePoseEstimator(kinematics, getGyroscopeRotation(), getSwerveModulePositions(),
                 new Pose2d()); // Vision (x, y, rotation) std-devs
@@ -238,7 +242,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     public void drive(ChassisSpeeds chassisSpeeds) {
         this.chassisSpeeds = chassisSpeeds;
-        System.out.println(chassisSpeeds.vxMetersPerSecond);
+        // System.out.println("Chassis speed"+chassisSpeeds.vxMetersPerSecond);
     }
 
     public void periodic() {
@@ -279,7 +283,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         if (driveSignalOpt.isPresent()) {
             HolonomicDriveSignal driveSignal = driveSignalOpt.get();
-            System.out.println(driveSignal.getTranslation().x);
+            // System.out.println(driveSignal.getTranslation().x);
             if (driveSignalOpt.get().isFieldOriented()) {
                 chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveSignal.getTranslation().x * SPEED_MULTIPLIER,
                         driveSignal.getTranslation().y * SPEED_MULTIPLIER, driveSignal.getRotation() * SPEED_MULTIPLIER,
