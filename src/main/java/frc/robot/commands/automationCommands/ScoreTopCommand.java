@@ -1,5 +1,7 @@
 package frc.robot.commands.automationCommands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.arm.ArmSubsystem;
@@ -10,8 +12,8 @@ import frc.robot.subsystems.ManipulatorSubsystem;
 
 public class ScoreTopCommand extends SequentialCommandGroup {
 
-    public ScoreTopCommand(ArmSubsystem armSubsystem, ManipulatorSubsystem manipulatorSubsystem) {
+    public ScoreTopCommand(ArmSubsystem armSubsystem, ManipulatorSubsystem manipulatorSubsystem, BooleanSupplier cone) {
         addCommands(new ArmToSetPointCommand(armSubsystem, ArmSetpoints.TOP_NODE));
-        addCommands(new ControlIntakeCommand(manipulatorSubsystem, isFinished(), isFinished()));
+        addCommands(new ControlIntakeCommand(manipulatorSubsystem, false, cone));
     }
 }

@@ -1,5 +1,7 @@
 package frc.robot.commands.automationCommands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.common.control.SimplePathBuilder;
 import frc.common.control.Trajectory;
@@ -15,7 +17,7 @@ import frc.robot.subsystems.ManipulatorSubsystem;
 
 public class AutoHorizontalIntake extends SequentialCommandGroup {
     public AutoHorizontalIntake(DrivetrainSubsystem drivetrainSubsystem, ArmSubsystem armSubsystem,
-            ManipulatorSubsystem manipulatorSubsystem, boolean cone) {
+            ManipulatorSubsystem manipulatorSubsystem, BooleanSupplier cone) {
         addCommands(
                 new FollowTrajectoryCommand(drivetrainSubsystem,
                         new Trajectory(new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)

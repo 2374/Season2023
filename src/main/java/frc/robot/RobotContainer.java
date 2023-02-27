@@ -120,9 +120,9 @@ public class RobotContainer {
         // false).withTimeout(3));
 
         new Trigger(m_controller::getYButton)
-                .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, true, m_ChassisSubsystem.getWantACone()));
+                .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, true, m_ChassisSubsystem::getWantACone));
         new Trigger(m_controller::getBButton)
-                .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, false, m_ChassisSubsystem.getWantACone()));
+                .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, false, m_ChassisSubsystem::getWantACone));
 
         // new Trigger(m_controller::getBButton)
         // .onTrue(new InstantCommand(() ->
