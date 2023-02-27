@@ -34,7 +34,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void outtake() {
-        intakeMotor.set(-.4);
+        intakeMotor.set(-.8);
     }
 
     public void stoptake() {
@@ -59,21 +59,23 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void periodic() {
-        System.out.println("Sensor=" + sensor.getRange());
+        System.out.println("Sensor=" + robotContainer.getChassisSubsystem().getWantACone()+"  "+ robotContainer.getChassisSubsystem().getWantACube()+"  "+sensor.getRange());
 
         // The distance from the TOF Sensor comes back in cm from 10->1400ish
         // We want to stop the motor automatically when the intakeMode is true
         // at the correct distance for each object
-        // if (intakeMode) {
-        // if (robotContainer.getChassisSubsystem().getWantACone()) {
-        // if (sensor.getRange() < 100) {
-        // stoptake();
-        // }
-        // } else { // we are testing for cube
-        // if (sensor.getRange() < 700) {
-        // stoptake();
-        // }
-        // }
-        // }
+        if (intakeMode) {
+            if (robotContainer.getChassisSubsystem().getSomething()) {
+                if (robotContainer.getChassisSubsystem().getWantACone()) {
+                    if (sensor.getRange() < 100) {
+                       stoptake();
+                    }
+                } else { // we are testing for cube
+                    if (sensor.getRange() < 700) {
+                       stoptake();
+                    }
+                }
+            }
+        }
     }
 }

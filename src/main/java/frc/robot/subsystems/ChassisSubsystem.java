@@ -10,8 +10,8 @@ import frc.robot.util.GamePiece.GamePieceType;
 public class ChassisSubsystem extends SubsystemBase {
 
     private CANdle candle;
-    private GamePieceType gamePiece = GamePieceType.Cone; // is the robot working with a Cone or a Cube? default to CONE
-                                                          // as one will be preloaded
+    private GamePieceType gamePiece = GamePieceType.None; // is the robot working with a Cone or a Cube? default to None
+                                                
     private String serialNumber = "unknown";
 
     private static ChassisSubsystem instance;
@@ -49,6 +49,11 @@ public class ChassisSubsystem extends SubsystemBase {
         return instance;
     }
 
+    // Do we want to work with some object?
+    public boolean getSomething() {
+        return gamePiece != GamePieceType.None;
+    }
+
     // return TRUE if the robot is working with a CONE
     public Boolean getWantACone() {
         return gamePiece == GamePieceType.Cone;
@@ -83,4 +88,5 @@ public class ChassisSubsystem extends SubsystemBase {
         System.out.println("RIOTEST=" + result);
         return result;
     }
+
 }
