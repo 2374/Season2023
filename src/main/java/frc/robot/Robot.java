@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -11,6 +13,7 @@ import frc.robot.util.DriverReadout;
 
 public class Robot extends TimedRobot {
     private final RobotContainer m_robotContainer = new RobotContainer();
+    private UsbCamera camera = CameraServer.startAutomaticCapture("Camera", 0);
     private Command m_autonomousCommand;
 
     // @SuppressWarnings("unused")
@@ -30,8 +33,10 @@ public class Robot extends TimedRobot {
                 (int) SmartDashboard.getNumber("Apriltag Number", 1)));
 
         // game piece determination
-        SmartDashboard.putData("Signal Cone", new InstantCommand(m_robotContainer.getChassisSubsystem()::setWantACone, m_robotContainer.getChassisSubsystem()));
-        SmartDashboard.putData("Signal Cube", new InstantCommand(m_robotContainer.getChassisSubsystem()::setWantACube, m_robotContainer.getChassisSubsystem()));
+        SmartDashboard.putData("Signal Cone", new InstantCommand(m_robotContainer.getChassisSubsystem()::setWantACone,
+                m_robotContainer.getChassisSubsystem()));
+        SmartDashboard.putData("Signal Cube", new InstantCommand(m_robotContainer.getChassisSubsystem()::setWantACube,
+                m_robotContainer.getChassisSubsystem()));
     }
 
     @Override
