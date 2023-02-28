@@ -14,9 +14,10 @@ import frc.robot.RobotContainer;
 public class ManipulatorSubsystem extends SubsystemBase {
     private final WPI_TalonFX intakeMotor;
     private final WPI_TalonFX wristRotationMotor;
-    TimeOfFlight sensor = new TimeOfFlight(Constants.MANIPULATOR_DISTANCE_SENSOR_CAN_ID);
-    Boolean intakeMode = false; // we start the match with a cone in the manipulator ready to deploy
-    RobotContainer robotContainer;
+    private TimeOfFlight sensor = new TimeOfFlight(Constants.MANIPULATOR_DISTANCE_SENSOR_CAN_ID);
+    private Boolean intakeMode = false; // we start the match with a cone in the manipulator ready to deploy
+    private Boolean active = false;
+    private RobotContainer robotContainer;
 
     public ManipulatorSubsystem(RobotContainer container) {
         intakeMotor = new WPI_TalonFX(Constants.MANIPULATOR_MOTOR_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
@@ -58,6 +59,14 @@ public class ManipulatorSubsystem extends SubsystemBase {
         return sensor.getRange();
     }
 
+    public void activate() {
+        active = true;
+    }
+
+    public void deactivate() {
+        active = false;
+    }
+
     public void periodic() {
         System.out.println("Sensor=" + robotContainer.getChassisSubsystem().getWantACone() + "  "
                 + robotContainer.getChassisSubsystem().getWantACube() + "  " + sensor.getRange());
@@ -65,18 +74,32 @@ public class ManipulatorSubsystem extends SubsystemBase {
         // The distance from the TOF Sensor comes back in cm from 10->1400ish
         // We want to stop the motor automatically when the intakeMode is true
         // at the correct distance for each object
-        // if (intakeMode) {
-        // if (robotContainer.getChassisSubsystem().getSomething()) {
-        // if (robotContainer.getChassisSubsystem().getWantACone()) {
-        // if (sensor.getRange() < 100) {
-        // stoptake();
-        // }
-        // } else { // we are testing for cube
-        // if (sensor.getRange() < 700) {
-        // stoptake();
-        // }
-        // }
-        // }
-        // }
+        if (active) {
+            if (intakeMode) {
+                if (robotContainer.getChassisSubsystem().getSomething()) {
+                    if (robotContainer.getChassisSubsystem().getWantACone()) {
+                        if (sensor.getRange() < 300) {
+                            stoptake();
+                            active = false;
+                        }
+                    } else if (robotContainer.getChassisSubsystem().getWantACube()) { // we are testing for cube
+                        if (sensor.getRange() < 100) {
+                            stoptake();
+                            active = false;
+                        }
+                    } else {
+                        stoptake();
+                        active = false;
+                    }
+                }
+            } else {
+                if (robotContainer.getChassisSubsystem().getSomething()) {
+                    if (sensor.getRange() > 300) {
+                        stoptake();
+                        active = false;
+                    }
+                }
+            }
+        }
     }
 }

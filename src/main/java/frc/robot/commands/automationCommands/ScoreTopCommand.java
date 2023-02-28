@@ -12,8 +12,8 @@ import frc.robot.subsystems.ManipulatorSubsystem;
 
 public class ScoreTopCommand extends SequentialCommandGroup {
 
-    public ScoreTopCommand(ArmSubsystem armSubsystem, ManipulatorSubsystem manipulatorSubsystem, BooleanSupplier cone) {
+    public ScoreTopCommand(ArmSubsystem armSubsystem, ManipulatorSubsystem manipulatorSubsystem) {
         addCommands(new ArmToSetPointCommand(armSubsystem, ArmSetpoints.TOP_NODE));
-        addCommands(new ControlIntakeCommand(manipulatorSubsystem, false, cone));
+        addCommands(new ControlIntakeCommand(manipulatorSubsystem, false));
     }
 }

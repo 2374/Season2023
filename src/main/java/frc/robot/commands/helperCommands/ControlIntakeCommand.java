@@ -10,45 +10,27 @@ import frc.robot.subsystems.ManipulatorSubsystem;
 public class ControlIntakeCommand extends CommandBase {
     private final ManipulatorSubsystem m_ManipulatorSubsystem;
     private final boolean in;
-    private final BooleanSupplier supplier;
-    private boolean cone;
 
-    public ControlIntakeCommand(ManipulatorSubsystem manipulatorSubsystem, boolean in, BooleanSupplier supplier) {
+    public ControlIntakeCommand(ManipulatorSubsystem manipulatorSubsystem, boolean in) {
         m_ManipulatorSubsystem = manipulatorSubsystem;
         this.in = in;
-        this.supplier = supplier;
         addRequirements(m_ManipulatorSubsystem);
     }
 
     @Override
     public void initialize() {
-        cone = supplier.getAsBoolean();
-        System.out.println(cone);
         if (in) {
             m_ManipulatorSubsystem.intake();
         } else {
             m_ManipulatorSubsystem.outtake();
         }
-    }
-
-    @Override
-    public boolean isFinished() {
-        if (in) {
-            if ((cone && m_ManipulatorSubsystem.getDistance() < 30)
-                    || (!cone && m_ManipulatorSubsystem.getDistance() < 100)) {
-                return true;
-            }
-        } else {
-            if (m_ManipulatorSubsystem.getDistance() > 350) {
-                return true;
-            }
-        }
-        return false;
+        m_ManipulatorSubsystem.activate();
     }
 
     @Override
     public void end(boolean interrupted) {
         System.out.println("Stop");
         m_ManipulatorSubsystem.stoptake();
+        m_ManipulatorSubsystem.deactivate();
     }
 }
