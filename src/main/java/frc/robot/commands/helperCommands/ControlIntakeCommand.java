@@ -11,6 +11,12 @@ public class ControlIntakeCommand extends CommandBase {
     private final ManipulatorSubsystem m_ManipulatorSubsystem;
     private final boolean in;
 
+    /**
+     * Starts the Manipulator
+     * 
+     * @param manipulatorSubsystem The manipulator subsystem
+     * @param in                   Intake or Outtake
+     */
     public ControlIntakeCommand(ManipulatorSubsystem manipulatorSubsystem, boolean in) {
         m_ManipulatorSubsystem = manipulatorSubsystem;
         this.in = in;
