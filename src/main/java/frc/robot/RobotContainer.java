@@ -136,9 +136,11 @@ public class RobotContainer {
         // false).withTimeout(3));
 
         new Trigger(m_controller::getYButton)
-                .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, true));
+                .onTrue(new InstantCommand(m_ManipulatorSubsystem::intake, m_ManipulatorSubsystem));
         new Trigger(m_controller::getBButton)
-                .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, false));
+                .onTrue(new InstantCommand(m_ManipulatorSubsystem::outtake, m_ManipulatorSubsystem));
+        new Trigger(m_controller::getAButton)
+                .onTrue(new InstantCommand(m_ManipulatorSubsystem::stoptake, m_ManipulatorSubsystem));
 
         // new Trigger(m_controller::getBButton)
         // .onTrue(new InstantCommand(() ->

@@ -33,8 +33,7 @@ public class ControlIntakeCommand extends CommandBase {
     }
 
     @Override
-    public void end(boolean interrupted) {
-        System.out.println("Stop");
-        m_ManipulatorSubsystem.stoptake();
+    public boolean isFinished() {
+        return true;
     }
 }
