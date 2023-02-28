@@ -24,13 +24,11 @@ public class ControlIntakeCommand extends CommandBase {
         } else {
             m_ManipulatorSubsystem.outtake();
         }
-        m_ManipulatorSubsystem.activate();
     }
 
     @Override
     public void end(boolean interrupted) {
         System.out.println("Stop");
         m_ManipulatorSubsystem.stoptake();
-        m_ManipulatorSubsystem.deactivate();
     }
 }

@@ -32,14 +32,17 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     public void intake() {
         intakeMotor.set(.4);
+        activate();
     }
 
     public void outtake() {
         intakeMotor.set(-.4);
+        activate();
     }
 
     public void stoptake() {
         intakeMotor.stopMotor();
+        deactivate();
     }
 
     public void rotateLeft() { // Use PID for this later
@@ -59,11 +62,11 @@ public class ManipulatorSubsystem extends SubsystemBase {
         return sensor.getRange();
     }
 
-    public void activate() {
+    private void activate() {
         active = true;
     }
 
-    public void deactivate() {
+    private void deactivate() {
         active = false;
     }
 
@@ -80,24 +83,18 @@ public class ManipulatorSubsystem extends SubsystemBase {
                     if (robotContainer.getChassisSubsystem().getWantACone()) {
                         if (sensor.getRange() < 300) {
                             stoptake();
-                            active = false;
                         }
                     } else if (robotContainer.getChassisSubsystem().getWantACube()) { // we are testing for cube
                         if (sensor.getRange() < 100) {
                             stoptake();
-                            active = false;
                         }
                     } else {
                         stoptake();
-                        active = false;
                     }
                 }
             } else {
-                if (robotContainer.getChassisSubsystem().getSomething()) {
-                    if (sensor.getRange() > 300) {
-                        stoptake();
-                        active = false;
-                    }
+                if (sensor.getRange() > 300) {
+                    stoptake();
                 }
             }
         }
