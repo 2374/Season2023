@@ -97,9 +97,9 @@ public class Constants {
         public static final double LOWER_ANGLE_OFFSET = -244.4;
         public static final double SHOULDER_ANGLE_OFFSET = -89.4;
 
-        public static final Gains GAINS_UPPER_JOINT = new Gains(0.02, 0.001, 0.01, 0.0, 50);
+        public static final Gains GAINS_UPPER_JOINT = new Gains(0.01, 0, 0.0005, 0.0, 50);
 
-        public static final Gains GAINS_LOWER_JOINT = new Gains(0.02, 0.001, 0.01, 0.00, 50);
+        public static final Gains GAINS_LOWER_JOINT = new Gains(0.01, 0, 0.0005, 0.00, 50);
 
         public static final double kSUpper = 0.04;
         public static final double kGUpper = 0.25;
@@ -129,7 +129,7 @@ public class Constants {
         public static final int MAX_SENSOR_VEL = 86398;
 
         /* Motor neutral dead-band : Range 0.001 -> 0.25 */
-        public static final double NEUTRAL_DEADBAND = 0.005;
+        public static final double NEUTRAL_DEADBAND = 0.02;
 
         public static final double NOMINAL_OUTPUT_FORWARD = 0;
         public static final double NOMINAL_OUTPUT_REVERSE = 0;

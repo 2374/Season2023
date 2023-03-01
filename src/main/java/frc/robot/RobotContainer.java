@@ -52,6 +52,7 @@ public class RobotContainer {
      * Reset the default arm command
      */
     public void resetArm() {
+        m_ArmSubsystem.reset();
         m_ArmSubsystem.setDefaultCommand(new ArmDefault(m_ArmSubsystem));
     }
 
@@ -77,7 +78,7 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(getChassisSubsystem()::setWantACube,
                         getChassisSubsystem()));
         new Trigger(m_controller::getXButton).onTrue(
-                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.STOWED), m_ArmSubsystem));
+                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.STOWED)));
         // new Trigger(m_controller::getYButton)
         // .onTrue(new InstantCommand(m_drivetrainSubsystem::printAngles,
         // m_drivetrainSubsystem));

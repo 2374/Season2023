@@ -62,6 +62,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     public ArmSubsystem(RobotContainer robotContainer) {
         container = robotContainer;
+
+        m_controllerLower.setTolerance(1, 1);
+        m_controllerUpper.setTolerance(1, 1);
         // following
         m_elbowRightJoint.follow(m_elbowLeftJoint);
         m_shoulderRightJoint.follow(m_shoulderLeftJoint);
@@ -213,14 +216,12 @@ public class ArmSubsystem extends SubsystemBase {
         m_controllerLower.reset(getLowerJointDegrees());
         m_shoulderSetpoint = getUpperJointDegrees();
         m_elbowSetpoint = getLowerJointDegrees();
-
     }
 
     public void updateUpperSetpoint(double setpoint) {
         if (m_shoulderSetpoint != setpoint) {
             if (setpoint < 180 && setpoint > -180) {
                 m_shoulderSetpoint = setpoint;
-                System.out.println("UPDATING - " + setpoint);
             }
         }
     }
@@ -229,7 +230,6 @@ public class ArmSubsystem extends SubsystemBase {
         if (m_elbowSetpoint != setpoint) {
             if (setpoint < 180 && setpoint > -180) {
                 m_elbowSetpoint = setpoint;
-                System.out.println("UPDATING" + setpoint);
             }
         }
     }
@@ -295,12 +295,12 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setPercentOutputUpper(double speed) {
         // m_shoulderLeftJoint.set(TalonFXControlMode.PercentOutput, speed);
-        System.out.println("shoulder-" + m_controllerUpper.getPositionError());
+        System.out.println("shoulder-" + speed);
     }
 
     public void setPercentOutputLower(double speed) {
         // m_elbowLeftJoint.set(TalonFXControlMode.PercentOutput, speed);
-        System.out.println("elbow-" + m_controllerLower.getPositionError());
+        System.out.println("elbow-" + speed);
     }
 
     public void neutralUpper() {
