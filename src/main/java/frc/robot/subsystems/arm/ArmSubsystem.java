@@ -295,12 +295,12 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setPercentOutputUpper(double speed) {
         // m_shoulderLeftJoint.set(TalonFXControlMode.PercentOutput, speed);
-        System.out.println("shoulder-" + speed);
+        System.out.println("shoulder-" + speed); // CHANGE THIS TO SMART DASHBOARD
     }
 
     public void setPercentOutputLower(double speed) {
         // m_elbowLeftJoint.set(TalonFXControlMode.PercentOutput, speed);
-        System.out.println("elbow-" + speed);
+        System.out.println("elbow-" + speed); // CHANGE THIS TO SMART DASHBOARD
     }
 
     public void neutralUpper() {
