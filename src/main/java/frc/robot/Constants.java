@@ -84,45 +84,45 @@ public class Constants {
             new Rotation3d(0, 0, 0));
     public static final Pose3d TAG_1_POSE3D = new Pose3d(FIELD_LENGTH, FIELD_WIDTH / 2, 4.5, new Rotation3d(0, 0, 180));
     public static final boolean TEST_MODE = false;
-    public static final int UPPER_ENCODER_ARM_CAN_ID = 25; // the CAN ID for the RIO CAN Bus
-    public static final int LOWER_ENCODER_ARM_CAN_ID = 26; // the CAN ID for the RIO CAN Bus
-    public static final int UPPER_JOINT_LEFT_MOTOR_CAN_ID = 5; // the CAN ID for the RIO CAN Bus
-    public static final int UPPER_JOINT_RIGHT_MOTOR_CAN_ID = 6; // the CAN ID for the RIO CAN Bus
-    public static final int LOWER_JOINT_LEFT_MOTOR_CAN_ID = 7; // the CAN ID for the RIO CAN Bus
-    public static final int LOWER_JOINT_RIGHT_MOTOR_CAN_ID = 8; // the CAN ID for the RIO CAN Bus
+    public static final int SHOULDER_ENCODER_ARM_CAN_ID = 25; // the CAN ID for the RIO CAN Bus
+    public static final int ELBOW_ENCODER_ARM_CAN_ID = 26; // the CAN ID for the RIO CAN Bus
+    public static final int SHOULDER_JOINT_LEFT_MOTOR_CAN_ID = 5; // the CAN ID for the RIO CAN Bus
+    public static final int SHOULDER_JOINT_RIGHT_MOTOR_CAN_ID = 6; // the CAN ID for the RIO CAN Bus
+    public static final int ELBOW_JOINT_LEFT_MOTOR_CAN_ID = 7; // the CAN ID for the RIO CAN Bus
+    public static final int ELBOW_JOINT_RIGHT_MOTOR_CAN_ID = 8; // the CAN ID for the RIO CAN Bus
     public static final int MANIPULATOR_WRIST_MOTOR_CAN_ID = 9;
 
     public static final class ArmConstants {
 
-        public static final double LOWER_ANGLE_OFFSET = -244.4;
+        public static final double ELBOW_ANGLE_OFFSET = -244.4;
         public static final double SHOULDER_ANGLE_OFFSET = -89.4;
 
-        public static final Gains GAINS_UPPER_JOINT = new Gains(0.01, 0, 0.0005, 0.0, 50);
+        public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.01, 0, 0.0005, 0.0, 50);
 
-        public static final Gains GAINS_LOWER_JOINT = new Gains(0.01, 0, 0.0005, 0.00, 50);
+        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.01, 0, 0.0005, 0.00, 50);
 
-        public static final double kSUpper = 0.04;
-        public static final double kGUpper = 0.25;
-        public static final double kVUpper = 0.06;
-        public static final double kAUpper = 0.0;
+        public static final double kSShoulder = 0.04;
+        public static final double kGShoulder = 0.25;
+        public static final double kVShoulder = 0.06;
+        public static final double kAShoulder = 0.0;
 
-        public static final double kSLower = 0.04;
-        public static final double kGLower = 0.25;
-        public static final double kVLower = 0.06;
-        public static final double kALower = 0.0;
+        public static final double kSElbow = 0.04;
+        public static final double kGElbow = 0.25;
+        public static final double kVElbow = 0.06;
+        public static final double kAElbow = 0.0;
 
         // JointConfig for DJArmFeedForwards
-        public static final double UPPER_LENGTH = 1.07;
-        public static final double UPPER_MOI = 0.4;
-        public static final double UPPER_CGRADIUS = 1.0;
-        public static final double UPPER_MASS = 5.0;
-        public static final DCMotor UPPER_MOTOR = DCMotor.getFalcon500(2).withReduction(75);
+        public static final double SHOULDER_LENGTH = 1.07;
+        public static final double SHOULDER_MOI = 0.4;
+        public static final double SHOULDER_CGRADIUS = 1.0;
+        public static final double SHOULDER_MASS = 5.0;
+        public static final DCMotor SHOULDER_MOTOR = DCMotor.getFalcon500(2).withReduction(75);
 
-        public static final double LOWER_LENGTH = 0.7874;
-        public static final double LOWER_MOI = 0.4;
-        public static final double LOWER_CGRADIUS = 1.0;
-        public static final double LOWER_MASS = 5.0;
-        public static final DCMotor LOWER_MOTOR = DCMotor.getFalcon500(2).withReduction(75);
+        public static final double ELBOW_LENGTH = 0.7874;
+        public static final double ELBOW_MOI = 0.4;
+        public static final double ELBOW_CGRADIUS = 1.0;
+        public static final double ELBOW_MASS = 5.0;
+        public static final DCMotor ELBOW_MOTOR = DCMotor.getFalcon500(2).withReduction(75);
 
         // Max sensor velocity per 100 ms
         // Max RPM 6380 * 2:1 gearing * 4096 ticks *1min/60000ms * 100ms
@@ -136,11 +136,11 @@ public class Constants {
         public static final double PEAK_OUTPUT_FORWARD = 0.5;
         public static final double PEAK_OUTPUT_REVERSE = -0.5;
 
-        public static final int FORWARD_SOFT_LIMIT_UPPER = 3300;
-        public static final int REVERSE_SOFT_LIMIT_UPPER = 500;
+        public static final int FORWARD_SOFT_LIMIT_SHOULDER = 3300;
+        public static final int REVERSE_SOFT_LIMIT_SHOULDER = 500;
 
-        public static final int FORWARD_SOFT_LIMIT_LOWER = 3400;
-        public static final int REVERSE_SOFT_LIMIT_LOWER = 1000;
+        public static final int FORWARD_SOFT_LIMIT_ELBOW = 3400;
+        public static final int REVERSE_SOFT_LIMIT_ELBOW = 1000;
         /**
          * Set to zero to skip waiting for confirmation.
          * Set to nonzero to wait and report to DS if action fails.
@@ -148,11 +148,11 @@ public class Constants {
         public final static int TIMEOUT = 10;
 
         // Motion Magic constants
-        public static final double LOWER_CRUISE = 70.0;
-        public static final double LOWER_ACCELERATION = 120.0;
+        public static final double ELBOW_CRUISE = 70.0;
+        public static final double ELBOW_ACCELERATION = 120.0;
 
-        public static final double UPPER_CRUISE = 70.0;
-        public static final double UPPER_ACCELERATION = 120.0;
+        public static final double SHOULDER_CRUISE = 70.0;
+        public static final double SHOULDER_ACCELERATION = 120.0;
 
         public static final double DUTY_CYCLE_MIN = 1.0 / 1025.0;
         public static final double DUTY_CYCLE_MAX = 1024.0 / 1025.0;
@@ -174,7 +174,7 @@ public class Constants {
         public static final Setpoint TOP_NODE_PLACED = new Setpoint(234, 149, false, 213, 111, false);
         public static final Setpoint SUBSTATION = new Setpoint(150, 53, false, 150, 53, false);
 
-        public static final double INTERMEDIATE_LOWER_POSITION = 90;
+        public static final double INTERMEDIATE_ELBOW_POSITION = 90;
     }
 
 }

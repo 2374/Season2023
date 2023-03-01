@@ -25,8 +25,8 @@ public class ArmDefault extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_arm.runUpperProfiled();
-        m_arm.runLowerProfiled();
+        m_arm.runShoulderProfiled();
+        m_arm.runElbowProfiled();
     }
 
     // Called once the command ends or is interrupted.

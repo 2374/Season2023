@@ -11,66 +11,66 @@ import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 
 public class SimpleASubsystem extends SubsystemBase {
-    private CANCoder upperEncoder;
-    private CANCoder lowerEncoder;
-    private WPI_TalonFX upperLeft;
-    private WPI_TalonFX upperRight;
-    private WPI_TalonFX lowerLeft;
-    private WPI_TalonFX lowerRight;
+    private CANCoder shoulderEncoder;
+    private CANCoder elbowEncoder;
+    private WPI_TalonFX shoulderLeft;
+    private WPI_TalonFX shoulderRight;
+    private WPI_TalonFX elbowLeft;
+    private WPI_TalonFX elbowRight;
 
     public SimpleASubsystem() {
-        upperEncoder = new CANCoder(Constants.UPPER_ENCODER_ARM_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
-        lowerEncoder = new CANCoder(Constants.LOWER_ENCODER_ARM_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
-        upperLeft = new WPI_TalonFX(Constants.UPPER_JOINT_LEFT_MOTOR_CAN_ID,
+        shoulderEncoder = new CANCoder(Constants.SHOULDER_ENCODER_ARM_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
+        elbowEncoder = new CANCoder(Constants.ELBOW_ENCODER_ARM_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
+        shoulderLeft = new WPI_TalonFX(Constants.SHOULDER_JOINT_LEFT_MOTOR_CAN_ID,
                 Constants.CAN_BUS_NAME_ROBORIO);
-        upperRight = new WPI_TalonFX(Constants.UPPER_JOINT_RIGHT_MOTOR_CAN_ID,
+        shoulderRight = new WPI_TalonFX(Constants.SHOULDER_JOINT_RIGHT_MOTOR_CAN_ID,
                 Constants.CAN_BUS_NAME_ROBORIO);
-        lowerLeft = new WPI_TalonFX(Constants.LOWER_JOINT_LEFT_MOTOR_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
-        lowerRight = new WPI_TalonFX(Constants.LOWER_JOINT_RIGHT_MOTOR_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
-        upperLeft.setInverted(true);
-        upperLeft.follow(upperRight);
-        lowerLeft.setInverted(true);
-        lowerLeft.follow(lowerRight);
-        upperLeft.setNeutralMode(NeutralMode.Brake);
-        upperRight.setNeutralMode(NeutralMode.Brake);
-        lowerLeft.setNeutralMode(NeutralMode.Brake);
-        lowerRight.setNeutralMode(NeutralMode.Brake);
-        upperStop();
-        lowerStop();
+        elbowLeft = new WPI_TalonFX(Constants.ELBOW_JOINT_LEFT_MOTOR_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
+        elbowRight = new WPI_TalonFX(Constants.ELBOW_JOINT_RIGHT_MOTOR_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
+        shoulderLeft.setInverted(true);
+        shoulderLeft.follow(shoulderRight);
+        elbowLeft.setInverted(true);
+        elbowLeft.follow(elbowRight);
+        shoulderLeft.setNeutralMode(NeutralMode.Brake);
+        shoulderRight.setNeutralMode(NeutralMode.Brake);
+        elbowLeft.setNeutralMode(NeutralMode.Brake);
+        elbowRight.setNeutralMode(NeutralMode.Brake);
+        shoulderStop();
+        elbowStop();
     }
 
-    public void upperForward() {
-        upperRight.set(0.2);
+    public void shoulderForward() {
+        shoulderRight.set(0.2);
     }
 
-    public void upperBack() {
-        upperRight.set(-0.2);
+    public void shoulderBack() {
+        shoulderRight.set(-0.2);
     }
 
-    public void upperStop() {
-        upperRight.set(ControlMode.Position, upperRight.getSelectedSensorPosition());
+    public void shoulderStop() {
+        shoulderRight.set(ControlMode.Position, shoulderRight.getSelectedSensorPosition());
     }
 
-    public void lowerForward() {
-        lowerRight.set(0.2);
+    public void elbowForward() {
+        elbowRight.set(0.2);
     }
 
-    public void lowerBack() {
-        lowerRight.set(-0.2);
+    public void elbowBack() {
+        elbowRight.set(-0.2);
     }
 
-    public void lowerStop() {
-        lowerRight.set(ControlMode.Position, lowerRight.getSelectedSensorPosition());
+    public void elbowStop() {
+        elbowRight.set(ControlMode.Position, elbowRight.getSelectedSensorPosition());
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("upperEncoder", upperEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("upperTrue",
-                (upperEncoder.getAbsolutePosition() + ArmConstants.SHOULDER_ANGLE_OFFSET + 180) % 360 - 180);
-        SmartDashboard.putNumber("lowerEncoder", lowerEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("lowerTrue",
-                (lowerEncoder.getAbsolutePosition() + ArmConstants.LOWER_ANGLE_OFFSET + 180) % 360 - 180);
+        SmartDashboard.putNumber("shoulderEncoder", shoulderEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("shoulderTrue",
+                (shoulderEncoder.getAbsolutePosition() + ArmConstants.SHOULDER_ANGLE_OFFSET + 180) % 360 - 180);
+        SmartDashboard.putNumber("elbowEncoder", elbowEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("elbowTrue",
+                (elbowEncoder.getAbsolutePosition() + ArmConstants.ELBOW_ANGLE_OFFSET + 180) % 360 - 180);
     }
 
 }
