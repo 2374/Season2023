@@ -69,7 +69,6 @@ public class Constants {
     // CHASSIS Subsystem
     public static final int CANDLE_CAN_ID = 27; // the CAN ID for the FASTFD CAN Bus
     public static final String TEST_ROBORIO_SERIAL_NUMBER = "0316b2d6"; // serial number of Swervee roborio
-    
 
     // MANIPULATOR Subsystem
     public static final int MANIPULATOR_MOTOR_CAN_ID = 10; // the CAN ID for the RIO CAN Bus
@@ -95,8 +94,8 @@ public class Constants {
 
     public static final class ArmConstants {
 
-        public static final double LOWER_ANGLE_OFFSET = -60.91;
-        public static final double UPPER_ANGLE_OFFSET = -211.55;
+        public static final double LOWER_ANGLE_OFFSET = -244.4;
+        public static final double SHOULDER_ANGLE_OFFSET = -89.4;
 
         public static final Gains GAINS_UPPER_JOINT = new Gains(0.02, 0.001, 0.01, 0.0, 50);
 
@@ -167,7 +166,7 @@ public class Constants {
         public static final Setpoint TEST_SETPOINT_HIGHER = new Setpoint(191, 35, true, 191, 35, true);
         public static final Setpoint TEST_SETPOINT_LOWER = new Setpoint(164, 65, true, 164, 65, true);
 
-        public static final Setpoint STOWED = new Setpoint(180, 16, false, 180, 16, false);
+        public static final Setpoint STOWED = new Setpoint(90, 90, false, 90, 90, false);
         public static final Setpoint FLOOR = new Setpoint(245, 61, true, 245, 62, true);
         public static final Setpoint MID_NODE = new Setpoint(192, 90, false, 192, 69, false);
         public static final Setpoint MID_NODE_PLACED = new Setpoint(199, 87, false, 192, 69, false);

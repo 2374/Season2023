@@ -67,7 +67,7 @@ public class SimpleASubsystem extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("upperEncoder", upperEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("upperTrue",
-                (upperEncoder.getAbsolutePosition() + ArmConstants.UPPER_ANGLE_OFFSET + 180) % 360 - 180);
+                (upperEncoder.getAbsolutePosition() + ArmConstants.SHOULDER_ANGLE_OFFSET + 180) % 360 - 180);
         SmartDashboard.putNumber("lowerEncoder", lowerEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("lowerTrue",
                 (lowerEncoder.getAbsolutePosition() + ArmConstants.LOWER_ANGLE_OFFSET + 180) % 360 - 180);

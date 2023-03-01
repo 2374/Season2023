@@ -101,8 +101,10 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void periodic() {
-        System.out.println("Sensor=" + robotContainer.getChassisSubsystem().getWantACone() + "  "
-                + robotContainer.getChassisSubsystem().getWantACube() + "  " + sensor.getRange());
+        // System.out.println("Sensor=" +
+        // robotContainer.getChassisSubsystem().getWantACone() + " "
+        // + robotContainer.getChassisSubsystem().getWantACube() + " " +
+        // sensor.getRange());
 
         // The distance from the TOF Sensor comes back in cm from 10->1400ish
         // We want to stop the motor automatically when the intakeMode is true

@@ -3,6 +3,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.ArmSetpoints;
 // import frc.robot.Constants.ArmSetpoints;
 import frc.robot.commands.*;
 import frc.robot.commands.helperCommands.ControlIntakeCommand;
@@ -15,8 +17,9 @@ import frc.robot.util.AutonomousTrajectories;
 public class RobotContainer {
     private final ChassisSubsystem m_ChassisSubsystem = new ChassisSubsystem();
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(this);
-    // private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-    private final ManipulatorSubsystem m_ManipulatorSubsystem = new ManipulatorSubsystem(this);
+    private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem(this);
+    // private final ManipulatorSubsystem m_ManipulatorSubsystem = new
+    // ManipulatorSubsystem(this);
     // private final SimpleASubsystem m_ASubsystem = new SimpleASubsystem();
 
     private final AutonomousChooser autonomousChooser = new AutonomousChooser(
@@ -49,7 +52,7 @@ public class RobotContainer {
      * Reset the default arm command
      */
     public void resetArm() {
-        // m_ArmSubsystem.setDefaultCommand(new ArmDefault(m_ArmSubsystem));
+        m_ArmSubsystem.setDefaultCommand(new ArmDefault(m_ArmSubsystem));
     }
 
     /**
@@ -73,6 +76,8 @@ public class RobotContainer {
         new Trigger(m_controller::getRightBumper)
                 .onTrue(new InstantCommand(getChassisSubsystem()::setWantACube,
                         getChassisSubsystem()));
+        new Trigger(m_controller::getXButton).onTrue(
+                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.STOWED), m_ArmSubsystem));
         // new Trigger(m_controller::getYButton)
         // .onTrue(new InstantCommand(m_drivetrainSubsystem::printAngles,
         // m_drivetrainSubsystem));
@@ -135,12 +140,15 @@ public class RobotContainer {
         // .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, false,
         // false).withTimeout(3));
 
-        new Trigger(m_controller::getYButton)
-                .onTrue(new InstantCommand(m_ManipulatorSubsystem::intake, m_ManipulatorSubsystem));
-        new Trigger(m_controller::getBButton)
-                .onTrue(new InstantCommand(m_ManipulatorSubsystem::outtake, m_ManipulatorSubsystem));
-        new Trigger(m_controller::getAButton)
-                .onTrue(new InstantCommand(m_ManipulatorSubsystem::stoptake, m_ManipulatorSubsystem));
+        // new Trigger(m_controller::getYButton)
+        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::intake,
+        // m_ManipulatorSubsystem));
+        // new Trigger(m_controller::getBButton)
+        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::outtake,
+        // m_ManipulatorSubsystem));
+        // new Trigger(m_controller::getAButton)
+        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::stoptake,
+        // m_ManipulatorSubsystem));
 
         // new Trigger(m_controller::getBButton)
         // .onTrue(new InstantCommand(() ->
@@ -216,18 +224,18 @@ public class RobotContainer {
      * 
      * @return The Arm Subsystem
      */
-    // public ArmSubsystem getArmSubsystem() {
-    // return m_ArmSubsystem;
-    // }
+    public ArmSubsystem getArmSubsystem() {
+        return m_ArmSubsystem;
+    }
 
     /**
      * Accessor to the Manipulator Subsystem
      * 
      * @return The Manipulator Subsystem
      */
-    public ManipulatorSubsystem getManipulatorSubsystem() {
-        return m_ManipulatorSubsystem;
-    }
+    // public ManipulatorSubsystem getManipulatorSubsystem() {
+    // return m_ManipulatorSubsystem;
+    // }
 
     /**
      * Accessor to the Chassis Subsystem

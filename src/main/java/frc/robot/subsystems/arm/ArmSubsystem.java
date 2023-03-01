@@ -21,19 +21,22 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.subsystems.ChassisSubsystem;
 import frc.robot.util.GamePiece;
 import frc.robot.util.GamePiece.GamePieceType;
 
 public class ArmSubsystem extends SubsystemBase {
     /** Creates a new ArmSubsystem. */
-    private WPI_TalonFX m_lowerLeftJoint = new WPI_TalonFX(Constants.LOWER_JOINT_LEFT_MOTOR_CAN_ID);
-    private WPI_TalonFX m_upperLeftJoint = new WPI_TalonFX(Constants.UPPER_JOINT_LEFT_MOTOR_CAN_ID);
-    private WPI_TalonFX m_lowerRightJoint = new WPI_TalonFX(Constants.LOWER_JOINT_RIGHT_MOTOR_CAN_ID);
-    private WPI_TalonFX m_upperRightJoint = new WPI_TalonFX(Constants.UPPER_JOINT_RIGHT_MOTOR_CAN_ID);
+    private WPI_TalonFX m_elbowLeftJoint = new WPI_TalonFX(Constants.LOWER_JOINT_LEFT_MOTOR_CAN_ID);
+    private WPI_TalonFX m_shoulderLeftJoint = new WPI_TalonFX(Constants.UPPER_JOINT_LEFT_MOTOR_CAN_ID);
+    private WPI_TalonFX m_elbowRightJoint = new WPI_TalonFX(Constants.LOWER_JOINT_RIGHT_MOTOR_CAN_ID);
+    private WPI_TalonFX m_shoulderRightJoint = new WPI_TalonFX(Constants.UPPER_JOINT_RIGHT_MOTOR_CAN_ID);
 
-    private CANCoder m_upperEncoder = new CANCoder(Constants.UPPER_ENCODER_ARM_CAN_ID);
-    private CANCoder m_lowerEncoder = new CANCoder(Constants.LOWER_ENCODER_ARM_CAN_ID);
+    private CANCoder m_shoulderEncoder = new CANCoder(Constants.UPPER_ENCODER_ARM_CAN_ID);
+    private CANCoder m_elbowEncoder = new CANCoder(Constants.LOWER_ENCODER_ARM_CAN_ID);
 
     private TrapezoidProfile.Constraints lowerConstraints = new TrapezoidProfile.Constraints(ArmConstants.UPPER_CRUISE,
             ArmConstants.UPPER_ACCELERATION);
@@ -52,177 +55,202 @@ public class ArmSubsystem extends SubsystemBase {
 
     private DJArmFeedforward m_doubleJointedFeedForwards = new DJArmFeedforward(joint_Lower, joint_Upper);
 
-    private double m_upperSetpoint;
-    private double m_lowerSetpoint;
+    private double m_shoulderSetpoint;
+    private double m_elbowSetpoint;
 
-    public ArmSubsystem() {
+    private RobotContainer container;
+
+    public ArmSubsystem(RobotContainer robotContainer) {
+        container = robotContainer;
         // following
-        m_lowerRightJoint.follow(m_lowerLeftJoint);
-        m_upperRightJoint.follow(m_upperLeftJoint);
+        m_elbowRightJoint.follow(m_elbowLeftJoint);
+        m_shoulderRightJoint.follow(m_shoulderLeftJoint);
 
         // Config Duty Cycle Range for the encoders
-        m_lowerEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
-        m_upperEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
+        m_elbowEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
+        m_shoulderEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
 
         // Default Motors
-        m_lowerLeftJoint.configFactoryDefault(ArmConstants.TIMEOUT);
-        m_upperLeftJoint.configFactoryDefault(ArmConstants.TIMEOUT);
-        m_lowerRightJoint.configFactoryDefault(ArmConstants.TIMEOUT);
-        m_upperRightJoint.configFactoryDefault(ArmConstants.TIMEOUT);
+        m_elbowLeftJoint.configFactoryDefault(ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configFactoryDefault(ArmConstants.TIMEOUT);
+        m_elbowRightJoint.configFactoryDefault(ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configFactoryDefault(ArmConstants.TIMEOUT);
 
         // Set Neutral Mode to Brake and NeutralDeadBand to prevent need for intentional
         // stalling
-        m_lowerLeftJoint.setNeutralMode(NeutralMode.Brake);
-        m_upperLeftJoint.setNeutralMode(NeutralMode.Brake);
-        m_lowerRightJoint.setNeutralMode(NeutralMode.Brake);
-        m_upperRightJoint.setNeutralMode(NeutralMode.Brake);
+        m_elbowLeftJoint.setNeutralMode(NeutralMode.Brake);
+        m_shoulderLeftJoint.setNeutralMode(NeutralMode.Brake);
+        m_elbowRightJoint.setNeutralMode(NeutralMode.Brake);
+        m_shoulderRightJoint.setNeutralMode(NeutralMode.Brake);
 
-        m_lowerLeftJoint.configNeutralDeadband(ArmConstants.NEUTRAL_DEADBAND);
-        m_upperLeftJoint.configNeutralDeadband(ArmConstants.NEUTRAL_DEADBAND);
-        m_lowerRightJoint.configNeutralDeadband(ArmConstants.NEUTRAL_DEADBAND);
-        m_upperRightJoint.configNeutralDeadband(ArmConstants.NEUTRAL_DEADBAND);
+        m_elbowLeftJoint.configNeutralDeadband(ArmConstants.NEUTRAL_DEADBAND);
+        m_shoulderLeftJoint.configNeutralDeadband(ArmConstants.NEUTRAL_DEADBAND);
+        m_elbowRightJoint.configNeutralDeadband(ArmConstants.NEUTRAL_DEADBAND);
+        m_shoulderRightJoint.configNeutralDeadband(ArmConstants.NEUTRAL_DEADBAND);
 
-        m_lowerLeftJoint.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 30, 0.2));
-        m_upperLeftJoint.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 30, 0.2));
-        m_lowerRightJoint.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 30, 0.2));
-        m_upperRightJoint.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 30, 0.2));
+        m_elbowLeftJoint.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 30, 0.2));
+        m_shoulderLeftJoint.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 30, 0.2));
+        m_elbowRightJoint.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 30, 0.2));
+        m_shoulderRightJoint.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 30, 0.2));
 
-        m_lowerLeftJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
+        m_elbowLeftJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
                 ArmConstants.TIMEOUT);
-        m_upperLeftJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
+        m_shoulderLeftJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
                 ArmConstants.TIMEOUT);
-        m_lowerRightJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
+        m_elbowRightJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
                 ArmConstants.TIMEOUT);
-        m_upperRightJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
+        m_shoulderRightJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
                 ArmConstants.TIMEOUT);
 
-        m_upperLeftJoint.setInverted(TalonFXInvertType.CounterClockwise);
-        m_lowerLeftJoint.setInverted(TalonFXInvertType.CounterClockwise);
-        m_upperRightJoint.setInverted(TalonFXInvertType.Clockwise);
-        m_lowerRightJoint.setInverted(TalonFXInvertType.Clockwise);
+        m_shoulderLeftJoint.setInverted(TalonFXInvertType.CounterClockwise);
+        m_elbowLeftJoint.setInverted(TalonFXInvertType.CounterClockwise);
+        m_shoulderRightJoint.setInverted(TalonFXInvertType.Clockwise);
+        m_elbowRightJoint.setInverted(TalonFXInvertType.Clockwise);
 
-        m_lowerLeftJoint.configNominalOutputForward(ArmConstants.NOMINAL_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
-        m_lowerLeftJoint.configNominalOutputReverse(ArmConstants.NOMINAL_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
-        m_lowerLeftJoint.configPeakOutputForward(ArmConstants.PEAK_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
-        m_lowerLeftJoint.configPeakOutputReverse(ArmConstants.PEAK_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
+        m_elbowLeftJoint.configNominalOutputForward(ArmConstants.NOMINAL_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
+        m_elbowLeftJoint.configNominalOutputReverse(ArmConstants.NOMINAL_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
+        m_elbowLeftJoint.configPeakOutputForward(ArmConstants.PEAK_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
+        m_elbowLeftJoint.configPeakOutputReverse(ArmConstants.PEAK_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
 
-        m_lowerRightJoint.configNominalOutputForward(ArmConstants.NOMINAL_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
-        m_lowerRightJoint.configNominalOutputReverse(ArmConstants.NOMINAL_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
-        m_lowerRightJoint.configPeakOutputForward(ArmConstants.PEAK_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
-        m_lowerRightJoint.configPeakOutputReverse(ArmConstants.PEAK_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
+        m_elbowRightJoint.configNominalOutputForward(ArmConstants.NOMINAL_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
+        m_elbowRightJoint.configNominalOutputReverse(ArmConstants.NOMINAL_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
+        m_elbowRightJoint.configPeakOutputForward(ArmConstants.PEAK_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
+        m_elbowRightJoint.configPeakOutputReverse(ArmConstants.PEAK_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
 
-        m_upperLeftJoint.configNominalOutputForward(ArmConstants.NOMINAL_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
-        m_upperLeftJoint.configNominalOutputReverse(ArmConstants.NOMINAL_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
-        m_upperLeftJoint.configPeakOutputForward(ArmConstants.PEAK_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
-        m_upperLeftJoint.configPeakOutputReverse(ArmConstants.PEAK_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configNominalOutputForward(ArmConstants.NOMINAL_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configNominalOutputReverse(ArmConstants.NOMINAL_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configPeakOutputForward(ArmConstants.PEAK_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configPeakOutputReverse(ArmConstants.PEAK_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
 
-        m_upperRightJoint.configNominalOutputForward(ArmConstants.NOMINAL_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
-        m_upperRightJoint.configNominalOutputReverse(ArmConstants.NOMINAL_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
-        m_upperRightJoint.configPeakOutputForward(ArmConstants.PEAK_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
-        m_upperRightJoint.configPeakOutputReverse(ArmConstants.PEAK_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configNominalOutputForward(ArmConstants.NOMINAL_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configNominalOutputReverse(ArmConstants.NOMINAL_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configPeakOutputForward(ArmConstants.PEAK_OUTPUT_FORWARD, ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configPeakOutputReverse(ArmConstants.PEAK_OUTPUT_REVERSE, ArmConstants.TIMEOUT);
 
-        m_lowerLeftJoint.configVoltageCompSaturation(12, ArmConstants.TIMEOUT);
-        m_upperLeftJoint.configVoltageCompSaturation(12, ArmConstants.TIMEOUT);
-        m_lowerRightJoint.configVoltageCompSaturation(12, ArmConstants.TIMEOUT);
-        m_upperRightJoint.configVoltageCompSaturation(12, ArmConstants.TIMEOUT);
+        m_elbowLeftJoint.configVoltageCompSaturation(12, ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configVoltageCompSaturation(12, ArmConstants.TIMEOUT);
+        m_elbowRightJoint.configVoltageCompSaturation(12, ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configVoltageCompSaturation(12, ArmConstants.TIMEOUT);
 
-        m_lowerLeftJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
-        m_upperLeftJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
-        m_lowerRightJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
-        m_upperRightJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
+        m_elbowLeftJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
+        m_elbowRightJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
 
-        m_lowerLeftJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
-        m_upperLeftJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
-        m_lowerRightJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
-        m_upperRightJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
+        m_elbowLeftJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
+        m_elbowRightJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
 
-        m_upperLeftJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_UPPER, ArmConstants.TIMEOUT);
-        m_upperLeftJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_UPPER, ArmConstants.TIMEOUT);
-        m_upperRightJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_UPPER, ArmConstants.TIMEOUT);
-        m_upperRightJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_UPPER, ArmConstants.TIMEOUT);
-        m_lowerLeftJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_LOWER, ArmConstants.TIMEOUT);
-        m_lowerLeftJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_LOWER, ArmConstants.TIMEOUT);
-        m_lowerRightJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_LOWER, ArmConstants.TIMEOUT);
-        m_lowerRightJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_LOWER, ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_UPPER,
+                ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_UPPER,
+                ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_UPPER,
+                ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_UPPER,
+                ArmConstants.TIMEOUT);
+        m_elbowLeftJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_LOWER, ArmConstants.TIMEOUT);
+        m_elbowLeftJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_LOWER, ArmConstants.TIMEOUT);
+        m_elbowRightJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_LOWER, ArmConstants.TIMEOUT);
+        m_elbowRightJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_LOWER, ArmConstants.TIMEOUT);
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        m_upperLeftJoint.setSelectedSensorPosition(degreesToCTREUnits(getUpperJointPos()), 0, ArmConstants.TIMEOUT);
-        m_lowerLeftJoint.setSelectedSensorPosition(degreesToCTREUnits(getLowerJointPos()), 0, ArmConstants.TIMEOUT);
-        m_upperRightJoint.setSelectedSensorPosition(degreesToCTREUnits(getUpperJointPos()), 0, ArmConstants.TIMEOUT);
-        m_lowerRightJoint.setSelectedSensorPosition(degreesToCTREUnits(getLowerJointPos()), 0, ArmConstants.TIMEOUT);
+        // m_shoulderLeftJoint.setSelectedSensorPosition(degreesToCTREUnits(getUpperJointPos()),
+        // 0, ArmConstants.TIMEOUT);
+        // m_elbowLeftJoint.setSelectedSensorPosition(degreesToCTREUnits(getLowerJointPos()),
+        // 0, ArmConstants.TIMEOUT);
+        // m_shoulderRightJoint.setSelectedSensorPosition(degreesToCTREUnits(getUpperJointPos()),
+        // 0, ArmConstants.TIMEOUT);
+        // m_elbowRightJoint.setSelectedSensorPosition(degreesToCTREUnits(getLowerJointPos()),
+        // 0, ArmConstants.TIMEOUT);
 
-        SmartDashboard.putNumber("Upper Setpoint", m_upperSetpoint);
-        SmartDashboard.putNumber("Lower Setpoint", m_lowerSetpoint);
+        SmartDashboard.putNumber("Shoulder Setpoint", m_shoulderSetpoint);
+        SmartDashboard.putNumber("Elbow Setpoint", m_elbowSetpoint);
+        SmartDashboard.putNumber("ShoulderEncoder", m_shoulderEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("ShoulderTrue",
+                (m_shoulderEncoder.getAbsolutePosition() + ArmConstants.SHOULDER_ANGLE_OFFSET + 180) % 360 - 180);
+        SmartDashboard.putNumber("ElbowEncoder", m_elbowEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("ElbowTrue",
+                (m_elbowEncoder.getAbsolutePosition() + ArmConstants.LOWER_ANGLE_OFFSET + 180) % 360 - 180);
 
         SmartDashboard.putBoolean("Game Peice", GamePiece.getGamePiece() == GamePieceType.Cone);
 
-        if (Constants.TEST_MODE) {
-            SmartDashboard.putNumber("Lower Angle", getLowerJointDegrees());
-            SmartDashboard.putNumber("Upper Angle", getUpperJointDegrees());
-            SmartDashboard.putNumber("Lower Angle Uncorrected", getLowerJointPos());
-            SmartDashboard.putNumber("Upper Angle Uncorrected", getUpperJointPos());
-            SmartDashboard.putNumber("Upper Percent", m_upperLeftJoint.getMotorOutputPercent());
-            SmartDashboard.putNumber("Lower Percent", m_lowerLeftJoint.getMotorOutputPercent());
-            SmartDashboard.putNumber("Lower Error", m_controllerLower.getPositionError());
-            SmartDashboard.putNumber("Upper Error", m_controllerUpper.getPositionError());
-            SmartDashboard.putNumber("Lower Velocity Setpoint", m_controllerLower.getPositionError());
-            SmartDashboard.putNumber("Upper Velocity Setpoint", m_controllerUpper.getPositionError());
-        } else {
-            SmartDashboard.clearPersistent("Lower Angle");
-            SmartDashboard.clearPersistent("Upper Angle");
-            SmartDashboard.clearPersistent("Upper Percent");
-            SmartDashboard.clearPersistent("Lower Percent");
-            SmartDashboard.clearPersistent("Upper Abs");
-            SmartDashboard.clearPersistent("Lower Abs");
-            SmartDashboard.clearPersistent("Upper Current");
-            SmartDashboard.clearPersistent("Lower Current");
-        }
+        // if (Constants.TEST_MODE) {
+        // SmartDashboard.putNumber("Lower Angle", getLowerJointDegrees());
+        // SmartDashboard.putNumber("Upper Angle", getUpperJointDegrees());
+        // SmartDashboard.putNumber("Lower Angle Uncorrected", getLowerJointPos());
+        // SmartDashboard.putNumber("Upper Angle Uncorrected", getUpperJointPos());
+        // SmartDashboard.putNumber("Upper Percent",
+        // m_shoulderLeftJoint.getMotorOutputPercent());
+        // SmartDashboard.putNumber("Lower Percent",
+        // m_elbowLeftJoint.getMotorOutputPercent());
+        // SmartDashboard.putNumber("Lower Error",
+        // m_controllerLower.getPositionError());
+        // SmartDashboard.putNumber("Upper Error",
+        // m_controllerUpper.getPositionError());
+        // SmartDashboard.putNumber("Lower Velocity Setpoint",
+        // m_controllerLower.getPositionError());
+        // SmartDashboard.putNumber("Upper Velocity Setpoint",
+        // m_controllerUpper.getPositionError());
+        // } else {
+        // SmartDashboard.clearPersistent("Lower Angle");
+        // SmartDashboard.clearPersistent("Upper Angle");
+        // SmartDashboard.clearPersistent("Upper Percent");
+        // SmartDashboard.clearPersistent("Lower Percent");
+        // SmartDashboard.clearPersistent("Upper Abs");
+        // SmartDashboard.clearPersistent("Lower Abs");
+        // SmartDashboard.clearPersistent("Upper Current");
+        // SmartDashboard.clearPersistent("Lower Current");
+        // }
     }
 
     public void reset() {
         m_controllerUpper.reset(getUpperJointDegrees());
         m_controllerLower.reset(getLowerJointDegrees());
-        m_upperSetpoint = getUpperJointDegrees();
-        m_lowerSetpoint = getLowerJointDegrees();
+        m_shoulderSetpoint = getUpperJointDegrees();
+        m_elbowSetpoint = getLowerJointDegrees();
 
     }
 
     public void updateUpperSetpoint(double setpoint) {
-        if (m_upperSetpoint != setpoint) {
-            if (setpoint < 360 && setpoint > 0) {
-                m_upperSetpoint = setpoint;
+        if (m_shoulderSetpoint != setpoint) {
+            if (setpoint < 180 && setpoint > -180) {
+                m_shoulderSetpoint = setpoint;
+                System.out.println("UPDATING - " + setpoint);
             }
         }
     }
 
     public void updateLowerSetpoint(double setpoint) {
-        if (m_lowerSetpoint != setpoint) {
-            if (setpoint < 360 && setpoint > 0) {
-                m_lowerSetpoint = setpoint;
+        if (m_elbowSetpoint != setpoint) {
+            if (setpoint < 180 && setpoint > -180) {
+                m_elbowSetpoint = setpoint;
+                System.out.println("UPDATING" + setpoint);
             }
         }
     }
 
     public void updateAllSetpoints(Setpoint setpoint) {
-        if (GamePiece.getGamePiece() == GamePieceType.Cone) {
-            updateUpperSetpoint(setpoint.m_upperCone);
-            updateLowerSetpoint(setpoint.m_lowerCone);
-        } else if (GamePiece.getGamePiece() == GamePieceType.Cube) {
-            updateUpperSetpoint(setpoint.m_upperCube);
-            updateLowerSetpoint(setpoint.m_lowerCube);
+        if (container.getChassisSubsystem().getWantACone()) {
+            updateUpperSetpoint(setpoint.m_shoulderCone);
+            updateLowerSetpoint(setpoint.m_elbowCone);
+        } else if (container.getChassisSubsystem().getWantACube()) {
+            updateUpperSetpoint(setpoint.m_shoulderCube);
+            updateLowerSetpoint(setpoint.m_elbowCube);
         }
     }
 
     public Vector<N2> calculateFeedforwards() {
         // To set lower constant, move lower and upper arms to
         // vertical, set to lower encoder value minus 90 (for horizontal)
-        Vector<N2> positionVector = VecBuilder.fill(Math.toRadians(m_lowerSetpoint - (90)),
+        Vector<N2> positionVector = VecBuilder.fill(Math.toRadians(m_elbowSetpoint - (90)),
                 // to set upper constant, move upper arm and lower arms to vertical
                 // and set to upper encoder value
-                Math.toRadians(-m_upperSetpoint + (180)));
+                Math.toRadians(-m_shoulderSetpoint + (180)));
 
         Vector<N2> velocityVector = VecBuilder.fill(0.0, 0.0);
         Vector<N2> accelVector = VecBuilder.fill(0.0, 0.0);
@@ -231,7 +259,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void runUpperProfiled() {
-        m_controllerUpper.setGoal(new TrapezoidProfile.State(m_upperSetpoint, 0.0));
+        m_controllerUpper.setGoal(new TrapezoidProfile.State(m_shoulderSetpoint, 0.0));
         double pidOutput = -m_controllerUpper.calculate(getUpperJointDegrees());
         // double ff = -(calculateFeedforwards().get(1, 0)) / 12.0;
         // System.out.println("upper ff" + (ff));
@@ -240,7 +268,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void runLowerProfiled() {
-        m_controllerLower.setGoal(new TrapezoidProfile.State(m_lowerSetpoint, 0.0));
+        m_controllerLower.setGoal(new TrapezoidProfile.State(m_elbowSetpoint, 0.0));
         double pidOutput = -m_controllerLower.calculate(getLowerJointDegrees());
         // double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
         // System.out.println("lower ff" + (ff));
@@ -249,8 +277,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setToCurrent() {
-        m_lowerSetpoint = getLowerJointDegrees();
-        m_upperSetpoint = getUpperJointDegrees();
+        m_elbowSetpoint = getLowerJointDegrees();
+        m_shoulderSetpoint = getUpperJointDegrees();
     }
 
     public boolean upperAtSetpoint() {
@@ -266,27 +294,29 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setPercentOutputUpper(double speed) {
-        m_upperLeftJoint.set(TalonFXControlMode.PercentOutput, speed);
+        // m_shoulderLeftJoint.set(TalonFXControlMode.PercentOutput, speed);
+        System.out.println("shoulder-" + m_controllerUpper.getPositionError());
     }
 
     public void setPercentOutputLower(double speed) {
-        m_lowerLeftJoint.set(TalonFXControlMode.PercentOutput, speed);
+        // m_elbowLeftJoint.set(TalonFXControlMode.PercentOutput, speed);
+        System.out.println("elbow-" + m_controllerLower.getPositionError());
     }
 
     public void neutralUpper() {
-        m_upperLeftJoint.neutralOutput();
+        m_shoulderLeftJoint.neutralOutput();
     }
 
     public void neutralLower() {
-        m_lowerLeftJoint.neutralOutput();
+        m_elbowLeftJoint.neutralOutput();
     }
 
     public double getLowerJointPos() {
-        return m_lowerEncoder.getAbsolutePosition();
+        return m_elbowEncoder.getAbsolutePosition();
     }
 
     public double getUpperJointPos() {
-        return m_upperEncoder.getAbsolutePosition();
+        return m_shoulderEncoder.getAbsolutePosition();
     }
 
     public double getLowerJointDegrees() {
@@ -294,7 +324,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public double getUpperJointDegrees() {
-        return (getUpperJointPos() + ArmConstants.UPPER_ANGLE_OFFSET + 180) % 360 - 180;
+        return (getUpperJointPos() + ArmConstants.SHOULDER_ANGLE_OFFSET + 180) % 360 - 180;
     }
 
     public double degreesToCTREUnits(double degrees) {
