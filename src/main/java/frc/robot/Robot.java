@@ -47,11 +47,13 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         // lights
+        m_robotContainer.getArmSubsystem().reset();
         m_robotContainer.getChassisSubsystem().setWantNothing();
     }
 
     @Override
     public void disabledExit() {
+        m_robotContainer.getArmSubsystem().reset();
         // robotContainer.getShooter().setHoodBrakeMode(false);
     }
 

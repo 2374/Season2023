@@ -97,9 +97,9 @@ public class Constants {
         public static final double ELBOW_ANGLE_OFFSET = -244.4;
         public static final double SHOULDER_ANGLE_OFFSET = -89.4;
 
-        public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.01, 0, 0.0005, 0.0, 50);
+        public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.05, 0.0, 50);
 
-        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.01, 0, 0.0005, 0.00, 50);
+        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.9, 0.1, 0.05, 0.00, 50);
 
         public static final double kSShoulder = 0.04;
         public static final double kGShoulder = 0.25;
@@ -129,7 +129,7 @@ public class Constants {
         public static final int MAX_SENSOR_VEL = 86398;
 
         /* Motor neutral dead-band : Range 0.001 -> 0.25 */
-        public static final double NEUTRAL_DEADBAND = 0.02;
+        public static final double NEUTRAL_DEADBAND = 0.01;
 
         public static final double NOMINAL_OUTPUT_FORWARD = 0;
         public static final double NOMINAL_OUTPUT_REVERSE = 0;
@@ -148,11 +148,11 @@ public class Constants {
         public final static int TIMEOUT = 10;
 
         // Motion Magic constants
-        public static final double ELBOW_CRUISE = 70.0;
-        public static final double ELBOW_ACCELERATION = 120.0;
+        public static final double ELBOW_CRUISE = 35.0;
+        public static final double ELBOW_ACCELERATION = 60.0;
 
-        public static final double SHOULDER_CRUISE = 70.0;
-        public static final double SHOULDER_ACCELERATION = 120.0;
+        public static final double SHOULDER_CRUISE = 35.0;
+        public static final double SHOULDER_ACCELERATION = 60.0;
 
         public static final double DUTY_CYCLE_MIN = 1.0 / 1025.0;
         public static final double DUTY_CYCLE_MAX = 1024.0 / 1025.0;
@@ -166,7 +166,7 @@ public class Constants {
         public static final Setpoint TEST_SETPOINT_HIGHER = new Setpoint(191, 35, true, 191, 35, true);
         public static final Setpoint TEST_SETPOINT_LOWER = new Setpoint(164, 65, true, 164, 65, true);
 
-        public static final Setpoint STOWED = new Setpoint(90, 90, false, 90, 90, false);
+        public static final Setpoint STOWED = new Setpoint(-90, 90, false, -90, 90, false);
         public static final Setpoint FLOOR = new Setpoint(245, 61, true, 245, 62, true);
         public static final Setpoint MID_NODE = new Setpoint(192, 90, false, 192, 69, false);
         public static final Setpoint MID_NODE_PLACED = new Setpoint(199, 87, false, 192, 69, false);
