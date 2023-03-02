@@ -72,6 +72,10 @@ public class ArmSubsystem extends SubsystemBase {
         m_elbowRightJoint.follow(m_elbowLeftJoint);
         m_shoulderRightJoint.follow(m_shoulderLeftJoint);
 
+        // Config Duty Cycle Range for the encoders
+        m_elbowEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
+        m_shoulderEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
+
         // Default Motors
         m_elbowLeftJoint.configFactoryDefault(ArmConstants.TIMEOUT);
         m_shoulderLeftJoint.configFactoryDefault(ArmConstants.TIMEOUT);
@@ -203,11 +207,11 @@ public class ArmSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("Elbow Error",
         // m_controllerElbow.getPositionError());
         // SmartDashboard.putNumber("Shoulder Error",
-        // m_controllerUpper.getPositionError());
+        // m_controllerShoulder.getPositionError());
         // SmartDashboard.putNumber("Elbow Velocity Setpoint",
         // m_controllerElbow.getPositionError());
         // SmartDashboard.putNumber("Shoulder Velocity Setpoint",
-        // m_controllerUpper.getPositionError());
+        // m_controllerShoulder.getPositionError());
         // } else {
         // SmartDashboard.clearPersistent("Elbow Angle");
         // SmartDashboard.clearPersistent("Shoulder Angle");
@@ -280,8 +284,8 @@ public class ArmSubsystem extends SubsystemBase {
         m_controllerElbow.setGoal(new TrapezoidProfile.State(m_elbowSetpoint, 0.0));
         double pidOutput = -m_controllerElbow.calculate(getElbowJointDegrees());
         // double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
-        // System.out.println("lower ff" + (ff));
-        // System.out.println("Lower PID" + pidOutput);
+        // System.out.println("elbow ff" + (ff));
+        // System.out.println("elbow PID" + pidOutput);
         setPercentOutputElbow(pidOutput); // may need to negate ff voltage to get desired output
     }
 
@@ -290,16 +294,16 @@ public class ArmSubsystem extends SubsystemBase {
         m_shoulderSetpoint = getShoulderJointDegrees();
     }
 
-    public boolean upperAtSetpoint() {
+    public boolean shoulderAtSetpoint() {
         return m_controllerShoulder.atSetpoint();
     }
 
-    public boolean lowerAtSetpoint() {
+    public boolean elbowAtSetpoint() {
         return m_controllerElbow.atSetpoint();
     }
 
     public boolean bothJointsAtSetpoint() {
-        return upperAtSetpoint() && lowerAtSetpoint();
+        return shoulderAtSetpoint() && elbowAtSetpoint();
     }
 
     public void setPercentOutputShoulder(double speed) {
@@ -314,28 +318,28 @@ public class ArmSubsystem extends SubsystemBase {
         m_elbowLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }
 
-    public void neutralUpper() {
+    public void neutralShoulder() {
         m_shoulderLeftJoint.neutralOutput();
     }
 
-    public void neutralLower() {
+    public void neutralElbow() {
         m_elbowLeftJoint.neutralOutput();
     }
 
-    public double getLowerJointPos() {
+    public double getElbowJointPos() {
         return m_elbowEncoder.getAbsolutePosition();
     }
 
-    public double getUpperJointPos() {
+    public double getShoulderJointPos() {
         return m_shoulderEncoder.getAbsolutePosition();
     }
 
     public double getElbowJointDegrees() {
-        return getLowerJointPos();
+        return getElbowJointPos();
     }
 
     public double getShoulderJointDegrees() {
-        return getUpperJointPos();
+        return getShoulderJointPos();
     }
 
     public double degreesToCTREUnits(double degrees) {

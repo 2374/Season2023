@@ -82,24 +82,24 @@ public class RobotContainer {
         // new Trigger(m_controller::getYButton)
         // .onTrue(new InstantCommand(m_drivetrainSubsystem::printAngles,
         // m_drivetrainSubsystem));
-        // upper
+        // Shoulder
         // new Trigger(m_controller::getXButton).onTrue(new
-        // InstantCommand(m_ASubsystem::upperForward, m_ASubsystem));
+        // InstantCommand(m_ASubsystem::shoulderForward, m_ASubsystem));
         // new Trigger(m_controller::getXButton).onFalse(new
-        // InstantCommand(m_ASubsystem::upperStop, m_ASubsystem));
+        // InstantCommand(m_ASubsystem::shoulderStop, m_ASubsystem));
         // new Trigger(m_controller::getAButton).onTrue(new
-        // InstantCommand(m_ASubsystem::upperBack, m_ASubsystem));
+        // InstantCommand(m_ASubsystem::shoulderBack, m_ASubsystem));
         // new Trigger(m_controller::getAButton).onFalse(new
-        // InstantCommand(m_ASubsystem::upperStop, m_ASubsystem));
-        // lower
+        // InstantCommand(m_ASubsystem::shoulderStop, m_ASubsystem));
+        // Elbow
         // new Trigger(m_controller::getYButton).onTrue(new
-        // InstantCommand(m_ASubsystem::lowerForward, m_ASubsystem));
+        // InstantCommand(m_ASubsystem::elbowForward, m_ASubsystem));
         // new Trigger(m_controller::getYButton).onFalse(new
-        // InstantCommand(m_ASubsystem::lowerStop, m_ASubsystem));
+        // InstantCommand(m_ASubsystem::elbowStop, m_ASubsystem));
         // new Trigger(m_controller::getBButton).onTrue(new
-        // InstantCommand(m_ASubsystem::lowerBack, m_ASubsystem));
+        // InstantCommand(m_ASubsystem::elbowBack, m_ASubsystem));
         // new Trigger(m_controller::getBButton).onFalse(new
-        // InstantCommand(m_ASubsystem::lowerStop, m_ASubsystem));
+        // InstantCommand(m_ASubsystem::elbowStop, m_ASubsystem));
         // wrist
         // new Trigger(m_controller::getXButton)
         // .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateLeft,

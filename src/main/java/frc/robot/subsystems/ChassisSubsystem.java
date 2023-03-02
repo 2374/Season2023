@@ -2,10 +2,13 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.led.CANdle;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.GamePiece.GamePieceType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ChassisSubsystem extends SubsystemBase {
 
@@ -13,6 +16,7 @@ public class ChassisSubsystem extends SubsystemBase {
     private GamePieceType gamePiece = GamePieceType.None; // is the robot working with a Cone or a Cube? default to None
 
     private String serialNumber = "unknown";
+    private UsbCamera camera = CameraServer.startAutomaticCapture("Camera", 0);
 
     private static ChassisSubsystem instance;
 
@@ -26,6 +30,7 @@ public class ChassisSubsystem extends SubsystemBase {
         instance = this;
         serialNumber = RobotController.getSerialNumber();
         System.out.println("SERIALNUMBER=" + serialNumber);
+        //SmartDashboard.putData(camera); TODO fix this
     }
 
     /**
