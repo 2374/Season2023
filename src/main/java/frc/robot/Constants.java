@@ -166,15 +166,18 @@ public class Constants {
         public static final Setpoint TEST_SETPOINT_HIGHER = new Setpoint(191, 35, true, 191, 35, true);
         public static final Setpoint TEST_SETPOINT_LOWER = new Setpoint(164, 65, true, 164, 65, true);
 
-        public static final Setpoint STOWED = new Setpoint(-90, 90, false, -90, 90, false);
-        public static final Setpoint FLOOR = new Setpoint(245, 61, true, 245, 62, true);
-        public static final Setpoint MID_NODE = new Setpoint(192, 90, false, 192, 69, false);
+        public static final Setpoint TALL = new Setpoint(1, 1, false, 1, 1, false);
+        public static final Setpoint STOWED = new Setpoint(-160, 132, false, -160, 132, false);
+        public static final Setpoint FLOOR = new Setpoint(20, 100, true, 20, 100, true);
+        public static final Setpoint MID_NODE = new Setpoint(-10, 90, false, -10, 90, false);
         public static final Setpoint MID_NODE_PLACED = new Setpoint(199, 87, false, 192, 69, false);
-        public static final Setpoint TOP_NODE = new Setpoint(225, 150, false, 213, 111, false);
+        public static final Setpoint TOP_NODE = new Setpoint(-10, -50, false, -10, -50, false);
         public static final Setpoint TOP_NODE_PLACED = new Setpoint(234, 149, false, 213, 111, false);
         public static final Setpoint SUBSTATION = new Setpoint(150, 53, false, 150, 53, false);
-
+        public static final Setpoint TEST = new Setpoint(-90, 90, false, -90, 90, false);
+        
         public static final double INTERMEDIATE_ELBOW_POSITION = 90;
     }
 
 }
+ 

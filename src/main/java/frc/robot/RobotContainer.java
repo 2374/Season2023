@@ -18,8 +18,7 @@ public class RobotContainer {
     private final ChassisSubsystem m_ChassisSubsystem = new ChassisSubsystem();
     private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem(this);
     private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem(this);
-    // private final ManipulatorSubsystem m_ManipulatorSubsystem = new
-    // ManipulatorSubsystem(this);
+    private final ManipulatorSubsystem m_ManipulatorSubsystem = new ManipulatorSubsystem(this);
     // private final SimpleASubsystem m_ASubsystem = new SimpleASubsystem();
 
     private final AutonomousChooser autonomousChooser = new AutonomousChooser(
@@ -77,8 +76,16 @@ public class RobotContainer {
         new Trigger(m_controller::getRightBumper)
                 .onTrue(new InstantCommand(getChassisSubsystem()::setWantACube,
                         getChassisSubsystem()));
-        new Trigger(m_controller::getXButton).onTrue(
-                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.STOWED)));
+        // new Trigger(m_controller::getYButton).onTrue(
+        //         new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.TOP_NODE)));
+        // new Trigger(m_controller::getXButton).onTrue(
+        //         new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.STOWED)));
+        // new Trigger(m_controller::getBButton).onTrue(
+        //         new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.MID_NODE)));
+        // new Trigger(m_controller::getAButton).onTrue(
+        //         new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.FLOOR)));
+        
+        
         // new Trigger(m_controller::getYButton)
         // .onTrue(new InstantCommand(m_drivetrainSubsystem::printAngles,
         // m_drivetrainSubsystem));
@@ -141,15 +148,15 @@ public class RobotContainer {
         // .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, false,
         // false).withTimeout(3));
 
-        // new Trigger(m_controller::getYButton)
-        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::intake,
-        // m_ManipulatorSubsystem));
-        // new Trigger(m_controller::getBButton)
-        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::outtake,
-        // m_ManipulatorSubsystem));
-        // new Trigger(m_controller::getAButton)
-        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::stoptake,
-        // m_ManipulatorSubsystem));
+        new Trigger(m_controller::getYButton)
+        .onTrue(new InstantCommand(m_ManipulatorSubsystem::intake,
+        m_ManipulatorSubsystem));
+        new Trigger(m_controller::getBButton)
+        .onTrue(new InstantCommand(m_ManipulatorSubsystem::outtake,
+        m_ManipulatorSubsystem));
+        new Trigger(m_controller::getAButton)
+        .onTrue(new InstantCommand(m_ManipulatorSubsystem::stoptake,
+        m_ManipulatorSubsystem));
 
         // new Trigger(m_controller::getBButton)
         // .onTrue(new InstantCommand(() ->

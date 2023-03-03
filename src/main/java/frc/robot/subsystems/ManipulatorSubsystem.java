@@ -31,6 +31,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         sensor.setRangingMode(RangingMode.Short, 50);
         // restrict the image to the center of the sensor
         sensor.setRangeOfInterest(8, 8, 12, 12);
+        sensor.setRangeOfInterest(10, 10, 10, 10);
         robotContainer = container; // give us a pointer back to the robot container to reference cube/cone desire
     }
 
@@ -38,7 +39,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
      * Starts intaking
      */
     public void intake() {
-        intakeMotor.set(.4);
+        intakeMotor.set(.6);
         activate();
     }
 
@@ -46,7 +47,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
      * Starts outtaking
      */
     public void outtake() {
-        intakeMotor.set(-.4);
+        intakeMotor.set(-.7);
         activate();
     }
 

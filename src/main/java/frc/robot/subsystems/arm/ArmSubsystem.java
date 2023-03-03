@@ -99,14 +99,10 @@ public class ArmSubsystem extends SubsystemBase {
         m_elbowRightJoint.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 30, 0.2));
         m_shoulderRightJoint.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 30, 0.2));
 
-        m_elbowLeftJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
-                ArmConstants.TIMEOUT);
-        m_shoulderLeftJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
-                ArmConstants.TIMEOUT);
-        m_elbowRightJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
-                ArmConstants.TIMEOUT);
-        m_shoulderRightJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
-                ArmConstants.TIMEOUT);
+        m_elbowLeftJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0, ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0, ArmConstants.TIMEOUT);
+        m_elbowRightJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0, ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0, ArmConstants.TIMEOUT);
 
         m_shoulderLeftJoint.setInverted(TalonFXInvertType.CounterClockwise);
         m_elbowLeftJoint.setInverted(TalonFXInvertType.CounterClockwise);
@@ -148,14 +144,10 @@ public class ArmSubsystem extends SubsystemBase {
         m_elbowRightJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
         m_shoulderRightJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
 
-        m_shoulderLeftJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_SHOULDER,
-                ArmConstants.TIMEOUT);
-        m_shoulderLeftJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_SHOULDER,
-                ArmConstants.TIMEOUT);
-        m_shoulderRightJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_SHOULDER,
-                ArmConstants.TIMEOUT);
-        m_shoulderRightJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_SHOULDER,
-                ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_SHOULDER, ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_SHOULDER, ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_SHOULDER, ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_SHOULDER, ArmConstants.TIMEOUT);
         m_elbowLeftJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_ELBOW, ArmConstants.TIMEOUT);
         m_elbowLeftJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_ELBOW, ArmConstants.TIMEOUT);
         m_elbowRightJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_ELBOW, ArmConstants.TIMEOUT);
@@ -225,6 +217,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void reset() {
+        System.out.println("Resetting shoulder and elbow to current location");
         m_controllerShoulder.reset(getShoulderJointDegrees());
         m_controllerElbow.reset(getElbowJointDegrees());
         m_shoulderSetpoint = getShoulderJointDegrees();
@@ -235,6 +228,7 @@ public class ArmSubsystem extends SubsystemBase {
         if (m_shoulderSetpoint != setpoint) {
             if (setpoint < 180 && setpoint > -180) {
                 m_shoulderSetpoint = setpoint;
+                System.out.println("Shoulder Change ="+setpoint);
             }
         }
     }
@@ -243,6 +237,7 @@ public class ArmSubsystem extends SubsystemBase {
         if (m_elbowSetpoint != setpoint) {
             if (setpoint < 180 && setpoint > -180) {
                 m_elbowSetpoint = setpoint;
+                System.out.println("Elbow Change ="+setpoint);
             }
         }
     }
@@ -281,6 +276,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void runElbowProfiled() {
+        //System.out.println("running elbow="+m_elbowSetpoint);
         m_controllerElbow.setGoal(new TrapezoidProfile.State(m_elbowSetpoint, 0.0));
         double pidOutput = -m_controllerElbow.calculate(getElbowJointDegrees());
         // double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
@@ -307,13 +303,14 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setPercentOutputShoulder(double speed) {
-        double t = degreesPerSecondToPower(speed) * 300;
+        double t = degreesPerSecondToPower(speed) * 750; //300;
         SmartDashboard.putNumber("shoulder", t);
+        //System.out.println("SHOULDER SPEED="+t);
         m_shoulderLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }
 
     public void setPercentOutputElbow(double speed) {
-        double t = degreesPerSecondToPower(speed) * 120;
+        double t = degreesPerSecondToPower(speed) * 300; //120;
         SmartDashboard.putNumber("elbow", t);
         m_elbowLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }
