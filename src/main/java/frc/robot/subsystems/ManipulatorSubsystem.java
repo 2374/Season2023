@@ -16,7 +16,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     private Boolean intakeMode = false; // we start the match with a cone in the manipulator ready to deploy
     private Boolean active = false; // are we actively intaking or outtaking?
     private RobotContainer robotContainer;
-    private int foundCounter = 0;
+    private int foundCounter = 0;  
 
     /**
      * The subsystem for managing the manipulator and the wrist

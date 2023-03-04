@@ -24,7 +24,8 @@ public class RobotContainer {
     private final AutonomousChooser autonomousChooser = new AutonomousChooser(
             new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS));
 
-    private final XboxController m_controller = new XboxController(Constants.CONTROLLER_USB_PORT);
+    private final XboxController m_driveController = new XboxController(Constants.CONTROLLER_USB_PORT_DRIVER);
+    private final XboxController m_operatorController = new XboxController(Constants.CONTROLLER_USB_PORT_OPERATOR);
 
     /**
      * The robot container. Need I say more?
@@ -61,29 +62,29 @@ public class RobotContainer {
      * @return The main controller
      */
     public XboxController getController() {
-        return m_controller;
+        return m_driveController;
     }
 
     /**
      * Setup all of the button controls for the robot
      */
     public void configureButtonBindings() {
-        new Trigger(m_controller::getBackButton)
+        new Trigger(m_driveController::getBackButton)
                 .onTrue(new InstantCommand(m_drivetrainSubsystem::zeroRotation, m_drivetrainSubsystem));
-        new Trigger(m_controller::getLeftBumper)
+        new Trigger(m_operatorController::getLeftBumper)
                 .onTrue(new InstantCommand(getChassisSubsystem()::setWantACone,
                         getChassisSubsystem()));
-        new Trigger(m_controller::getRightBumper)
+        new Trigger(m_operatorController::getRightBumper)
                 .onTrue(new InstantCommand(getChassisSubsystem()::setWantACube,
                         getChassisSubsystem()));
-        // new Trigger(m_controller::getYButton).onTrue(
-        //         new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.TOP_NODE)));
-        // new Trigger(m_controller::getXButton).onTrue(
-        //         new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.STOWED)));
-        // new Trigger(m_controller::getBButton).onTrue(
-        //         new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.MID_NODE)));
-        // new Trigger(m_controller::getAButton).onTrue(
-        //         new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.FLOOR)));
+        new Trigger(m_driveController::getYButton).onTrue(
+                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.TOP_NODE)));
+        new Trigger(m_driveController::getXButton).onTrue(
+                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.STOWED)));
+        new Trigger(m_driveController::getBButton).onTrue(
+                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.MID_NODE)));
+        new Trigger(m_driveController::getAButton).onTrue(
+                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.FLOOR)));
         
         
         // new Trigger(m_controller::getYButton)
@@ -107,56 +108,20 @@ public class RobotContainer {
         // InstantCommand(m_ASubsystem::elbowBack, m_ASubsystem));
         // new Trigger(m_controller::getBButton).onFalse(new
         // InstantCommand(m_ASubsystem::elbowStop, m_ASubsystem));
-        // wrist
-        // new Trigger(m_controller::getXButton)
-        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateLeft,
-        // m_ManipulatorSubsystem));
-        // new Trigger(m_controller::getXButton)
-        // .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation,
-        // m_ManipulatorSubsystem));
-        // new Trigger(m_controller::getAButton)
-        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateRight,
-        // m_ManipulatorSubsystem));
-        // new Trigger(m_controller::getAButton)
-        // .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation,
-        // m_ManipulatorSubsystem));
-        // claw
-        // new Trigger(m_controller::getYButton)
-        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::intake,
-        // m_ManipulatorSubsystem));
-        // new Trigger(m_controller::getYButton)
-        // .onFalse(new InstantCommand(m_ManipulatorSubsystem::stoptake,
-        // m_ManipulatorSubsystem));
-        // new Trigger(m_controller::getBButton)
-        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::outtake,
-        // m_ManipulatorSubsystem));
-        // new Trigger(m_controller::getBButton)
-        // .onFalse(new InstantCommand(m_ManipulatorSubsystem::stoptake,
-        // m_ManipulatorSubsystem));
-
-        // temp claw
-        // new Trigger(m_controller::getYButton)
-        // .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, true,
-        // true).withTimeout(3));
-        // new Trigger(m_controller::getBButton)
-        // .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, false,
-        // true).withTimeout(3));
-        // new Trigger(m_controller::getXButton)
-        // .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, true,
-        // false).withTimeout(3));
-        // new Trigger(m_controller::getAButton)
-        // .onTrue(new ControlIntakeCommand(m_ManipulatorSubsystem, false,
-        // false).withTimeout(3));
-
-        new Trigger(m_controller::getYButton)
-        .onTrue(new InstantCommand(m_ManipulatorSubsystem::intake,
-        m_ManipulatorSubsystem));
-        new Trigger(m_controller::getBButton)
-        .onTrue(new InstantCommand(m_ManipulatorSubsystem::outtake,
-        m_ManipulatorSubsystem));
-        new Trigger(m_controller::getAButton)
-        .onTrue(new InstantCommand(m_ManipulatorSubsystem::stoptake,
-        m_ManipulatorSubsystem));
+        
+        // Manipulator Commands
+        // Intake
+        new Trigger(m_operatorController::getYButton).onTrue(new InstantCommand(m_ManipulatorSubsystem::intake, m_ManipulatorSubsystem));
+        // Outtake
+        new Trigger(m_operatorController::getAButton).onTrue(new InstantCommand(m_ManipulatorSubsystem::outtake, m_ManipulatorSubsystem));
+        // StopTake
+        new Trigger(m_operatorController::getBackButton).onTrue(new InstantCommand(m_ManipulatorSubsystem::stoptake, m_ManipulatorSubsystem));
+        // Wrist
+        new Trigger(m_operatorController::getXButton).onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateLeft, m_ManipulatorSubsystem));
+        new Trigger(m_operatorController::getXButton).onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation, m_ManipulatorSubsystem));
+        new Trigger(m_operatorController::getBButton).onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateRight, m_ManipulatorSubsystem));
+        new Trigger(m_operatorController::getBButton).onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation, m_ManipulatorSubsystem));
+        
 
         // new Trigger(m_controller::getBButton)
         // .onTrue(new InstantCommand(() ->
@@ -194,7 +159,7 @@ public class RobotContainer {
      * @return The adjusted Left Y axis of the main controller
      */
     private double getForwardInput() {
-        return -square(deadband(m_controller.getLeftY(), 0.1)) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
+        return -square(deadband(m_driveController.getLeftY(), 0.1)) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
                 * DrivetrainSubsystem.SPEED_MULTIPLIER;
     }
 
@@ -204,7 +169,7 @@ public class RobotContainer {
      * @return The adjusted Left X axis of the main controller
      */
     private double getStrafeInput() {
-        return -square(deadband(m_controller.getLeftX(), 0.1)) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
+        return -square(deadband(m_driveController.getLeftX(), 0.1)) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
                 * DrivetrainSubsystem.SPEED_MULTIPLIER;
     }
 
@@ -214,7 +179,7 @@ public class RobotContainer {
      * @return The adjusted Right X axis of the main controller
      */
     private double getRotationInput() {
-        return -square(deadband(m_controller.getRightX(), 0.1))
+        return -square(deadband(m_driveController.getRightX(), 0.1))
                 * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * DrivetrainSubsystem.SPEED_MULTIPLIER;
     }
 
