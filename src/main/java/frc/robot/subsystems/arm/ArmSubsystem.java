@@ -63,6 +63,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     private RobotContainer container;
 
+    private static final int NO_CHANGE = 500;
+
     public ArmSubsystem(RobotContainer robotContainer) {
         container = robotContainer;
 
@@ -244,12 +246,20 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void updateAllSetpoints(Setpoint setpoint) {
         if (container.getChassisSubsystem().getWantACone()) {
-            updateShoulderSetpoint(setpoint.m_shoulderCone);
-            updateElbowSetpoint(setpoint.m_elbowCone);
+            if (setpoint.m_shoulderCone != NO_CHANGE)
+              updateShoulderSetpoint(setpoint.m_shoulderCone);
+            if (setpoint.m_elbowCone != NO_CHANGE)
+              updateElbowSetpoint(setpoint.m_elbowCone);
         } else if (container.getChassisSubsystem().getWantACube()) {
-            updateShoulderSetpoint(setpoint.m_shoulderCube);
-            updateElbowSetpoint(setpoint.m_elbowCube);
+            if (setpoint.m_shoulderCube != NO_CHANGE)
+              updateShoulderSetpoint(setpoint.m_shoulderCube);
+            if (setpoint.m_elbowCube != NO_CHANGE)
+              updateElbowSetpoint(setpoint.m_elbowCube);
         }
+    }
+
+    public boolean atSetpoint(Setpoint setpoint) {
+        return false;
     }
 
     public Vector<N2> calculateFeedforwards() {
@@ -346,5 +356,43 @@ public class ArmSubsystem extends SubsystemBase {
 
     public double degreesPerSecondToPower(double degrees) {
         return degrees / 38400;
+    }
+
+    // -160 132
+    private static final Setpoint BICEP_OUT = new Setpoint(NO_CHANGE, 75, false, NO_CHANGE, 75, false);
+    private static final Setpoint FOREARM_HALF1 = new Setpoint(-130, NO_CHANGE, false, -130, NO_CHANGE, false);
+    private static final Setpoint FOREARM_HALF2 = new Setpoint(-110, NO_CHANGE, false, -110, NO_CHANGE, false);
+    private static final Setpoint FOREARM_HALF3 = new Setpoint(-70, NO_CHANGE, false, -70, NO_CHANGE, false);
+    private static final Setpoint FOREARM_HALF4 = new Setpoint(-45, NO_CHANGE, false, -45, NO_CHANGE, false);
+    private static final Setpoint FOREARM_HALF5 = new Setpoint(-25, NO_CHANGE, false, -25, NO_CHANGE, false);
+    private static final Setpoint FOREARM_FINAL = new Setpoint(-10, 75, false, -10, 75, false);
+    // a series of setpoints to get to the mid level scoring 
+    public Object midScoreRoutine() {
+        updateAllSetpoints(BICEP_OUT); 
+        while (!bothJointsAtSetpoint()){
+            System.out.println("Moving to BICEP_OUT");
+        }
+        updateAllSetpoints(FOREARM_HALF1);
+        while (!bothJointsAtSetpoint()){
+            System.out.println("Moving to FOREARM_HALF");
+        }
+        updateAllSetpoints(FOREARM_HALF2);
+        while (!bothJointsAtSetpoint()){
+            System.out.println("Moving to FOREARM_HALF");
+        }
+        // updateAllSetpoints(FOREARM_HALF3);
+        // while (!bothJointsAtSetpoint()){
+        //     System.out.println("Moving to FOREARM_HALF");
+        // }
+        // updateAllSetpoints(FOREARM_HALF4);
+        // while (!bothJointsAtSetpoint()){
+        //     System.out.println("Moving to FOREARM_HALF");
+        // }
+        // updateAllSetpoints(FOREARM_HALF5);
+        // while (!bothJointsAtSetpoint()){
+        //     System.out.println("Moving to FOREARM_HALF");
+        // }
+        // updateAllSetpoints(FOREARM_FINAL);
+        return null;
     }
 }

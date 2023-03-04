@@ -97,9 +97,13 @@ public class Constants {
         public static final double ELBOW_ANGLE_OFFSET = -244.4;
         public static final double SHOULDER_ANGLE_OFFSET = -89.4;
 
-        public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.05, 0.0, 50);
+        // public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.05, 0.0, 50);
 
-        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.9, 0.1, 0.05, 0.00, 50);
+        // public static final Gains GAINS_ELBOW_JOINT = new Gains(0.9, 0.1, 0.05, 0.00, 50);
+
+        public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.01, 0.0, 50);
+
+        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.9, 0.1, 0.01, 0.00, 50);
 
         public static final double kSShoulder = 0.04;
         public static final double kGShoulder = 0.25;
@@ -169,7 +173,7 @@ public class Constants {
         public static final Setpoint TALL = new Setpoint(1, 1, false, 1, 1, false);
         public static final Setpoint STOWED = new Setpoint(-160, 132, false, -160, 132, false);
         public static final Setpoint FLOOR = new Setpoint(20, 100, true, 20, 100, true);
-        public static final Setpoint MID_NODE = new Setpoint(-10, 90, false, -10, 90, false);
+        // public static final Setpoint MID_NODE = new Setpoint(-10, 90, false, -10, 90, false);
         public static final Setpoint MID_NODE_PLACED = new Setpoint(199, 87, false, 192, 69, false);
         public static final Setpoint TOP_NODE = new Setpoint(-10, -50, false, -10, -50, false);
         public static final Setpoint TOP_NODE_PLACED = new Setpoint(234, 149, false, 213, 111, false);
