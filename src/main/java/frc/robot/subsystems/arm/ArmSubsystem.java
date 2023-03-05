@@ -174,23 +174,19 @@ public class ArmSubsystem extends SubsystemBase {
         // m_elbowRightJoint.setSelectedSensorPosition(degreesToCTREUnits(getElbowJointPos()),
         // 0, ArmConstants.TIMEOUT);
 
-        // SmartDashboard.putNumber("Shoulder Setpoint", m_shoulderSetpoint);
-        // SmartDashboard.putNumber("Elbow Setpoint", m_elbowSetpoint);
-        // SmartDashboard.putNumber("ShoulderEncoder",
-        // m_shoulderEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("ShoulderTrue",
+        SmartDashboard.putNumber("Shoulder Setpoint", m_shoulderSetpoint);
+        SmartDashboard.putNumber("Elbow Setpoint", m_elbowSetpoint);
+        SmartDashboard.putNumber("Shoulder Absolute Encoder Position",
                 (m_shoulderEncoder.getAbsolutePosition()));
-        // SmartDashboard.putNumber("ElbowEncoder",
-        // m_elbowEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("ElbowTrue",
+        SmartDashboard.putNumber("Elbow Absolute Encoder Position",
                 (m_elbowEncoder.getAbsolutePosition()));
 
         // SmartDashboard.putBoolean("Game Peice", GamePiece.getGamePiece() ==
         // GamePieceType.Cone);
 
         // if (Constants.TEST_MODE) {
-        // SmartDashboard.putNumber("Elbow Angle", getElbowJointDegrees());
-        // SmartDashboard.putNumber("Shoulder Angle", getShoulderJointDegrees());
+        SmartDashboard.putNumber("Elbow Angle", getElbowJointDegrees());
+        SmartDashboard.putNumber("Shoulder Angle", getShoulderJointDegrees());
         // SmartDashboard.putNumber("Elbow Angle Uncorrected", getElbowJointPos());
         // SmartDashboard.putNumber("Shoulder Angle Uncorrected",
         // getShoulderJointPos());
@@ -266,9 +262,9 @@ public class ArmSubsystem extends SubsystemBase {
         // To set elbow constant, move forearm and bicep to
         // vertical, set to elbow encoder value minus 90 (for horizontal)
         Vector<N2> positionVector = VecBuilder.fill(Math.toRadians(m_elbowSetpoint - (90)),
-                // to set shoulder constant, move bicep and forearm to vertical
-                // and set to shoulder encoder value
-                Math.toRadians(-m_shoulderSetpoint + (180)));
+        // to set shoulder constant, move bicep and forearm to vertical
+        // and set to shoulder encoder value
+        Math.toRadians(-m_shoulderSetpoint + (180)));
 
         Vector<N2> velocityVector = VecBuilder.fill(0.0, 0.0);
         Vector<N2> accelVector = VecBuilder.fill(0.0, 0.0);
@@ -279,9 +275,9 @@ public class ArmSubsystem extends SubsystemBase {
     public void runShoulderProfiled() {
         m_controllerShoulder.setGoal(new TrapezoidProfile.State(m_shoulderSetpoint, 0.0));
         double pidOutput = -m_controllerShoulder.calculate(getShoulderJointDegrees());
-        // double ff = -(calculateFeedforwards().get(1, 0)) / 12.0;
-        // System.out.println("Shoulder ff" + (ff));
-        // System.out.println("Shoulder PID" + pidOutput);
+        double ff = -(calculateFeedforwards().get(1, 0)) / 12.0;
+        System.out.println("Shoulder ff" + (ff));
+        System.out.println("Shoulder PID" + pidOutput);
         setPercentOutputShoulder(pidOutput); // may need to negate ff voltage to get desired output
     }
 
@@ -289,9 +285,9 @@ public class ArmSubsystem extends SubsystemBase {
         //System.out.println("running elbow="+m_elbowSetpoint);
         m_controllerElbow.setGoal(new TrapezoidProfile.State(m_elbowSetpoint, 0.0));
         double pidOutput = -m_controllerElbow.calculate(getElbowJointDegrees());
-        // double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
-        // System.out.println("elbow ff" + (ff));
-        // System.out.println("elbow PID" + pidOutput);
+        double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
+        System.out.println("elbow ff" + (ff));
+        System.out.println("elbow PID" + pidOutput);
         setPercentOutputElbow(pidOutput); // may need to negate ff voltage to get desired output
     }
 
@@ -313,14 +309,14 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setPercentOutputShoulder(double speed) {
-        double t = degreesPerSecondToPower(speed) * 750; //300;
+        double t = degreesPerSecondToPower(speed) * 450; //750; //300;
         SmartDashboard.putNumber("shoulder", t);
         //System.out.println("SHOULDER SPEED="+t);
         m_shoulderLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }
 
     public void setPercentOutputElbow(double speed) {
-        double t = degreesPerSecondToPower(speed) * 300; //120;
+        double t = degreesPerSecondToPower(speed) * 240; //300; //120;
         SmartDashboard.putNumber("elbow", t);
         m_elbowLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }
@@ -394,5 +390,13 @@ public class ArmSubsystem extends SubsystemBase {
         // }
         // updateAllSetpoints(FOREARM_FINAL);
         return null;
+    }
+
+    public void incrementShoulderSetPoint(){
+        updateShoulderSetpoint(getShoulderJointDegrees()+1);
+    }
+
+    public void decrementShouldSetPoint(){
+        updateShoulderSetpoint(getShoulderJointDegrees()-1);
     }
 }

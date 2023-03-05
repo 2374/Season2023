@@ -94,16 +94,16 @@ public class Constants {
 
     public static final class ArmConstants {
 
-        public static final double ELBOW_ANGLE_OFFSET = -244.4;
+        public static final double ELBOW_ANGLE_OFFSET = 86.24; //-36.29; //-244.4; 
         public static final double SHOULDER_ANGLE_OFFSET = -89.4;
 
-        // public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.05, 0.0, 50);
+        public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.05, 0.0, 50);
 
-        // public static final Gains GAINS_ELBOW_JOINT = new Gains(0.9, 0.1, 0.05, 0.00, 50);
+        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.9, 1.5, 0.0, 0.00, 50);
 
-        public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.01, 0.0, 50);
+        // public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.01, 0.0, 50);
 
-        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.9, 0.1, 0.01, 0.00, 50);
+        // public static final Gains GAINS_ELBOW_JOINT = new Gains(0.9, 0.1, 0.01, 0.00, 50);
 
         public static final double kSShoulder = 0.04;
         public static final double kGShoulder = 0.25;
@@ -120,13 +120,13 @@ public class Constants {
         public static final double SHOULDER_MOI = 0.4;
         public static final double SHOULDER_CGRADIUS = 1.0;
         public static final double SHOULDER_MASS = 5.0;
-        public static final DCMotor SHOULDER_MOTOR = DCMotor.getFalcon500(2).withReduction(75);
+        public static final DCMotor SHOULDER_MOTOR = DCMotor.getFalcon500(2).withReduction(80);
 
         public static final double ELBOW_LENGTH = 0.7874;
         public static final double ELBOW_MOI = 0.4;
         public static final double ELBOW_CGRADIUS = 1.0;
         public static final double ELBOW_MASS = 5.0;
-        public static final DCMotor ELBOW_MOTOR = DCMotor.getFalcon500(2).withReduction(75);
+        public static final DCMotor ELBOW_MOTOR = DCMotor.getFalcon500(2).withReduction(60);
 
         // Max sensor velocity per 100 ms
         // Max RPM 6380 * 2:1 gearing * 4096 ticks *1min/60000ms * 100ms
@@ -171,14 +171,16 @@ public class Constants {
         public static final Setpoint TEST_SETPOINT_LOWER = new Setpoint(164, 65, true, 164, 65, true);
 
         public static final Setpoint TALL = new Setpoint(1, 1, false, 1, 1, false);
-        public static final Setpoint STOWED = new Setpoint(-160, 132, false, -160, 132, false);
-        public static final Setpoint FLOOR = new Setpoint(20, 100, true, 20, 100, true);
-        // public static final Setpoint MID_NODE = new Setpoint(-10, 90, false, -10, 90, false);
+        public static final Setpoint STOWED = new Setpoint(-140, 132, false, -160, 132, false);
+        public static final Setpoint RUN = new Setpoint(90, 50, false, -160, 132, false);
+        public static final Setpoint READY = new Setpoint(-10, 500 , true, 20, 110, true);
+        public static final Setpoint FLOOR = new Setpoint(90, 85 , true, 20, 110, true);
+        public static final Setpoint MID_NODE = new Setpoint(-10, 90, false, -10, 90, false);
         public static final Setpoint MID_NODE_PLACED = new Setpoint(199, 87, false, 192, 69, false);
         public static final Setpoint TOP_NODE = new Setpoint(-10, -50, false, -10, -50, false);
         public static final Setpoint TOP_NODE_PLACED = new Setpoint(234, 149, false, 213, 111, false);
         public static final Setpoint SUBSTATION = new Setpoint(150, 53, false, 150, 53, false);
-        public static final Setpoint TEST = new Setpoint(-90, 90, false, -90, 90, false);
+        public static final Setpoint TEST = new Setpoint(-70, 110, false, -90, 90, false);
         
         public static final double INTERMEDIATE_ELBOW_POSITION = 90;
     }

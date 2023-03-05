@@ -77,16 +77,18 @@ public class RobotContainer {
         new Trigger(m_operatorController::getRightBumper)
                 .onTrue(new InstantCommand(getChassisSubsystem()::setWantACube,
                         getChassisSubsystem()));
-        // new Trigger(m_driveController::getYButton).onTrue(
-        //         new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.TOP_NODE)));
         new Trigger(m_driveController::getYButton).onTrue(
-                    new InstantCommand(() -> m_ArmSubsystem.midScoreRoutine()));
+                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.TEST)));
+        // new Trigger(m_driveController::getYButton).onTrue(
+        //             new InstantCommand(() -> m_ArmSubsystem.midScoreRoutine()));
         new Trigger(m_driveController::getXButton).onTrue(
                 new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.STOWED)));
-        // new Trigger(m_driveController::getBButton).onTrue(
-        //         new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.MID_NODE)));
+        new Trigger(m_driveController::getBButton).onTrue(
+                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.RUN)));
         new Trigger(m_driveController::getAButton).onTrue(
-                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.FLOOR)));
+                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.READY)));
+       // new Trigger(m_operatorController::getPOV()).onTrue(new InstantCommand(m_ArmSubsystem::incrementShoulderSetPoint, m_ArmSubsystem));
+        
         
         
         // new Trigger(m_controller::getYButton)
