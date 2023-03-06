@@ -90,7 +90,7 @@ public class ArmSubsystem extends SubsystemBase {
         m_shoulderLeftJoint.setNeutralMode(NeutralMode.Brake);
         m_elbowRightJoint.setNeutralMode(NeutralMode.Brake);
         m_shoulderRightJoint.setNeutralMode(NeutralMode.Brake);
-
+       
         m_elbowLeftJoint.configNeutralDeadband(ArmConstants.NEUTRAL_DEADBAND);
         m_shoulderLeftJoint.configNeutralDeadband(ArmConstants.NEUTRAL_DEADBAND);
         m_elbowRightJoint.configNeutralDeadband(ArmConstants.NEUTRAL_DEADBAND);
@@ -276,8 +276,8 @@ public class ArmSubsystem extends SubsystemBase {
         m_controllerShoulder.setGoal(new TrapezoidProfile.State(m_shoulderSetpoint, 0.0));
         double pidOutput = -m_controllerShoulder.calculate(getShoulderJointDegrees());
         double ff = -(calculateFeedforwards().get(1, 0)) / 12.0;
-        System.out.println("Shoulder ff" + (ff));
-        System.out.println("Shoulder PID" + pidOutput);
+        // System.out.println("Shoulder ff" + (ff));
+        // System.out.println("Shoulder PID" + pidOutput);
         setPercentOutputShoulder(pidOutput); // may need to negate ff voltage to get desired output
     }
 
@@ -286,8 +286,8 @@ public class ArmSubsystem extends SubsystemBase {
         m_controllerElbow.setGoal(new TrapezoidProfile.State(m_elbowSetpoint, 0.0));
         double pidOutput = -m_controllerElbow.calculate(getElbowJointDegrees());
         double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
-        System.out.println("elbow ff" + (ff));
-        System.out.println("elbow PID" + pidOutput);
+        // System.out.println("elbow ff" + (ff));
+        // System.out.println("elbow PID" + pidOutput);
         setPercentOutputElbow(pidOutput); // may need to negate ff voltage to get desired output
     }
 
@@ -309,14 +309,14 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setPercentOutputShoulder(double speed) {
-        double t = degreesPerSecondToPower(speed) * 450; //750; //300;
+        double t = degreesPerSecondToPower(speed) * 750; //750; //300;
         SmartDashboard.putNumber("shoulder", t);
         //System.out.println("SHOULDER SPEED="+t);
         m_shoulderLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }
 
     public void setPercentOutputElbow(double speed) {
-        double t = degreesPerSecondToPower(speed) * 240; //300; //120;
+        double t = degreesPerSecondToPower(speed) * 300; //300; //120;
         SmartDashboard.putNumber("elbow", t);
         m_elbowLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }
@@ -393,10 +393,22 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void incrementShoulderSetPoint(){
-        updateShoulderSetpoint(getShoulderJointDegrees()+1);
+        System.out.println("INCR-Shoulder");
+        updateShoulderSetpoint(m_shoulderSetpoint+10);
     }
 
     public void decrementShouldSetPoint(){
-        updateShoulderSetpoint(getShoulderJointDegrees()-1);
+        System.out.println("DECR-Shoulder");
+        updateShoulderSetpoint(m_shoulderSetpoint-10);
+    }
+
+    public void incrementElbowSetPoint(){
+        System.out.println("INCR-Elbow");
+        updateElbowSetpoint(m_elbowSetpoint+10);
+    }
+
+    public void decrementElbowSetPoint(){
+        System.out.println("DECR-Elbow");
+        updateElbowSetpoint(m_elbowSetpoint-10);
     }
 }

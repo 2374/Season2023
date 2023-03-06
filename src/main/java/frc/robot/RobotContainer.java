@@ -71,22 +71,34 @@ public class RobotContainer {
     public void configureButtonBindings() {
         new Trigger(m_driveController::getBackButton)
                 .onTrue(new InstantCommand(m_drivetrainSubsystem::zeroRotation, m_drivetrainSubsystem));
+        new Trigger(m_operatorController::getStartButton)
+                .onTrue(new InstantCommand(getChassisSubsystem()::setWantToggle,
+                        getChassisSubsystem()));
         new Trigger(m_operatorController::getLeftBumper)
-                .onTrue(new InstantCommand(getChassisSubsystem()::setWantACone,
-                        getChassisSubsystem()));
+                .onTrue(new InstantCommand(m_ArmSubsystem::incrementElbowSetPoint,
+                m_ArmSubsystem));
         new Trigger(m_operatorController::getRightBumper)
-                .onTrue(new InstantCommand(getChassisSubsystem()::setWantACube,
-                        getChassisSubsystem()));
+                .onTrue(new InstantCommand(m_ArmSubsystem::decrementElbowSetPoint,
+                m_ArmSubsystem));
+
+        new Trigger(m_driveController::getLeftBumper)
+                .onTrue(new InstantCommand(m_ArmSubsystem::incrementShoulderSetPoint,
+                        m_ArmSubsystem));
+        new Trigger(m_driveController::getRightBumper)
+                .onTrue(new InstantCommand(m_ArmSubsystem::decrementShouldSetPoint,
+                        m_ArmSubsystem));
+                        
+
         new Trigger(m_driveController::getYButton).onTrue(
-                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.TEST)));
+                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.HILUNGE)));
         // new Trigger(m_driveController::getYButton).onTrue(
         //             new InstantCommand(() -> m_ArmSubsystem.midScoreRoutine()));
         new Trigger(m_driveController::getXButton).onTrue(
                 new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.STOWED)));
         new Trigger(m_driveController::getBButton).onTrue(
-                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.RUN)));
+                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.ENGARDE)));
         new Trigger(m_driveController::getAButton).onTrue(
-                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.READY)));
+                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.HIGARDE)));
        // new Trigger(m_operatorController::getPOV()).onTrue(new InstantCommand(m_ArmSubsystem::incrementShoulderSetPoint, m_ArmSubsystem));
         
         

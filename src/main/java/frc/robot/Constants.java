@@ -97,10 +97,7 @@ public class Constants {
         public static final double ELBOW_ANGLE_OFFSET = 86.24; //-36.29; //-244.4; 
         public static final double SHOULDER_ANGLE_OFFSET = -89.4;
 
-        public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.05, 0.0, 50);
-
-        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.9, 1.5, 0.0, 0.00, 50);
-
+       
         // public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.01, 0.0, 50);
 
         // public static final Gains GAINS_ELBOW_JOINT = new Gains(0.9, 0.1, 0.01, 0.00, 50);
@@ -164,15 +161,32 @@ public class Constants {
         public static final double PERIOD = 1025;
 
         public static final double ENCODER_DISTANCE_PER_PULSE = (2.0 * Math.PI / 8192);
+        public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.4, 0.3, 0.0, 0.0, 50);
+
+        //public static final Gains GAINS_ELBOW_JOINT = new Gains(0.75, 0.75, 0.0, 0.00, 50);
+        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.4, 0.3, 0.0, 0.00, 50);
     }
 
     public static final class ArmSetpoints {
         public static final Setpoint TEST_SETPOINT_HIGHER = new Setpoint(191, 35, true, 191, 35, true);
         public static final Setpoint TEST_SETPOINT_LOWER = new Setpoint(164, 65, true, 164, 65, true);
 
+        // ELBOW | SHOULDER false/true
         public static final Setpoint TALL = new Setpoint(1, 1, false, 1, 1, false);
-        public static final Setpoint STOWED = new Setpoint(-140, 132, false, -160, 132, false);
-        public static final Setpoint RUN = new Setpoint(90, 50, false, -160, 132, false);
+        public static final Setpoint STOWED = new Setpoint(-140, 132, false, -140, 132, false);
+        public static final Setpoint STAB = new Setpoint(100, 45, false, 100, 45, false);
+        public static final Setpoint ENGARDE = new Setpoint(-55, 132, false, -55, 132, false);
+        public static final Setpoint LUNGE = new Setpoint(-40, 132, false, -40, 132, false);
+        public static final Setpoint HIGARDE = new Setpoint(500, 25, false, 500, 25, false);
+        public static final Setpoint HILUNGE = new Setpoint(-40, 25, false, -10, 25, false);
+
+
+
+        public static final Setpoint POSA = new Setpoint(500, 45, false, -160, 132, false);
+        
+        public static final Setpoint POSB = new Setpoint(130, 500, false, -160, 132, false);
+        
+        public static final Setpoint POS_0 = new Setpoint(130, 40, false, -160, 132, false);
         public static final Setpoint READY = new Setpoint(-10, 500 , true, 20, 110, true);
         public static final Setpoint FLOOR = new Setpoint(90, 85 , true, 20, 110, true);
         public static final Setpoint MID_NODE = new Setpoint(-10, 90, false, -10, 90, false);
@@ -184,6 +198,8 @@ public class Constants {
         
         public static final double INTERMEDIATE_ELBOW_POSITION = 90;
     }
+
+   
 
 }
  

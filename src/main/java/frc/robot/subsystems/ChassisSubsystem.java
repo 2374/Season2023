@@ -98,6 +98,14 @@ public class ChassisSubsystem extends SubsystemBase {
         return gamePiece == GamePieceType.Cube;
     }
 
+    public void setWantToggle() {
+        if (gamePiece == GamePieceType.Cube) {
+            setWantACone();
+        } else {
+            setWantACube();
+        }
+    }
+
     /**
      * Tell the robot it wants to work with a CONE
      */
