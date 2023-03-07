@@ -79,19 +79,6 @@ public class RobotContainer {
         new Trigger(m_operatorController::getStartButton)
                 .onTrue(new InstantCommand(getChassisSubsystem()::setWantToggle,
                         getChassisSubsystem()));
-        new Trigger(m_operatorController::getLeftBumper)
-                .onTrue(new InstantCommand(m_ArmSubsystem::incrementElbowSetPoint,
-                        m_ArmSubsystem));
-        new Trigger(m_operatorController::getRightBumper)
-                .onTrue(new InstantCommand(m_ArmSubsystem::decrementElbowSetPoint,
-                        m_ArmSubsystem));
-
-        new Trigger(m_driveController::getLeftBumper)
-                .onTrue(new InstantCommand(m_ArmSubsystem::incrementShoulderSetPoint,
-                        m_ArmSubsystem));
-        new Trigger(m_driveController::getRightBumper)
-                .onTrue(new InstantCommand(m_ArmSubsystem::decrementShouldSetPoint,
-                        m_ArmSubsystem));
         new Trigger(m_driveController::getStartButton)
                 .onTrue(new InstantCommand(m_ManipulatorSubsystem::stoptake, m_ManipulatorSubsystem));
 
@@ -234,9 +221,9 @@ public class RobotContainer {
      * 
      * @return The Manipulator Subsystem
      */
-    // public ManipulatorSubsystem getManipulatorSubsystem() {
-    // return m_ManipulatorSubsystem;
-    // }
+    public ManipulatorSubsystem getManipulatorSubsystem() {
+        return m_ManipulatorSubsystem;
+    }
 
     /**
      * Accessor to the Chassis Subsystem

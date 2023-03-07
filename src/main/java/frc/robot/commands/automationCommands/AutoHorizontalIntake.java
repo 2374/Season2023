@@ -23,6 +23,6 @@ public class AutoHorizontalIntake extends SequentialCommandGroup {
                         new Trajectory(new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
                                 .lineTo(new Vector2(.25, 0)).build(), DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS, 0))
                         .alongWith(new ControlIntakeCommand(manipulatorSubsystem, true)),
-                new ArmToSetPointCommand(armSubsystem, ArmSetpoints.STOWED));
+                new ArmToSetPointCommand(armSubsystem, ArmSetpoints.STOW));
     }
 }

@@ -18,7 +18,7 @@ public class GoToPositionWithIntermediate extends SequentialCommandGroup {
     /** Creates a new GoToPositionWithIntermediate. */
     public GoToPositionWithIntermediate(ArmSubsystem arm, Setpoint setpoint) {
 
-        Setpoint intermediateSetpoint = new Setpoint(ArmSetpoints.INTERMEDIATE_ELBOW_POSITION,
+        Setpoint intermediateSetpoint = new Setpoint(0,ArmSetpoints.INTERMEDIATE_ELBOW_POSITION,
                 setpoint.m_shoulderCone * 0.5, setpoint.wristCone,
                 ArmSetpoints.INTERMEDIATE_ELBOW_POSITION, (setpoint.m_elbowCube) * 0.5, setpoint.wristCube);
         addCommands(

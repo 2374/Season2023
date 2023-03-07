@@ -9,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -19,17 +18,11 @@ import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.subsystems.ChassisSubsystem;
-import frc.robot.util.GamePiece;
-import frc.robot.util.GamePiece.GamePieceType;
 
 public class ArmSubsystem extends SubsystemBase {
     /** Creates a new ArmSubsystem. */
@@ -262,6 +255,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void updateAllSetpoints(Setpoint setpoint) {
         currentState = setpoint;
+        displayCurrentState();
         if (container.getChassisSubsystem().getWantACone()) {
             if (setpoint.m_shoulderCone != NO_CHANGE)
                 updateShoulderSetpoint(setpoint.m_shoulderCone);
@@ -391,6 +385,7 @@ public class ArmSubsystem extends SubsystemBase {
                 break;
             case Constants.STAB_READY_Label:
                 currentState = Constants.ArmSetpoints.STAB_READY;
+                container.getManipulatorSubsystem().stoptake();
                 break;
             case Constants.STAB_Label:
                 currentState = Constants.ArmSetpoints.STAB_READY;
@@ -425,6 +420,7 @@ public class ArmSubsystem extends SubsystemBase {
                 break;
             case Constants.STAB_Label:
                 currentState = Constants.ArmSetpoints.STOW;
+                container.getManipulatorSubsystem().stoptake();
                 break;
             case Constants.LOW_SCORE_Label:
                 currentState = Constants.ArmSetpoints.STOW;
@@ -484,12 +480,14 @@ public class ArmSubsystem extends SubsystemBase {
                 break;
             case Constants.STAB_READY_Label:
                 currentState = Constants.ArmSetpoints.STAB;
+                container.getManipulatorSubsystem().intake();
                 break;
             case Constants.STAB_Label:
                 currentState = Constants.ArmSetpoints.STAB;
                 break;
             case Constants.LOW_SCORE_Label:
                 currentState = Constants.ArmSetpoints.LOW_SCORE;
+                container.getManipulatorSubsystem().outtake();
                 break;
             case Constants.HIGH_SCORE_Label:
                 currentState = Constants.ArmSetpoints.HIGH_SCORE;

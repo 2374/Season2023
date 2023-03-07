@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.InvertType;
+// import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -9,11 +9,11 @@ import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.common.control.PidController;
 import frc.robot.Constants;
-import frc.robot.Robot;
+// import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 public class ManipulatorSubsystem extends SubsystemBase {
@@ -69,7 +69,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
      * Starts outtaking
      */
     public void outtake() {
-        intakeMotor.set(-1);
+        intakeMotor.set(-0.4);
         intakeMode = false;
         activate();
     }
