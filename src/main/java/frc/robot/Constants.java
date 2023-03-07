@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import frc.common.control.PidConstants;
 // import edu.wpi.first.wpilibj.DutyCycle;
 import frc.robot.subsystems.arm.Setpoint;
 import frc.robot.util.Gains;
@@ -91,16 +92,19 @@ public class Constants {
     public static final int ELBOW_JOINT_LEFT_MOTOR_CAN_ID = 7; // the CAN ID for the RIO CAN Bus
     public static final int ELBOW_JOINT_RIGHT_MOTOR_CAN_ID = 8; // the CAN ID for the RIO CAN Bus
     public static final int MANIPULATOR_WRIST_MOTOR_CAN_ID = 9;
+    public static final double WRIST_OFFSET = -68.3789;
+    public static final PidConstants WRIST_PID_CONSTANTS = new PidConstants(0.00002, 0, 0);
 
     public static final class ArmConstants {
 
-        public static final double ELBOW_ANGLE_OFFSET = 86.24; //-36.29; //-244.4; 
+        public static final double ELBOW_ANGLE_OFFSET = 110; // -36.29; //-244.4;
         public static final double SHOULDER_ANGLE_OFFSET = -89.4;
 
-       
-        // public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.01, 0.0, 50);
+        // public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.01,
+        // 0.0, 50);
 
-        // public static final Gains GAINS_ELBOW_JOINT = new Gains(0.9, 0.1, 0.01, 0.00, 50);
+        // public static final Gains GAINS_ELBOW_JOINT = new Gains(0.9, 0.1, 0.01, 0.00,
+        // 50);
 
         public static final double kSShoulder = 0.04;
         public static final double kGShoulder = 0.25;
@@ -161,9 +165,10 @@ public class Constants {
         public static final double PERIOD = 1025;
 
         public static final double ENCODER_DISTANCE_PER_PULSE = (2.0 * Math.PI / 8192);
-        public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.4, 0.3, 0.0, 0.0, 50);
+        public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.8, 0.3, 0.0, 0.0, 50);
 
-        //public static final Gains GAINS_ELBOW_JOINT = new Gains(0.75, 0.75, 0.0, 0.00, 50);
+        // public static final Gains GAINS_ELBOW_JOINT = new Gains(0.75, 0.75, 0.0,
+        // 0.00, 50);
         public static final Gains GAINS_ELBOW_JOINT = new Gains(0.4, 0.3, 0.0, 0.00, 50);
     }
 
@@ -177,29 +182,24 @@ public class Constants {
         public static final Setpoint STAB = new Setpoint(100, 45, false, 100, 45, false);
         public static final Setpoint ENGARDE = new Setpoint(-55, 132, false, -55, 132, false);
         public static final Setpoint LUNGE = new Setpoint(-40, 132, false, -40, 132, false);
-        public static final Setpoint HIGARDE = new Setpoint(500, 25, false, 500, 25, false);
+        public static final Setpoint HIGARDE = new Setpoint(15, 75, false, 15, 75, false);
         public static final Setpoint HILUNGE = new Setpoint(-40, 25, false, -10, 25, false);
 
-
-
         public static final Setpoint POSA = new Setpoint(500, 45, false, -160, 132, false);
-        
+
         public static final Setpoint POSB = new Setpoint(130, 500, false, -160, 132, false);
-        
+
         public static final Setpoint POS_0 = new Setpoint(130, 40, false, -160, 132, false);
-        public static final Setpoint READY = new Setpoint(-10, 500 , true, 20, 110, true);
-        public static final Setpoint FLOOR = new Setpoint(90, 85 , true, 20, 110, true);
+        public static final Setpoint READY = new Setpoint(-10, 500, true, 20, 110, true);
+        public static final Setpoint FLOOR = new Setpoint(90, 85, true, 20, 110, true);
         public static final Setpoint MID_NODE = new Setpoint(-10, 90, false, -10, 90, false);
         public static final Setpoint MID_NODE_PLACED = new Setpoint(199, 87, false, 192, 69, false);
         public static final Setpoint TOP_NODE = new Setpoint(-10, -50, false, -10, -50, false);
         public static final Setpoint TOP_NODE_PLACED = new Setpoint(234, 149, false, 213, 111, false);
         public static final Setpoint SUBSTATION = new Setpoint(150, 53, false, 150, 53, false);
-        public static final Setpoint TEST = new Setpoint(-70, 110, false, -90, 90, false);
-        
+        public static final Setpoint TEST = new Setpoint(-90, 90, false, -90, 90, false);
+
         public static final double INTERMEDIATE_ELBOW_POSITION = 90;
     }
 
-   
-
 }
- 

@@ -61,8 +61,17 @@ public class RobotContainer {
      * 
      * @return The main controller
      */
-    public XboxController getController() {
+    public XboxController getMainController() {
         return m_driveController;
+    }
+
+    /**
+     * Get the second controller
+     * 
+     * @return The second controller
+     */
+    public XboxController getSecondController() {
+        return m_operatorController;
     }
 
     /**
@@ -76,10 +85,10 @@ public class RobotContainer {
                         getChassisSubsystem()));
         new Trigger(m_operatorController::getLeftBumper)
                 .onTrue(new InstantCommand(m_ArmSubsystem::incrementElbowSetPoint,
-                m_ArmSubsystem));
+                        m_ArmSubsystem));
         new Trigger(m_operatorController::getRightBumper)
                 .onTrue(new InstantCommand(m_ArmSubsystem::decrementElbowSetPoint,
-                m_ArmSubsystem));
+                        m_ArmSubsystem));
 
         new Trigger(m_driveController::getLeftBumper)
                 .onTrue(new InstantCommand(m_ArmSubsystem::incrementShoulderSetPoint,
@@ -87,22 +96,25 @@ public class RobotContainer {
         new Trigger(m_driveController::getRightBumper)
                 .onTrue(new InstantCommand(m_ArmSubsystem::decrementShouldSetPoint,
                         m_ArmSubsystem));
-                        
+        new Trigger(m_driveController::getStartButton)
+                .onTrue(new InstantCommand(m_ManipulatorSubsystem::stoptake, m_ManipulatorSubsystem));
 
         new Trigger(m_driveController::getYButton).onTrue(
                 new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.HILUNGE)));
         // new Trigger(m_driveController::getYButton).onTrue(
-        //             new InstantCommand(() -> m_ArmSubsystem.midScoreRoutine()));
+        // new InstantCommand(() -> m_ArmSubsystem.midScoreRoutine()));
         new Trigger(m_driveController::getXButton).onTrue(
                 new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.STOWED)));
         new Trigger(m_driveController::getBButton).onTrue(
                 new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.ENGARDE)));
         new Trigger(m_driveController::getAButton).onTrue(
                 new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.HIGARDE)));
-       // new Trigger(m_operatorController::getPOV()).onTrue(new InstantCommand(m_ArmSubsystem::incrementShoulderSetPoint, m_ArmSubsystem));
-        
-        
-        
+        // new Trigger(m_driveController::getAButton).onTrue(
+        // new InstantCommand(() ->
+        // m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.TEST)));
+        // new Trigger(m_operatorController::getPOV()).onTrue(new
+        // InstantCommand(m_ArmSubsystem::incrementShoulderSetPoint, m_ArmSubsystem));
+
         // new Trigger(m_controller::getYButton)
         // .onTrue(new InstantCommand(m_drivetrainSubsystem::printAngles,
         // m_drivetrainSubsystem));
@@ -124,20 +136,26 @@ public class RobotContainer {
         // InstantCommand(m_ASubsystem::elbowBack, m_ASubsystem));
         // new Trigger(m_controller::getBButton).onFalse(new
         // InstantCommand(m_ASubsystem::elbowStop, m_ASubsystem));
-        
+
         // Manipulator Commands
         // Intake
-        new Trigger(m_operatorController::getYButton).onTrue(new InstantCommand(m_ManipulatorSubsystem::intake, m_ManipulatorSubsystem));
+        new Trigger(m_operatorController::getYButton)
+                .onTrue(new InstantCommand(m_ManipulatorSubsystem::intake, m_ManipulatorSubsystem));
         // Outtake
-        new Trigger(m_operatorController::getAButton).onTrue(new InstantCommand(m_ManipulatorSubsystem::outtake, m_ManipulatorSubsystem));
+        new Trigger(m_operatorController::getAButton)
+                .onTrue(new InstantCommand(m_ManipulatorSubsystem::outtake, m_ManipulatorSubsystem));
         // StopTake
-        new Trigger(m_operatorController::getBackButton).onTrue(new InstantCommand(m_ManipulatorSubsystem::stoptake, m_ManipulatorSubsystem));
+        new Trigger(m_operatorController::getBackButton)
+                .onTrue(new InstantCommand(m_ManipulatorSubsystem::toggleRotate, m_ManipulatorSubsystem));
         // Wrist
-        new Trigger(m_operatorController::getXButton).onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateLeft, m_ManipulatorSubsystem));
-        new Trigger(m_operatorController::getXButton).onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation, m_ManipulatorSubsystem));
-        new Trigger(m_operatorController::getBButton).onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateRight, m_ManipulatorSubsystem));
-        new Trigger(m_operatorController::getBButton).onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation, m_ManipulatorSubsystem));
-        
+        new Trigger(m_operatorController::getXButton)
+                .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateLeft, m_ManipulatorSubsystem));
+        new Trigger(m_operatorController::getXButton)
+                .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation, m_ManipulatorSubsystem));
+        new Trigger(m_operatorController::getBButton)
+                .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateRight, m_ManipulatorSubsystem));
+        new Trigger(m_operatorController::getBButton)
+                .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation, m_ManipulatorSubsystem));
 
         // new Trigger(m_controller::getBButton)
         // .onTrue(new InstantCommand(() ->
@@ -152,7 +170,7 @@ public class RobotContainer {
      * @param tolerance The amount of inner area to remove
      * @return The adjusted value
      */
-    private static double deadband(double value, double tolerance) {
+    public static double deadband(double value, double tolerance) {
         if (Math.abs(value) < tolerance)
             return 0.0;
 
@@ -165,7 +183,7 @@ public class RobotContainer {
      * @param value Value to square
      * @return The copy sign square
      */
-    private static double square(double value) {
+    public static double square(double value) {
         return Math.copySign(value * value, value);
     }
 

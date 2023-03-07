@@ -11,7 +11,7 @@ import frc.robot.util.DriverReadout;
 
 public class Robot extends TimedRobot {
     private final RobotContainer m_robotContainer = new RobotContainer();
-    
+
     private Command m_autonomousCommand;
 
     // @SuppressWarnings("unused")
@@ -52,6 +52,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledExit() {
         m_robotContainer.getArmSubsystem().reset();
+        m_robotContainer.getChassisSubsystem().setWantACone();
         // robotContainer.getShooter().setHoodBrakeMode(false);
     }
 

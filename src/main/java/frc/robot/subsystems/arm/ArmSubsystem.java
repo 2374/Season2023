@@ -19,6 +19,8 @@ import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -90,7 +92,7 @@ public class ArmSubsystem extends SubsystemBase {
         m_shoulderLeftJoint.setNeutralMode(NeutralMode.Brake);
         m_elbowRightJoint.setNeutralMode(NeutralMode.Brake);
         m_shoulderRightJoint.setNeutralMode(NeutralMode.Brake);
-       
+
         m_elbowLeftJoint.configNeutralDeadband(ArmConstants.NEUTRAL_DEADBAND);
         m_shoulderLeftJoint.configNeutralDeadband(ArmConstants.NEUTRAL_DEADBAND);
         m_elbowRightJoint.configNeutralDeadband(ArmConstants.NEUTRAL_DEADBAND);
@@ -101,10 +103,14 @@ public class ArmSubsystem extends SubsystemBase {
         m_elbowRightJoint.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 30, 0.2));
         m_shoulderRightJoint.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 30, 0.2));
 
-        m_elbowLeftJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0, ArmConstants.TIMEOUT);
-        m_shoulderLeftJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0, ArmConstants.TIMEOUT);
-        m_elbowRightJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0, ArmConstants.TIMEOUT);
-        m_shoulderRightJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0, ArmConstants.TIMEOUT);
+        m_elbowLeftJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
+                ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
+                ArmConstants.TIMEOUT);
+        m_elbowRightJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
+                ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configSelectedFeedbackSensor(FeedbackDevice.PulseWidthEncodedPosition, 0,
+                ArmConstants.TIMEOUT);
 
         m_shoulderLeftJoint.setInverted(TalonFXInvertType.CounterClockwise);
         m_elbowLeftJoint.setInverted(TalonFXInvertType.CounterClockwise);
@@ -146,10 +152,14 @@ public class ArmSubsystem extends SubsystemBase {
         m_elbowRightJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
         m_shoulderRightJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
 
-        m_shoulderLeftJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_SHOULDER, ArmConstants.TIMEOUT);
-        m_shoulderLeftJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_SHOULDER, ArmConstants.TIMEOUT);
-        m_shoulderRightJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_SHOULDER, ArmConstants.TIMEOUT);
-        m_shoulderRightJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_SHOULDER, ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_SHOULDER,
+                ArmConstants.TIMEOUT);
+        m_shoulderLeftJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_SHOULDER,
+                ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_SHOULDER,
+                ArmConstants.TIMEOUT);
+        m_shoulderRightJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_SHOULDER,
+                ArmConstants.TIMEOUT);
         m_elbowLeftJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_ELBOW, ArmConstants.TIMEOUT);
         m_elbowLeftJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_ELBOW, ArmConstants.TIMEOUT);
         m_elbowRightJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_ELBOW, ArmConstants.TIMEOUT);
@@ -160,11 +170,23 @@ public class ArmSubsystem extends SubsystemBase {
         m_shoulderEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         m_elbowEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         m_elbowEncoder.configSensorDirection(true);
+
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        if (RobotContainer.deadband(container.getSecondController().getLeftY(), 0.1) != 0) {
+            if (true) { // ADD LIMITS
+                updateShoulderSetpoint(
+                        m_shoulderSetpoint
+                                + (RobotContainer.deadband(container.getSecondController().getLeftY(), 0.1) / 4));
+            }
+        }
+        if (RobotContainer.deadband(container.getSecondController().getRightY(), 0.1) != 0) {
+            updateElbowSetpoint(
+                    m_elbowSetpoint + (RobotContainer.deadband(container.getSecondController().getRightY(), 0.1) / 4));
+        }
         // m_shoulderLeftJoint.setSelectedSensorPosition(degreesToCTREUnits(getShoulderJointPos()),
         // 0, ArmConstants.TIMEOUT);
         // m_elbowLeftJoint.setSelectedSensorPosition(degreesToCTREUnits(getElbowJointPos()),
@@ -176,10 +198,6 @@ public class ArmSubsystem extends SubsystemBase {
 
         SmartDashboard.putNumber("Shoulder Setpoint", m_shoulderSetpoint);
         SmartDashboard.putNumber("Elbow Setpoint", m_elbowSetpoint);
-        SmartDashboard.putNumber("Shoulder Absolute Encoder Position",
-                (m_shoulderEncoder.getAbsolutePosition()));
-        SmartDashboard.putNumber("Elbow Absolute Encoder Position",
-                (m_elbowEncoder.getAbsolutePosition()));
 
         // SmartDashboard.putBoolean("Game Peice", GamePiece.getGamePiece() ==
         // GamePieceType.Cone);
@@ -226,7 +244,7 @@ public class ArmSubsystem extends SubsystemBase {
         if (m_shoulderSetpoint != setpoint) {
             if (setpoint < 180 && setpoint > -180) {
                 m_shoulderSetpoint = setpoint;
-                System.out.println("Shoulder Change ="+setpoint);
+                System.out.println("Shoulder Change =" + setpoint);
             }
         }
     }
@@ -235,7 +253,7 @@ public class ArmSubsystem extends SubsystemBase {
         if (m_elbowSetpoint != setpoint) {
             if (setpoint < 180 && setpoint > -180) {
                 m_elbowSetpoint = setpoint;
-                System.out.println("Elbow Change ="+setpoint);
+                System.out.println("Elbow Change =" + setpoint);
             }
         }
     }
@@ -243,14 +261,14 @@ public class ArmSubsystem extends SubsystemBase {
     public void updateAllSetpoints(Setpoint setpoint) {
         if (container.getChassisSubsystem().getWantACone()) {
             if (setpoint.m_shoulderCone != NO_CHANGE)
-              updateShoulderSetpoint(setpoint.m_shoulderCone);
+                updateShoulderSetpoint(setpoint.m_shoulderCone);
             if (setpoint.m_elbowCone != NO_CHANGE)
-              updateElbowSetpoint(setpoint.m_elbowCone);
+                updateElbowSetpoint(setpoint.m_elbowCone);
         } else if (container.getChassisSubsystem().getWantACube()) {
             if (setpoint.m_shoulderCube != NO_CHANGE)
-              updateShoulderSetpoint(setpoint.m_shoulderCube);
+                updateShoulderSetpoint(setpoint.m_shoulderCube);
             if (setpoint.m_elbowCube != NO_CHANGE)
-              updateElbowSetpoint(setpoint.m_elbowCube);
+                updateElbowSetpoint(setpoint.m_elbowCube);
         }
     }
 
@@ -261,10 +279,10 @@ public class ArmSubsystem extends SubsystemBase {
     public Vector<N2> calculateFeedforwards() {
         // To set elbow constant, move forearm and bicep to
         // vertical, set to elbow encoder value minus 90 (for horizontal)
-        Vector<N2> positionVector = VecBuilder.fill(Math.toRadians(m_elbowSetpoint - (90)),
-        // to set shoulder constant, move bicep and forearm to vertical
-        // and set to shoulder encoder value
-        Math.toRadians(-m_shoulderSetpoint + (180)));
+        Vector<N2> positionVector = VecBuilder.fill(Math.toRadians(m_elbowSetpoint),
+                // to set shoulder constant, move bicep and forearm to vertical
+                // and set to shoulder encoder value
+                Math.toRadians(-m_shoulderSetpoint + (180)));
 
         Vector<N2> velocityVector = VecBuilder.fill(0.0, 0.0);
         Vector<N2> accelVector = VecBuilder.fill(0.0, 0.0);
@@ -276,18 +294,18 @@ public class ArmSubsystem extends SubsystemBase {
         m_controllerShoulder.setGoal(new TrapezoidProfile.State(m_shoulderSetpoint, 0.0));
         double pidOutput = -m_controllerShoulder.calculate(getShoulderJointDegrees());
         double ff = -(calculateFeedforwards().get(1, 0)) / 12.0;
-        // System.out.println("Shoulder ff" + (ff));
-        // System.out.println("Shoulder PID" + pidOutput);
+        SmartDashboard.putNumber("Shoulder ff", ff);
+        SmartDashboard.putNumber("Shoulder PID", pidOutput);
         setPercentOutputShoulder(pidOutput); // may need to negate ff voltage to get desired output
     }
 
     public void runElbowProfiled() {
-        //System.out.println("running elbow="+m_elbowSetpoint);
+        // System.out.println("running elbow="+m_elbowSetpoint);
         m_controllerElbow.setGoal(new TrapezoidProfile.State(m_elbowSetpoint, 0.0));
         double pidOutput = -m_controllerElbow.calculate(getElbowJointDegrees());
         double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
-        // System.out.println("elbow ff" + (ff));
-        // System.out.println("elbow PID" + pidOutput);
+        SmartDashboard.putNumber("Elbow ff", ff);
+        SmartDashboard.putNumber("Elbow PID", pidOutput);
         setPercentOutputElbow(pidOutput); // may need to negate ff voltage to get desired output
     }
 
@@ -309,14 +327,14 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setPercentOutputShoulder(double speed) {
-        double t = degreesPerSecondToPower(speed) * 750; //750; //300;
+        double t = degreesPerSecondToPower(speed) * 750; // 750; //300;
         SmartDashboard.putNumber("shoulder", t);
-        //System.out.println("SHOULDER SPEED="+t);
+        // System.out.println("SHOULDER SPEED="+t);
         m_shoulderLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }
 
     public void setPercentOutputElbow(double speed) {
-        double t = degreesPerSecondToPower(speed) * 300; //300; //120;
+        double t = degreesPerSecondToPower(speed) * 300; // 300; //120;
         SmartDashboard.putNumber("elbow", t);
         m_elbowLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }
@@ -362,53 +380,54 @@ public class ArmSubsystem extends SubsystemBase {
     private static final Setpoint FOREARM_HALF4 = new Setpoint(-45, NO_CHANGE, false, -45, NO_CHANGE, false);
     private static final Setpoint FOREARM_HALF5 = new Setpoint(-25, NO_CHANGE, false, -25, NO_CHANGE, false);
     private static final Setpoint FOREARM_FINAL = new Setpoint(-10, 75, false, -10, 75, false);
-    // a series of setpoints to get to the mid level scoring 
+
+    // a series of setpoints to get to the mid level scoring
     public Object midScoreRoutine() {
-        updateAllSetpoints(BICEP_OUT); 
-        while (!bothJointsAtSetpoint()){
+        updateAllSetpoints(BICEP_OUT);
+        while (!bothJointsAtSetpoint()) {
             System.out.println("Moving to BICEP_OUT");
         }
         updateAllSetpoints(FOREARM_HALF1);
-        while (!bothJointsAtSetpoint()){
+        while (!bothJointsAtSetpoint()) {
             System.out.println("Moving to FOREARM_HALF");
         }
         updateAllSetpoints(FOREARM_HALF2);
-        while (!bothJointsAtSetpoint()){
+        while (!bothJointsAtSetpoint()) {
             System.out.println("Moving to FOREARM_HALF");
         }
         // updateAllSetpoints(FOREARM_HALF3);
         // while (!bothJointsAtSetpoint()){
-        //     System.out.println("Moving to FOREARM_HALF");
+        // System.out.println("Moving to FOREARM_HALF");
         // }
         // updateAllSetpoints(FOREARM_HALF4);
         // while (!bothJointsAtSetpoint()){
-        //     System.out.println("Moving to FOREARM_HALF");
+        // System.out.println("Moving to FOREARM_HALF");
         // }
         // updateAllSetpoints(FOREARM_HALF5);
         // while (!bothJointsAtSetpoint()){
-        //     System.out.println("Moving to FOREARM_HALF");
+        // System.out.println("Moving to FOREARM_HALF");
         // }
         // updateAllSetpoints(FOREARM_FINAL);
         return null;
     }
 
-    public void incrementShoulderSetPoint(){
+    public void incrementShoulderSetPoint() {
         System.out.println("INCR-Shoulder");
-        updateShoulderSetpoint(m_shoulderSetpoint+10);
+        updateShoulderSetpoint(m_shoulderSetpoint + 10);
     }
 
-    public void decrementShouldSetPoint(){
+    public void decrementShouldSetPoint() {
         System.out.println("DECR-Shoulder");
-        updateShoulderSetpoint(m_shoulderSetpoint-10);
+        updateShoulderSetpoint(m_shoulderSetpoint - 10);
     }
 
-    public void incrementElbowSetPoint(){
+    public void incrementElbowSetPoint() {
         System.out.println("INCR-Elbow");
-        updateElbowSetpoint(m_elbowSetpoint+10);
+        updateElbowSetpoint(m_elbowSetpoint + 10);
     }
 
-    public void decrementElbowSetPoint(){
+    public void decrementElbowSetPoint() {
         System.out.println("DECR-Elbow");
-        updateElbowSetpoint(m_elbowSetpoint-10);
+        updateElbowSetpoint(m_elbowSetpoint - 10);
     }
 }
