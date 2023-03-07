@@ -3,11 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-// import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.ArmSetpoints;
-// import frc.robot.Constants.ArmSetpoints;
 import frc.robot.commands.*;
-// import frc.robot.commands.helperCommands.ControlIntakeCommand;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.arm.ArmDefault;
 import frc.robot.subsystems.arm.ArmSubsystem;
@@ -100,15 +96,13 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(m_ManipulatorSubsystem::stoptake, m_ManipulatorSubsystem));
 
         new Trigger(m_driveController::getYButton).onTrue(
-                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.HILUNGE)));
-        // new Trigger(m_driveController::getYButton).onTrue(
-        // new InstantCommand(() -> m_ArmSubsystem.midScoreRoutine()));
+                new InstantCommand(() -> m_ArmSubsystem.setpointUP()));
         new Trigger(m_driveController::getXButton).onTrue(
-                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.STOWED)));
+                new InstantCommand(() -> m_ArmSubsystem.setpointBACK()));
         new Trigger(m_driveController::getBButton).onTrue(
-                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.ENGARDE)));
+                new InstantCommand(() -> m_ArmSubsystem.setpointFORWARD()));
         new Trigger(m_driveController::getAButton).onTrue(
-                new InstantCommand(() -> m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.HIGARDE)));
+                new InstantCommand(() -> m_ArmSubsystem.setpointDOWN()));
         // new Trigger(m_driveController::getAButton).onTrue(
         // new InstantCommand(() ->
         // m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.TEST)));

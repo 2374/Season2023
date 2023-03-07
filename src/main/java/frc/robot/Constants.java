@@ -173,33 +173,32 @@ public class Constants {
     }
 
     public static final class ArmSetpoints {
-        public static final Setpoint TEST_SETPOINT_HIGHER = new Setpoint(191, 35, true, 191, 35, true);
-        public static final Setpoint TEST_SETPOINT_LOWER = new Setpoint(164, 65, true, 164, 65, true);
+        public static final Setpoint TEST_SETPOINT_HIGHER = new Setpoint(0,191, 35, true, 191, 35, true);
+        public static final Setpoint TEST_SETPOINT_LOWER = new Setpoint(0,164, 65, true, 164, 65, true);
 
         // ELBOW | SHOULDER false/true
-        public static final Setpoint TALL = new Setpoint(1, 1, false, 1, 1, false);
-        public static final Setpoint STOWED = new Setpoint(-140, 132, false, -140, 132, false);
-        public static final Setpoint STAB = new Setpoint(100, 45, false, 100, 45, false);
-        public static final Setpoint ENGARDE = new Setpoint(-55, 132, false, -55, 132, false);
-        public static final Setpoint LUNGE = new Setpoint(-40, 132, false, -40, 132, false);
-        public static final Setpoint HIGARDE = new Setpoint(15, 75, false, 15, 75, false);
-        public static final Setpoint HILUNGE = new Setpoint(-40, 25, false, -10, 25, false);
-
-        public static final Setpoint POSA = new Setpoint(500, 45, false, -160, 132, false);
-
-        public static final Setpoint POSB = new Setpoint(130, 500, false, -160, 132, false);
-
-        public static final Setpoint POS_0 = new Setpoint(130, 40, false, -160, 132, false);
-        public static final Setpoint READY = new Setpoint(-10, 500, true, 20, 110, true);
-        public static final Setpoint FLOOR = new Setpoint(90, 85, true, 20, 110, true);
-        public static final Setpoint MID_NODE = new Setpoint(-10, 90, false, -10, 90, false);
-        public static final Setpoint MID_NODE_PLACED = new Setpoint(199, 87, false, 192, 69, false);
-        public static final Setpoint TOP_NODE = new Setpoint(-10, -50, false, -10, -50, false);
-        public static final Setpoint TOP_NODE_PLACED = new Setpoint(234, 149, false, 213, 111, false);
-        public static final Setpoint SUBSTATION = new Setpoint(150, 53, false, 150, 53, false);
-        public static final Setpoint TEST = new Setpoint(-90, 90, false, -90, 90, false);
+        public static final Setpoint TALL = new Setpoint(0,1, 1, false, 1, 1, false);
+        public static final Setpoint REST = new Setpoint(REST_Label,-140, 132, false, -140, 132, false);
+        public static final Setpoint MID_READY = new Setpoint(MID_READY_Label,-35, 90, false, -35, 90, false);
+        public static final Setpoint MID_DROP = new Setpoint(MID_DROP_Label,-35, 80, false, -35, 80, false);
+        public static final Setpoint STOW = new Setpoint(STOW_Label,90, 80, false, 90, 80, false);
+        public static final Setpoint STAB_READY = new Setpoint(STAB_READY_Label,70, 80, false, 70, 80, false);
+        public static final Setpoint STAB = new Setpoint(STAB_Label,70, 70, false, 70, 70, false);
+        public static final Setpoint LOW_SCORE = new Setpoint(LOW_SCORE_Label,60, 80, false, 60, 80, false);
+        public static final Setpoint HIGH_SCORE = new Setpoint(HIGH_SCORE_Label,-35, 75, false, -35, 75, false);
 
         public static final double INTERMEDIATE_ELBOW_POSITION = 90;
     }
+
+    public static final int REST_Label = 1;
+    public static final int MID_READY_Label = 2;
+    public static final int MID_DROP_Label = 3;
+    public static final int STOW_Label = 4;
+    public static final int STAB_READY_Label = 5;
+    public static final int STAB_Label = 6;
+    public static final int LOW_SCORE_Label = 7;
+    public static final int HIGH_SCORE_Label = 8;
+
+        
 
 }

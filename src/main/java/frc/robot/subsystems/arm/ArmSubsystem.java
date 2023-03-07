@@ -41,6 +41,8 @@ public class ArmSubsystem extends SubsystemBase {
     private CANCoder m_shoulderEncoder = new CANCoder(Constants.SHOULDER_ENCODER_ARM_CAN_ID);
     private CANCoder m_elbowEncoder = new CANCoder(Constants.ELBOW_ENCODER_ARM_CAN_ID);
 
+    private Setpoint currentState = Constants.ArmSetpoints.REST;
+
     private TrapezoidProfile.Constraints elbowConstraints = new TrapezoidProfile.Constraints(
             ArmConstants.SHOULDER_CRUISE,
             ArmConstants.SHOULDER_ACCELERATION);
@@ -259,6 +261,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void updateAllSetpoints(Setpoint setpoint) {
+        currentState = setpoint;
         if (container.getChassisSubsystem().getWantACone()) {
             if (setpoint.m_shoulderCone != NO_CHANGE)
                 updateShoulderSetpoint(setpoint.m_shoulderCone);
@@ -372,62 +375,160 @@ public class ArmSubsystem extends SubsystemBase {
         return degrees / 38400;
     }
 
-    // -160 132
-    private static final Setpoint BICEP_OUT = new Setpoint(NO_CHANGE, 75, false, NO_CHANGE, 75, false);
-    private static final Setpoint FOREARM_HALF1 = new Setpoint(-130, NO_CHANGE, false, -130, NO_CHANGE, false);
-    private static final Setpoint FOREARM_HALF2 = new Setpoint(-110, NO_CHANGE, false, -110, NO_CHANGE, false);
-    private static final Setpoint FOREARM_HALF3 = new Setpoint(-70, NO_CHANGE, false, -70, NO_CHANGE, false);
-    private static final Setpoint FOREARM_HALF4 = new Setpoint(-45, NO_CHANGE, false, -45, NO_CHANGE, false);
-    private static final Setpoint FOREARM_HALF5 = new Setpoint(-25, NO_CHANGE, false, -25, NO_CHANGE, false);
-    private static final Setpoint FOREARM_FINAL = new Setpoint(-10, 75, false, -10, 75, false);
-
-    // a series of setpoints to get to the mid level scoring
-    public Object midScoreRoutine() {
-        updateAllSetpoints(BICEP_OUT);
-        while (!bothJointsAtSetpoint()) {
-            System.out.println("Moving to BICEP_OUT");
+    public Object setpointUP() {
+        switch (currentState.m_label) {
+            case Constants.REST_Label:
+                currentState = Constants.ArmSetpoints.MID_READY;
+                break;
+            case Constants.MID_READY_Label:
+                currentState = Constants.ArmSetpoints.HIGH_SCORE;
+                break;
+            case Constants.MID_DROP_Label:
+                currentState = Constants.ArmSetpoints.STOW;
+                break;
+            case Constants.STOW_Label:
+                currentState = Constants.ArmSetpoints.MID_READY;
+                break;
+            case Constants.STAB_READY_Label:
+                currentState = Constants.ArmSetpoints.STAB_READY;
+                break;
+            case Constants.STAB_Label:
+                currentState = Constants.ArmSetpoints.STAB_READY;
+                break;
+            case Constants.LOW_SCORE_Label:
+                currentState = Constants.ArmSetpoints.LOW_SCORE;
+                break;
+            case Constants.HIGH_SCORE_Label:
+                currentState = Constants.ArmSetpoints.MID_READY;
+                break;
         }
-        updateAllSetpoints(FOREARM_HALF1);
-        while (!bothJointsAtSetpoint()) {
-            System.out.println("Moving to FOREARM_HALF");
-        }
-        updateAllSetpoints(FOREARM_HALF2);
-        while (!bothJointsAtSetpoint()) {
-            System.out.println("Moving to FOREARM_HALF");
-        }
-        // updateAllSetpoints(FOREARM_HALF3);
-        // while (!bothJointsAtSetpoint()){
-        // System.out.println("Moving to FOREARM_HALF");
-        // }
-        // updateAllSetpoints(FOREARM_HALF4);
-        // while (!bothJointsAtSetpoint()){
-        // System.out.println("Moving to FOREARM_HALF");
-        // }
-        // updateAllSetpoints(FOREARM_HALF5);
-        // while (!bothJointsAtSetpoint()){
-        // System.out.println("Moving to FOREARM_HALF");
-        // }
-        // updateAllSetpoints(FOREARM_FINAL);
+        updateAllSetpoints(currentState);
         return null;
     }
 
-    public void incrementShoulderSetPoint() {
-        System.out.println("INCR-Shoulder");
-        updateShoulderSetpoint(m_shoulderSetpoint + 10);
+    public Object setpointBACK() {
+        switch (currentState.m_label) {
+            case Constants.REST_Label:
+                currentState = Constants.ArmSetpoints.MID_READY;
+                break;
+            case Constants.MID_READY_Label:
+                currentState = Constants.ArmSetpoints.REST;
+                break;
+            case Constants.MID_DROP_Label:
+                currentState = Constants.ArmSetpoints.STOW;
+                break;
+            case Constants.STOW_Label:
+                currentState = Constants.ArmSetpoints.STOW;
+                break;
+            case Constants.STAB_READY_Label:
+                currentState = Constants.ArmSetpoints.STOW;
+                break;
+            case Constants.STAB_Label:
+                currentState = Constants.ArmSetpoints.STOW;
+                break;
+            case Constants.LOW_SCORE_Label:
+                currentState = Constants.ArmSetpoints.STOW;
+                break;
+            case Constants.HIGH_SCORE_Label:
+                currentState = Constants.ArmSetpoints.MID_READY;
+                break;
+        }
+        updateAllSetpoints(currentState);
+        return null;
     }
 
-    public void decrementShouldSetPoint() {
-        System.out.println("DECR-Shoulder");
-        updateShoulderSetpoint(m_shoulderSetpoint - 10);
+    public Object setpointFORWARD() {
+        switch (currentState.m_label) {
+            case Constants.REST_Label:
+                currentState = Constants.ArmSetpoints.MID_READY;
+                break;
+            case Constants.MID_READY_Label:
+                currentState = Constants.ArmSetpoints.MID_DROP;
+                break;
+            case Constants.MID_DROP_Label:
+                currentState = Constants.ArmSetpoints.STOW;
+                break;
+            case Constants.STOW_Label:
+                currentState = Constants.ArmSetpoints.STAB_READY;
+                break;
+            case Constants.STAB_READY_Label:
+                currentState = Constants.ArmSetpoints.LOW_SCORE;
+                break;
+            case Constants.STAB_Label:
+                currentState = Constants.ArmSetpoints.STAB;
+                break;
+            case Constants.LOW_SCORE_Label:
+                currentState = Constants.ArmSetpoints.LOW_SCORE;
+                break;
+            case Constants.HIGH_SCORE_Label:
+                currentState = Constants.ArmSetpoints.HIGH_SCORE;
+                break;
+        }
+        updateAllSetpoints(currentState);
+        return null;
     }
 
-    public void incrementElbowSetPoint() {
-        System.out.println("INCR-Elbow");
-        updateElbowSetpoint(m_elbowSetpoint + 10);
+    public Object setpointDOWN() {
+        switch (currentState.m_label) {
+            case Constants.REST_Label:
+                currentState = Constants.ArmSetpoints.MID_READY;
+                break;
+            case Constants.MID_READY_Label:
+                currentState = Constants.ArmSetpoints.STOW;
+                break;
+            case Constants.MID_DROP_Label:
+                currentState = Constants.ArmSetpoints.STOW;
+                break;
+            case Constants.STOW_Label:
+                currentState = Constants.ArmSetpoints.STAB_READY;
+                break;
+            case Constants.STAB_READY_Label:
+                currentState = Constants.ArmSetpoints.STAB;
+                break;
+            case Constants.STAB_Label:
+                currentState = Constants.ArmSetpoints.STAB;
+                break;
+            case Constants.LOW_SCORE_Label:
+                currentState = Constants.ArmSetpoints.LOW_SCORE;
+                break;
+            case Constants.HIGH_SCORE_Label:
+                currentState = Constants.ArmSetpoints.HIGH_SCORE;
+                break;
+        }
+        updateAllSetpoints(currentState);
+        return null;
     }
 
-    public void decrementElbowSetPoint() {
-        System.out.println("DECR-Elbow");
-        updateElbowSetpoint(m_elbowSetpoint - 10);
+    public Object displayCurrentState() {
+        switch (currentState.m_label) {
+            case Constants.REST_Label:
+                SmartDashboard.putString("SETPOINT STATE", "REST");
+                break;
+            case Constants.MID_READY_Label:
+                SmartDashboard.putString("SETPOINT STATE", "MID_READY");
+                break;
+            case Constants.MID_DROP_Label:
+                SmartDashboard.putString("SETPOINT STATE", "MID_DROP");
+                break;
+            case Constants.STOW_Label:
+                SmartDashboard.putString("SETPOINT STATE", "STOW");
+                break;
+            case Constants.STAB_READY_Label:
+                SmartDashboard.putString("SETPOINT STATE", "STAB_READY");
+                break;
+            case Constants.STAB_Label:
+                SmartDashboard.putString("SETPOINT STATE", "STAB");
+                break;
+            case Constants.LOW_SCORE_Label:
+                SmartDashboard.putString("SETPOINT STATE", "LOW_SCORE");
+                break;
+            case Constants.HIGH_SCORE_Label:
+                SmartDashboard.putString("SETPOINT STATE", "HIGH_SCORE");
+                break;
+            default:
+                SmartDashboard.putString("SETPOINT STATE", "UNKNOWN");
+                break;
+        }
+        return null;
     }
 }
