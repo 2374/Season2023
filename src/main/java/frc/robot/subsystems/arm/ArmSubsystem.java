@@ -360,6 +360,14 @@ public class ArmSubsystem extends SubsystemBase {
         return getShoulderJointPos();
     }
 
+    public double getShoulderSetpoint() {
+        return m_shoulderSetpoint;
+    }
+
+    public double getElbowSetpoint() {
+        return m_elbowSetpoint;
+    }
+
     public double degreesToCTREUnits(double degrees) {
         // degrees to CTRE
         return degrees / 360 * 4096;

@@ -1,6 +1,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
@@ -33,6 +35,7 @@ public class RobotContainer {
         resetArm();
 
         configureButtonBindings();
+        configureShuffleBoard();
     }
 
     /**
@@ -68,6 +71,19 @@ public class RobotContainer {
      */
     public XboxController getSecondController() {
         return m_operatorController;
+    }
+
+    /**
+     * Set up the Shuffleboard
+     */
+    public void configureShuffleBoard() {
+        ShuffleboardTab tab = Shuffleboard.getTab("Driver Readout");
+        tab.add("setPointUp", new InstantCommand(() -> m_ArmSubsystem.setpointUP()));
+        tab.add("setPointBack", new InstantCommand(() -> m_ArmSubsystem.setpointBACK()));
+        tab.add("setPointForward", new InstantCommand(() -> m_ArmSubsystem.setpointFORWARD()));
+        tab.add("setPointDown", new InstantCommand(() -> m_ArmSubsystem.setpointDOWN()));
+        tab.addNumber("Shoulder Setpoint", () -> m_ArmSubsystem.getShoulderSetpoint());
+        tab.addNumber("Elbow Setpoint", () -> m_ArmSubsystem.getElbowSetpoint());
     }
 
     /**
@@ -108,13 +124,17 @@ public class RobotContainer {
         new Trigger(m_operatorController::getBackButton)
                 .onTrue(new InstantCommand(m_ManipulatorSubsystem::toggleRotate, m_ManipulatorSubsystem));
         // new Trigger(m_operatorController::getXButton)
-        //         .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateLeft, m_ManipulatorSubsystem));
+        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateLeft,
+        // m_ManipulatorSubsystem));
         // new Trigger(m_operatorController::getXButton)
-        //         .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation, m_ManipulatorSubsystem));
+        // .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation,
+        // m_ManipulatorSubsystem));
         // new Trigger(m_operatorController::getBButton)
-        //         .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateRight, m_ManipulatorSubsystem));
+        // .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateRight,
+        // m_ManipulatorSubsystem));
         // new Trigger(m_operatorController::getBButton)
-        //         .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation, m_ManipulatorSubsystem));
+        // .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation,
+        // m_ManipulatorSubsystem));
 
         // new Trigger(m_controller::getBButton)
         // .onTrue(new InstantCommand(() ->
