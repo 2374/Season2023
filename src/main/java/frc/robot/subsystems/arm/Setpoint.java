@@ -15,7 +15,7 @@ public class Setpoint {
     public int m_label;
 
     /**
-     * 
+     * @param m_label
      * @param m_elbowCone
      * @param m_shoulderCone
      * @param wristCone
@@ -24,7 +24,7 @@ public class Setpoint {
      * @param wristCube
      */
     public Setpoint(int label, double m_elbowCone, double m_shoulderCone, boolean wristCone, double m_elbowCube,
-            double m_shoulderCube,  boolean wristCube) {
+            double m_shoulderCube, boolean wristCube) {
         this.m_label = label;
         this.m_elbowCone = m_elbowCone;
         this.m_shoulderCone = m_shoulderCone;

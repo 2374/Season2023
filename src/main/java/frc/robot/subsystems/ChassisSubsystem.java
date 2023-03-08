@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.GamePiece.GamePieceType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ChassisSubsystem extends SubsystemBase {
 
@@ -16,7 +15,7 @@ public class ChassisSubsystem extends SubsystemBase {
     private GamePieceType gamePiece = GamePieceType.None; // is the robot working with a Cone or a Cube? default to None
 
     private String serialNumber = "unknown";
-    private UsbCamera camera = CameraServer.startAutomaticCapture("Camera", 0);
+    // private UsbCamera camera = CameraServer.startAutomaticCapture("Camera", 0);
 
     private static ChassisSubsystem instance;
 
