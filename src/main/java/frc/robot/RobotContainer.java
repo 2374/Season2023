@@ -74,69 +74,47 @@ public class RobotContainer {
      * Setup all of the button controls for the robot
      */
     public void configureButtonBindings() {
+        // Drivetrain
         new Trigger(m_driveController::getBackButton)
                 .onTrue(new InstantCommand(m_drivetrainSubsystem::zeroRotation, m_drivetrainSubsystem));
+
+        // Chassis
         new Trigger(m_operatorController::getStartButton)
                 .onTrue(new InstantCommand(getChassisSubsystem()::setWantToggle,
                         getChassisSubsystem()));
-        new Trigger(m_driveController::getStartButton)
-                .onTrue(new InstantCommand(m_ManipulatorSubsystem::stoptake, m_ManipulatorSubsystem));
 
-        new Trigger(m_driveController::getYButton).onTrue(
+        // Arm Setpoints
+        new Trigger(m_operatorController::getYButton).onTrue(
                 new InstantCommand(() -> m_ArmSubsystem.setpointUP()));
-        new Trigger(m_driveController::getXButton).onTrue(
+        new Trigger(m_operatorController::getXButton).onTrue(
                 new InstantCommand(() -> m_ArmSubsystem.setpointBACK()));
-        new Trigger(m_driveController::getBButton).onTrue(
+        new Trigger(m_operatorController::getBButton).onTrue(
                 new InstantCommand(() -> m_ArmSubsystem.setpointFORWARD()));
-        new Trigger(m_driveController::getAButton).onTrue(
+        new Trigger(m_operatorController::getAButton).onTrue(
                 new InstantCommand(() -> m_ArmSubsystem.setpointDOWN()));
-        // new Trigger(m_driveController::getAButton).onTrue(
-        // new InstantCommand(() ->
-        // m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.TEST)));
-        // new Trigger(m_operatorController::getPOV()).onTrue(new
-        // InstantCommand(m_ArmSubsystem::incrementShoulderSetPoint, m_ArmSubsystem));
-
-        // new Trigger(m_controller::getYButton)
-        // .onTrue(new InstantCommand(m_drivetrainSubsystem::printAngles,
-        // m_drivetrainSubsystem));
-        // Shoulder
-        // new Trigger(m_controller::getXButton).onTrue(new
-        // InstantCommand(m_ASubsystem::shoulderForward, m_ASubsystem));
-        // new Trigger(m_controller::getXButton).onFalse(new
-        // InstantCommand(m_ASubsystem::shoulderStop, m_ASubsystem));
-        // new Trigger(m_controller::getAButton).onTrue(new
-        // InstantCommand(m_ASubsystem::shoulderBack, m_ASubsystem));
-        // new Trigger(m_controller::getAButton).onFalse(new
-        // InstantCommand(m_ASubsystem::shoulderStop, m_ASubsystem));
-        // Elbow
-        // new Trigger(m_controller::getYButton).onTrue(new
-        // InstantCommand(m_ASubsystem::elbowForward, m_ASubsystem));
-        // new Trigger(m_controller::getYButton).onFalse(new
-        // InstantCommand(m_ASubsystem::elbowStop, m_ASubsystem));
-        // new Trigger(m_controller::getBButton).onTrue(new
-        // InstantCommand(m_ASubsystem::elbowBack, m_ASubsystem));
-        // new Trigger(m_controller::getBButton).onFalse(new
-        // InstantCommand(m_ASubsystem::elbowStop, m_ASubsystem));
 
         // Manipulator Commands
         // Intake
-        new Trigger(m_operatorController::getYButton)
+        new Trigger(m_operatorController::getLeftBumper)
                 .onTrue(new InstantCommand(m_ManipulatorSubsystem::intake, m_ManipulatorSubsystem));
         // Outtake
-        new Trigger(m_operatorController::getAButton)
+        new Trigger(m_operatorController::getRightBumper)
                 .onTrue(new InstantCommand(m_ManipulatorSubsystem::outtake, m_ManipulatorSubsystem));
         // StopTake
+        new Trigger(m_driveController::getStartButton)
+                .onTrue(new InstantCommand(m_ManipulatorSubsystem::stoptake, m_ManipulatorSubsystem));
+
+        // Wrist
         new Trigger(m_operatorController::getBackButton)
                 .onTrue(new InstantCommand(m_ManipulatorSubsystem::toggleRotate, m_ManipulatorSubsystem));
-        // Wrist
-        new Trigger(m_operatorController::getXButton)
-                .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateLeft, m_ManipulatorSubsystem));
-        new Trigger(m_operatorController::getXButton)
-                .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation, m_ManipulatorSubsystem));
-        new Trigger(m_operatorController::getBButton)
-                .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateRight, m_ManipulatorSubsystem));
-        new Trigger(m_operatorController::getBButton)
-                .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation, m_ManipulatorSubsystem));
+        // new Trigger(m_operatorController::getXButton)
+        //         .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateLeft, m_ManipulatorSubsystem));
+        // new Trigger(m_operatorController::getXButton)
+        //         .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation, m_ManipulatorSubsystem));
+        // new Trigger(m_operatorController::getBButton)
+        //         .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateRight, m_ManipulatorSubsystem));
+        // new Trigger(m_operatorController::getBButton)
+        //         .onFalse(new InstantCommand(m_ManipulatorSubsystem::stopRotation, m_ManipulatorSubsystem));
 
         // new Trigger(m_controller::getBButton)
         // .onTrue(new InstantCommand(() ->
