@@ -172,6 +172,8 @@ public class ArmSubsystem extends SubsystemBase {
         m_elbowEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         m_elbowEncoder.configSensorDirection(true);
 
+        displayCurrentState();
+
     }
 
     @Override
@@ -407,6 +409,7 @@ public class ArmSubsystem extends SubsystemBase {
                 break;
             case Constants.LOW_SCORE_Label:
                 currentState = Constants.ArmSetpoints.LOW_SCORE;
+                container.getManipulatorSubsystem().outtake();
                 break;
             case Constants.HIGH_SCORE_Label:
                 currentState = Constants.ArmSetpoints.MID_READY;
@@ -472,6 +475,7 @@ public class ArmSubsystem extends SubsystemBase {
                 break;
             case Constants.LOW_SCORE_Label:
                 currentState = Constants.ArmSetpoints.LOW_SCORE;
+                container.getManipulatorSubsystem().outtake();
                 break;
             case Constants.HIGH_SCORE_Label:
                 currentState = Constants.ArmSetpoints.HIGH_SCORE;
@@ -519,30 +523,66 @@ public class ArmSubsystem extends SubsystemBase {
         switch (currentState.m_label) {
             case Constants.REST_Label:
                 SmartDashboard.putString("SETPOINT STATE", "REST");
+                SmartDashboard.putString("SETPOINT UP", "MID_READY");
+                SmartDashboard.putString("SETPOINT DOWN", "MID_READY");
+                SmartDashboard.putString("SETPOINT FORWARD", "MID_READY");
+                SmartDashboard.putString("SETPOINT BACK", "MID_READY");
                 break;
             case Constants.MID_READY_Label:
                 SmartDashboard.putString("SETPOINT STATE", "MID_READY");
+                SmartDashboard.putString("SETPOINT UP", "HIGH_SCORE");
+                SmartDashboard.putString("SETPOINT DOWN", "STOW");
+                SmartDashboard.putString("SETPOINT FORWARD", "MID_DROP");
+                SmartDashboard.putString("SETPOINT BACK", "REST");
                 break;
             case Constants.MID_DROP_Label:
                 SmartDashboard.putString("SETPOINT STATE", "MID_DROP");
+                SmartDashboard.putString("SETPOINT UP", "STOW");
+                SmartDashboard.putString("SETPOINT DOWN", "STOW");
+                SmartDashboard.putString("SETPOINT FORWARD", "STOW");
+                SmartDashboard.putString("SETPOINT BACK", "STOW");
                 break;
             case Constants.STOW_Label:
                 SmartDashboard.putString("SETPOINT STATE", "STOW");
+                SmartDashboard.putString("SETPOINT UP", "MID_READY");
+                SmartDashboard.putString("SETPOINT DOWN", "STAB_READY");
+                SmartDashboard.putString("SETPOINT FORWARD", "STAB_READY");
+                SmartDashboard.putString("SETPOINT BACK", "NOTHING");
                 break;
             case Constants.STAB_READY_Label:
                 SmartDashboard.putString("SETPOINT STATE", "STAB_READY");
+                SmartDashboard.putString("SETPOINT UP", "STOW");
+                SmartDashboard.putString("SETPOINT DOWN", "STAB");
+                SmartDashboard.putString("SETPOINT FORWARD", "LOW_SCORE");
+                SmartDashboard.putString("SETPOINT BACK", "STOW");
                 break;
             case Constants.STAB_Label:
                 SmartDashboard.putString("SETPOINT STATE", "STAB");
+                SmartDashboard.putString("SETPOINT UP", "STAB_READY");
+                SmartDashboard.putString("SETPOINT DOWN", "NOTHING");
+                SmartDashboard.putString("SETPOINT FORWARD", "NOTHING");
+                SmartDashboard.putString("SETPOINT BACK", "STOW");
                 break;
             case Constants.LOW_SCORE_Label:
                 SmartDashboard.putString("SETPOINT STATE", "LOW_SCORE");
+                SmartDashboard.putString("SETPOINT UP", "SHOOT");
+                SmartDashboard.putString("SETPOINT DOWN", "SHOOT");
+                SmartDashboard.putString("SETPOINT FORWARD", "SHOOT");
+                SmartDashboard.putString("SETPOINT BACK", "STOW");
                 break;
             case Constants.HIGH_SCORE_Label:
                 SmartDashboard.putString("SETPOINT STATE", "HIGH_SCORE");
+                SmartDashboard.putString("SETPOINT UP", "SHOOT");
+                SmartDashboard.putString("SETPOINT DOWN", "SHOOT");
+                SmartDashboard.putString("SETPOINT FORWARD", "SHOOT");
+                SmartDashboard.putString("SETPOINT BACK", "MID_READY");
                 break;
             default:
                 SmartDashboard.putString("SETPOINT STATE", "UNKNOWN");
+                SmartDashboard.putString("SETPOINT UP", "UNKNOWN");
+                SmartDashboard.putString("SETPOINT DOWN", "UNKNOWN");
+                SmartDashboard.putString("SETPOINT FORWARD", "UNKNOWN");
+                SmartDashboard.putString("SETPOINT BACK", "UNKNOWN");
                 break;
         }
         return null;
