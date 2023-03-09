@@ -97,8 +97,8 @@ public class Constants {
 
     public static final class ArmConstants {
 
-        public static final double ELBOW_ANGLE_OFFSET = 110; // -36.29; //-244.4;
-        public static final double SHOULDER_ANGLE_OFFSET = -89.4;
+        public static final double ELBOW_ANGLE_OFFSET = -5.27; // -36.29; //-244.4;
+        public static final double SHOULDER_ANGLE_OFFSET = -27.7;
 
         // public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.01,
         // 0.0, 50);
@@ -173,19 +173,19 @@ public class Constants {
     }
 
     public static final class ArmSetpoints {
-        public static final Setpoint TEST_SETPOINT_HIGHER = new Setpoint(0,191, 35, true, 191, 35, true);
-        public static final Setpoint TEST_SETPOINT_LOWER = new Setpoint(0,164, 65, true, 164, 65, true);
+        public static final Setpoint TEST_SETPOINT_HIGHER = new Setpoint(0, 191, 35, true, 191, 35, true);
+        public static final Setpoint TEST_SETPOINT_LOWER = new Setpoint(0, 164, 65, true, 164, 65, true);
 
         // ELBOW | SHOULDER false/true
-        public static final Setpoint TALL = new Setpoint(0,1, 1, false, 1, 1, false);
-        public static final Setpoint REST = new Setpoint(REST_Label,-140, 132, false, -140, 132, false);
-        public static final Setpoint MID_READY = new Setpoint(MID_READY_Label,-35, 90, false, -35, 90, false);
-        public static final Setpoint MID_DROP = new Setpoint(MID_DROP_Label,-35, 80, false, -35, 80, false);
-        public static final Setpoint STOW = new Setpoint(STOW_Label,90, 80, false, 90, 80, false);
-        public static final Setpoint STAB_READY = new Setpoint(STAB_READY_Label,70, 80, false, 70, 80, false);
-        public static final Setpoint STAB = new Setpoint(STAB_Label,70, 70, false, 70, 70, false);
-        public static final Setpoint LOW_SCORE = new Setpoint(LOW_SCORE_Label,60, 80, false, 60, 80, false);
-        public static final Setpoint HIGH_SCORE = new Setpoint(HIGH_SCORE_Label,-35, 75, false, -35, 75, false);
+        public static final Setpoint TALL = new Setpoint(0, 1, 1, false, 1, 1, false);
+        public static final Setpoint REST = new Setpoint(REST_Label, -140, 132, false, -140, 132, false);
+        public static final Setpoint MID_READY = new Setpoint(MID_READY_Label, 35, 60, false, 35, 60, false);
+        public static final Setpoint MID_DROP = new Setpoint(MID_DROP_Label, 30, 50, false, 30, 50, false);
+        public static final Setpoint STOW = new Setpoint(STOW_Label, 140, 60, false, 140, 60, false);
+        public static final Setpoint STAB_READY = new Setpoint(STAB_READY_Label, 90, 60, false, 90, 60, false);
+        public static final Setpoint STAB = new Setpoint(STAB_Label, 62, 95, false, 62, 95, false);
+        public static final Setpoint LOW_SCORE = new Setpoint(LOW_SCORE_Label, 90, 60, false, 90, 60, false);
+        public static final Setpoint HIGH_SCORE = new Setpoint(HIGH_SCORE_Label, -35, 75, false, -35, 75, false);
 
         public static final double INTERMEDIATE_ELBOW_POSITION = 90;
     }
@@ -198,7 +198,5 @@ public class Constants {
     public static final int STAB_Label = 6;
     public static final int LOW_SCORE_Label = 7;
     public static final int HIGH_SCORE_Label = 8;
-
-        
 
 }

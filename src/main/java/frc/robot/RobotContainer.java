@@ -84,6 +84,8 @@ public class RobotContainer {
         tab.add("setPointDown", new InstantCommand(() -> m_ArmSubsystem.setpointDOWN()));
         tab.addNumber("Shoulder Setpoint", () -> m_ArmSubsystem.getShoulderSetpoint());
         tab.addNumber("Elbow Setpoint", () -> m_ArmSubsystem.getElbowSetpoint());
+        tab.addNumber("Shoulder Angle", () -> m_ArmSubsystem.getShoulderJointDegrees());
+        tab.addNumber("Elbow Angle", () -> m_ArmSubsystem.getElbowJointDegrees());
     }
 
     /**

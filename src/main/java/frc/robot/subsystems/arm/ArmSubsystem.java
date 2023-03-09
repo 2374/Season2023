@@ -142,23 +142,29 @@ public class ArmSubsystem extends SubsystemBase {
         m_elbowRightJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
         m_shoulderRightJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
 
-        m_elbowLeftJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
-        m_shoulderLeftJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
-        m_elbowRightJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
-        m_shoulderRightJoint.configForwardSoftLimitEnable(true, ArmConstants.TIMEOUT);
+        // m_elbowLeftJoint.configForwardSoftLimitEnable(false, ArmConstants.TIMEOUT);
+        // m_shoulderLeftJoint.configForwardSoftLimitEnable(false,
+        // ArmConstants.TIMEOUT);
+        // m_elbowRightJoint.configForwardSoftLimitEnable(false, ArmConstants.TIMEOUT);
+        // m_shoulderRightJoint.configForwardSoftLimitEnable(false,
+        // ArmConstants.TIMEOUT);
 
-        m_shoulderLeftJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_SHOULDER,
-                ArmConstants.TIMEOUT);
-        m_shoulderLeftJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_SHOULDER,
-                ArmConstants.TIMEOUT);
-        m_shoulderRightJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_SHOULDER,
-                ArmConstants.TIMEOUT);
-        m_shoulderRightJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_SHOULDER,
-                ArmConstants.TIMEOUT);
-        m_elbowLeftJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_ELBOW, ArmConstants.TIMEOUT);
-        m_elbowLeftJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_ELBOW, ArmConstants.TIMEOUT);
-        m_elbowRightJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_ELBOW, ArmConstants.TIMEOUT);
-        m_elbowRightJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_ELBOW, ArmConstants.TIMEOUT);
+        // m_shoulderLeftJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_SHOULDER,
+        // ArmConstants.TIMEOUT);
+        // m_shoulderLeftJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_SHOULDER,
+        // ArmConstants.TIMEOUT);
+        // m_shoulderRightJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_SHOULDER,
+        // ArmConstants.TIMEOUT);
+        // m_shoulderRightJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_SHOULDER,
+        // ArmConstants.TIMEOUT);
+        // m_elbowLeftJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_ELBOW,
+        // ArmConstants.TIMEOUT);
+        // m_elbowLeftJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_ELBOW,
+        // ArmConstants.TIMEOUT);
+        // m_elbowRightJoint.configForwardSoftLimitThreshold(ArmConstants.FORWARD_SOFT_LIMIT_ELBOW,
+        // ArmConstants.TIMEOUT);
+        // m_elbowRightJoint.configReverseSoftLimitThreshold(ArmConstants.REVERSE_SOFT_LIMIT_ELBOW,
+        // ArmConstants.TIMEOUT);
 
         m_shoulderEncoder.configMagnetOffset(ArmConstants.SHOULDER_ANGLE_OFFSET);
         m_elbowEncoder.configMagnetOffset(ArmConstants.ELBOW_ANGLE_OFFSET);
@@ -378,6 +384,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public Object setpointUP() {
+        System.out.println(bothJointsAtSetpoint());
         switch (currentState.m_label) {
             case Constants.REST_Label:
                 currentState = Constants.ArmSetpoints.MID_READY;
@@ -410,6 +417,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public Object setpointBACK() {
+        System.out.println(bothJointsAtSetpoint());
         switch (currentState.m_label) {
             case Constants.REST_Label:
                 currentState = Constants.ArmSetpoints.MID_READY;
@@ -442,6 +450,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public Object setpointFORWARD() {
+        System.out.println(bothJointsAtSetpoint());
         switch (currentState.m_label) {
             case Constants.REST_Label:
                 currentState = Constants.ArmSetpoints.MID_READY;
@@ -473,6 +482,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public Object setpointDOWN() {
+        System.out.println(bothJointsAtSetpoint());
         switch (currentState.m_label) {
             case Constants.REST_Label:
                 currentState = Constants.ArmSetpoints.MID_READY;

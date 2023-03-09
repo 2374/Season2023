@@ -17,10 +17,9 @@ import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 public class ManipulatorSubsystem extends SubsystemBase {
-    // private final WPI_TalonFX intakeMotor;
+    private final WPI_TalonFX intakeMotor;
     private final WPI_TalonFX wristRotationMotor;
-    // private TimeOfFlight sensor = new
-    // TimeOfFlight(Constants.MANIPULATOR_DISTANCE_SENSOR_CAN_ID);
+    private TimeOfFlight sensor = new TimeOfFlight(Constants.MANIPULATOR_DISTANCE_SENSOR_CAN_ID);
     private Boolean intakeMode = false; // we start the match with a cone in the manipulator ready to deploy
     private Boolean active = false; // are we actively intaking or outtaking?
     private Boolean direction = false;
@@ -35,15 +34,15 @@ public class ManipulatorSubsystem extends SubsystemBase {
      * @param container The robot container
      */
     public ManipulatorSubsystem(RobotContainer container) {
-        // intakeMotor = new WPI_TalonFX(Constants.MANIPULATOR_MOTOR_CAN_ID,
-        // Constants.CAN_BUS_NAME_ROBORIO);
-        // intakeMotor.setNeutralMode(NeutralMode.Brake);
-        // intakeMotor.setInverted(true);
+        intakeMotor = new WPI_TalonFX(Constants.MANIPULATOR_MOTOR_CAN_ID,
+                Constants.CAN_BUS_NAME_ROBORIO);
+        intakeMotor.setNeutralMode(NeutralMode.Brake);
+        intakeMotor.setInverted(true);
         wristRotationMotor = new WPI_TalonFX(Constants.MANIPULATOR_WRIST_MOTOR_CAN_ID, Constants.CAN_BUS_NAME_ROBORIO);
         // set the sensor to short range 1300 or less and sample evry 200ms
-        // sensor.setRangingMode(RangingMode.Short, 50);
+        sensor.setRangingMode(RangingMode.Short, 50);
         // // restrict the image to the center of the sensor 16x16 is the full grid
-        // sensor.setRangeOfInterest(7, 7, 9, 9);
+        sensor.setRangeOfInterest(7, 7, 9, 9);
         robotContainer = container; // give us a pointer back to the robot container to reference cube/cone desire
         wristRotationMotor.getSensorCollection().setIntegratedSensorPosition(0, 100);
         // controller.setContinuous(false);
@@ -52,13 +51,14 @@ public class ManipulatorSubsystem extends SubsystemBase {
         // controller.setSetpoint(0);
         wristRotationMotor.setInverted(TalonFXInvertType.CounterClockwise);
         wristRotationMotor.configNeutralDeadband(0.01);
+        wristRotationMotor.setNeutralMode(NeutralMode.Brake);
     }
 
     /**
      * Starts intaking
      */
     public void intake() {
-        // intakeMotor.set(1);
+        intakeMotor.set(1);
         intakeMode = true;
         foundCounter = 0;
         activate();
@@ -68,7 +68,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
      * Starts outtaking
      */
     public void outtake() {
-        // intakeMotor.set(-0.4);
+        intakeMotor.set(-0.2);
         intakeMode = false;
         activate();
     }
@@ -77,7 +77,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
      * Stops taking
      */
     public void stoptake() {
-        // intakeMotor.stopMotor();
+        intakeMotor.stopMotor();
         deactivate();
     }
 
@@ -115,8 +115,8 @@ public class ManipulatorSubsystem extends SubsystemBase {
      * @return The distance measured by the Time of Flight Sensor in millimeters
      */
     public double getDistance() {
-        // return sensor.getRange();
-        return 0;
+        return sensor.getRange();
+        // return 0;
     }
 
     /**
@@ -142,57 +142,56 @@ public class ManipulatorSubsystem extends SubsystemBase {
         // Robot.kDefaultPeriod));
         SmartDashboard.putNumber("Wrist Encoder",
                 wristRotationMotor.getSensorCollection().getIntegratedSensorPosition());
-        if (direction && wristRotationMotor.getSensorCollection().getIntegratedSensorPosition() < 8000) {
+        if (direction && wristRotationMotor.getSensorCollection().getIntegratedSensorPosition() < 8500) {
             wristRotationMotor.set(0.05);
-        } else if (!direction && wristRotationMotor.getSensorCollection().getIntegratedSensorPosition() > 1000) {
+        } else if (!direction && wristRotationMotor.getSensorCollection().getIntegratedSensorPosition() > 1500) {
             wristRotationMotor.set(-0.05);
         } else {
             wristRotationMotor.stopMotor();
         }
-        // if (active) { // is active?
-        // System.out.println("Sensor=" +
-        // robotContainer.getChassisSubsystem().getWantACone() + " "
-        // + robotContainer.getChassisSubsystem().getWantACube() + " " +
-        // sensor.getRange());
-        stoptake();
-        // if (intakeMode) { // intake mode?
-        // if (robotContainer.getChassisSubsystem().getSomething()) { // want something?
-        // if (robotContainer.getChassisSubsystem().getWantACone()) { // want cone?
-        // if (sensor.getRange() < 60) {
-        // foundCounter++;
-        // if (foundCounter > 10) {
-        // System.out.println("stopping due to enough results for cube less than 60");
-        // stoptake();
-        // }
-        // } else {
-        // foundCounter = 0;
-        // }
-        // } else if (robotContainer.getChassisSubsystem().getWantACube()) { // want
-        // cube?
+        if (active) { // is active?
+            // System.out.println("Sensor=" +
+            // robotContainer.getChassisSubsystem().getWantACone() + " "
+            // + robotContainer.getChassisSubsystem().getWantACube() + " " +
+            // sensor.getRange());
+            // stoptake();
+            if (intakeMode) { // intake mode?
+                if (robotContainer.getChassisSubsystem().getSomething()) { // want something?
+                    if (robotContainer.getChassisSubsystem().getWantACone()) { // want cone?
+                        if (sensor.getRange() < 60) {
+                            foundCounter++;
+                            if (foundCounter > 10) {
+                                System.out.println("stopping due to enough results for cube less than 60");
+                                stoptake();
+                            }
+                        } else {
+                            foundCounter = 0;
+                        }
+                    } else if (robotContainer.getChassisSubsystem().getWantACube()) { // want cube?
 
-        // if (sensor.getRange() < 130) {
-        // foundCounter++;
-        // if (foundCounter > 15) {
-        // System.out.println("stopping due to enough results for cube less than 130");
-        // stoptake();
-        // }
-        // } else {
-        // foundCounter = 0;
-        // }
-        // } else {
-        // System.out.println("stopping due to invalid state");
-        // stoptake();
-        // }
-        // }
-        // } else { // outtake mode
-        // if (sensor.getRange() > 300) {
-        // foundCounter--;
-        // if (foundCounter <= 0) {
-        // System.out.println("stopping due to game piece having left long enough");
-        // stoptake();
-        // }
-        // }
-        // }
-        // }
+                        if (sensor.getRange() < 130) {
+                            foundCounter++;
+                            if (foundCounter > 15) {
+                                System.out.println("stopping due to enough results for cube less than 130");
+                                stoptake();
+                            }
+                        } else {
+                            foundCounter = 0;
+                        }
+                    } else {
+                        System.out.println("stopping due to invalid state");
+                        stoptake();
+                    }
+                }
+            } else { // outtake mode
+                if (sensor.getRange() > 300) {
+                    foundCounter--;
+                    if (foundCounter <= 0) {
+                        System.out.println("stopping due to game piece having left long enough");
+                        stoptake();
+                    }
+                }
+            }
+        }
     }
 }
