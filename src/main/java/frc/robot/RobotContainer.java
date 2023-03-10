@@ -93,10 +93,10 @@ public class RobotContainer {
         // m_ArmSubsystem.setpointFORWARD()));
         // tab.add("setPointDown", new InstantCommand(() ->
         // m_ArmSubsystem.setpointDOWN()));
-        tab.addNumber("Shoulder Setpoint", () -> m_ArmSubsystem.getShoulderSetpoint()).withPosition(3, 0);
-        tab.addNumber("Elbow Setpoint", () -> m_ArmSubsystem.getElbowSetpoint()).withPosition(5, 0);
-        tab.addNumber("Shoulder Angle", () -> m_ArmSubsystem.getShoulderJointDegrees()).withPosition(3, 2);
-        tab.addNumber("Elbow Angle", () -> m_ArmSubsystem.getElbowJointDegrees()).withPosition(5, 2);
+        tab.addNumber("Shoulder Setpoint", () -> m_ArmSubsystem.getShoulderSetpoint()).withPosition(3, 2);
+        tab.addNumber("Elbow Setpoint", () -> m_ArmSubsystem.getElbowSetpoint()).withPosition(5, 2);
+        tab.addNumber("Shoulder Angle", () -> m_ArmSubsystem.getShoulderJointDegrees()).withPosition(3, 0);
+        tab.addNumber("Elbow Angle", () -> m_ArmSubsystem.getElbowJointDegrees()).withPosition(5, 0);
         tab.addString("CURRENT", () -> m_ArmSubsystem.getCurrentState()).withPosition(4, 1);
         tab.addString("UP", () -> m_ArmSubsystem.getUpState()).withPosition(4, 0);
         tab.addString("DOWN", () -> m_ArmSubsystem.getDownState()).withPosition(4, 2);

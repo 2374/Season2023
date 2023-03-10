@@ -4,6 +4,7 @@ package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
@@ -31,6 +32,8 @@ public class AutonomousChooser {
         autonomousModeChooser.setDefaultOption("1 meter F", AutonomousMode.ONE_METER_F);
         autonomousModeChooser.addOption("1 meter B", AutonomousMode.ONE_METER_B);
         // autonomousModeChooser.addOption("Figure Eight", AutonomousMode.FIGURE_EIGHT);
+        autonomousModeChooser.addOption("Generic Back", AutonomousMode.GENERIC_BACK);
+        autonomousModeChooser.addOption("Generic Score Back", AutonomousMode.GENERIC_SCORE_BACK);
         autonomousModeChooser.addOption("Red Outer No Charge", AutonomousMode.RED_OUTER_NO_CHARGE);
         autonomousModeChooser.addOption("Red Outer Charge", AutonomousMode.RED_OUTER_CHARGE);
         autonomousModeChooser.addOption("Red Middle No Charge", AutonomousMode.RED_MIDDLE_NO_CHARGE);
@@ -52,9 +55,9 @@ public class AutonomousChooser {
     public Command getOneMeterFAuto(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        resetRobotPose(command, container, trajectories.getOneMeterF());
-
-        command.addCommands(follow(container, trajectories.getOneMeterF()));
+        command.addCommands(
+                resetRobotPose(container, trajectories.getOneMeterF()),
+                follow(container, trajectories.getOneMeterF()));
 
         return command;
     }
@@ -62,9 +65,9 @@ public class AutonomousChooser {
     public Command getOneMeterBAuto(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        resetRobotPose(command, container, trajectories.getOneMeterB());
-
-        command.addCommands(follow(container, trajectories.getOneMeterB()));
+        command.addCommands(
+                resetRobotPose(container, trajectories.getOneMeterB()),
+                follow(container, trajectories.getOneMeterB()));
 
         return command;
     }
@@ -72,9 +75,9 @@ public class AutonomousChooser {
     public Command getFigureEightAuto(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
-        resetRobotPose(command, container, trajectories.getFigureEight());
-
-        command.addCommands(follow(container, trajectories.getFigureEight()));
+        command.addCommands(
+                resetRobotPose(container, trajectories.getFigureEight()),
+                follow(container, trajectories.getFigureEight()));
 
         return command;
     }
@@ -83,20 +86,12 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         // assumes robot starts in front of the outer scoring poles
-        resetRobotPose(command, container, trajectories.getFourPointNineFiveMeterF());
         // score the cone on the top row
-        // topConeScore(command, container);
         // move the arm to rest while moving to pickup the cube 4.7 meters toward the
         // middle of the field
-        command.addCommands(follow(container, trajectories.getFourPointNineFiveMeterF()));
-        // fourPointSevenMeterWithFrontArmMovement(command, container);
         // intake the cone from the ground
-        // THIS IS BROKEN intakeGroundThenRest(command, container);
         // move back toward the scoring area and slide toward the middle to align to
         // score
-        command.addCommands(follow(container,
-                trajectories.getFourPointSevenMeterB()),
-                follow(container, trajectories.getSideOneMeter()));
         // score the top row of the 2nd cone in from the outer wall
         // topConeScore(command, container);
 
@@ -107,17 +102,41 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         // assumes robot starts in front of the outer scoring poles
-        resetRobotPose(command, container, trajectories.getFourPointSevenMeterB());
         // score the cone on the top row
-        // topConeScore(command, container);
         // move 4.7 meters toward the center of the field so as to clear the charge
         // station
-        // fourPointSevenMeterWithFrontArmMovement(command, container);
         // move 2 meters toward the middle of the charge station to align for climbing
         // move 1.5 meeters to get onto charge station
         // auto balance
 
         return command;
+    }
+
+    public Command getGenericBackAuto(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        command.addCommands(
+                resetRobotPose(container),
+                followLine(container, -3.7, 0));
+
+        return command;
+    }
+
+    public Command getGenericScoreBackAuto(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        command.addCommands(
+                resetRobotPose(container),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointDOWN()),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointFORWARD()),
+                backWhileOuttake(container),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointDOWN()),
+                followLine(container, -3.5, 0),
+                followLine(container, 0, 0, 180),
+                resetRobotPose(container));
+
+        return command;
+
     }
 
     // private void scoreTop(SequentialCommandGroup command, RobotContainer
@@ -139,19 +158,31 @@ public class AutonomousChooser {
     // container.getManipulatorSubsystem(), true));
     // }
 
+    private Command backWhileOuttake(RobotContainer container) {
+        return new ParallelCommandGroup(new InstantCommand(() -> container.getManipulatorSubsystem().outtake(),
+                container.getManipulatorSubsystem()), followLine(container, -0.2, 0));
+    }
+
+    private Command gotoSetpoint(RobotContainer container,
+            Runnable buttonDirectionMethod) {
+        return new InstantCommand(buttonDirectionMethod, container.getArmSubsystem()).andThen(new WaitCommand(0.1))
+                .andThen(new WaitUntilCommand(() -> container.getArmSubsystem().bothJointsAtSetpoint()));
+    }
+
     private Command follow(RobotContainer container, Trajectory trajectory) {
         return new FollowTrajectoryCommand(container.getDrivetrain(), trajectory);
     }
 
-    private Command followLine(RobotContainer container, int x, int y, int rotationDegrees) {
+    private Command followLine(RobotContainer container, double x, double y,
+            int rotationDegrees) {
         return new FollowTrajectoryCommand(container.getDrivetrain(),
                 new Trajectory(
                         new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
                                 .lineTo(new Vector2(x, y), Rotation2.fromDegrees(rotationDegrees)).build(),
-                        DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS, 0));
+                        DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS, 0.1));
     }
 
-    private Command followLine(RobotContainer container, int x, int y) {
+    private Command followLine(RobotContainer container, double x, double y) {
         return followLine(container, x, y, 0);
     }
 
@@ -159,10 +190,15 @@ public class AutonomousChooser {
     // return new ArmToSetPointCommand(container.getArmSubsystem(), setpoint);
     // }
 
-    public void resetRobotPose(SequentialCommandGroup command, RobotContainer container, Trajectory trajectory) {
+    public Command resetRobotPose(RobotContainer container, Trajectory trajectory) {
         Path.State start = trajectory.getPath().calculate(0.0);
-        command.addCommands(new InstantCommand(() -> container.getDrivetrain().setPose(new Pose2d(start.getPosition().x,
-                start.getPosition().y, new Rotation2d(start.getRotation().toRadians())))));
+        return new InstantCommand(() -> container.getDrivetrain().setPose(new Pose2d(start.getPosition().x,
+                start.getPosition().y, new Rotation2d(start.getRotation().toRadians()))));
+    }
+
+    public Command resetRobotPose(RobotContainer container) {
+        return new InstantCommand(
+                () -> container.getDrivetrain().setPose(new Pose2d(0, 0, Rotation2d.fromDegrees(0))));
     }
 
     // Handler to determine what command was requested for the autonmous routine to
@@ -175,6 +211,10 @@ public class AutonomousChooser {
                 return getOneMeterBAuto(container);
             case FIGURE_EIGHT:
                 return getFigureEightAuto(container);
+            case GENERIC_BACK:
+                return getGenericBackAuto(container);
+            case GENERIC_SCORE_BACK:
+                return getGenericScoreBackAuto(container);
             case RED_OUTER_NO_CHARGE:
                 return getRedOuterNoChargeCommand(container);
             case RED_OUTER_CHARGE:
@@ -206,7 +246,8 @@ public class AutonomousChooser {
     }
 
     private enum AutonomousMode {
-        ONE_METER_F, ONE_METER_B, FIGURE_EIGHT, RED_OUTER_NO_CHARGE, RED_OUTER_CHARGE, RED_MIDDLE_NO_CHARGE,
+        ONE_METER_F, ONE_METER_B, FIGURE_EIGHT, GENERIC_BACK, GENERIC_SCORE_BACK, RED_OUTER_NO_CHARGE, RED_OUTER_CHARGE,
+        RED_MIDDLE_NO_CHARGE,
         RED_MIDDLE_CHARGE, RED_INNER_NO_CHARGE, RED_INNER_CHARGE,
         BLUE_OUTER_NO_CHARGE, BLUE_OUTER_CHARGE, BLUE_MIDDLE_NO_CHARGE, BLUE_MIDDLE_CHARGE, BLUE_INNER_NO_CHARGE,
         BLUE_INNER_CHARGE

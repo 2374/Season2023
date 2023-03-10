@@ -18,9 +18,6 @@ import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -150,6 +147,9 @@ public class ArmSubsystem extends SubsystemBase {
         m_elbowRightJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
         m_shoulderRightJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
 
+        m_controllerShoulder.setTolerance(3, 3);
+        m_controllerElbow.setTolerance(3, 3);
+
         // m_elbowLeftJoint.configForwardSoftLimitEnable(false, ArmConstants.TIMEOUT);
         // m_shoulderLeftJoint.configForwardSoftLimitEnable(false,
         // ArmConstants.TIMEOUT);
@@ -188,11 +188,10 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
         if (RobotContainer.deadband(container.getSecondController().getLeftY(), 0.1) != 0) {
-            if (true) { // ADD LIMITS
-                updateShoulderSetpoint(
-                        m_shoulderSetpoint
-                                + (RobotContainer.deadband(container.getSecondController().getLeftY(), 0.1) / 4));
-            }
+            updateShoulderSetpoint(
+                    m_shoulderSetpoint
+                            + (RobotContainer.deadband(container.getSecondController().getLeftY(), 0.1) / 4));
+
         }
         if (RobotContainer.deadband(container.getSecondController().getRightY(), 0.1) != 0) {
             updateElbowSetpoint(
@@ -306,7 +305,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void runShoulderProfiled() {
         m_controllerShoulder.setGoal(new TrapezoidProfile.State(m_shoulderSetpoint, 0.0));
         double pidOutput = -m_controllerShoulder.calculate(getShoulderJointDegrees());
-        double ff = -(calculateFeedforwards().get(1, 0)) / 12.0;
+        // double ff = -(calculateFeedforwards().get(1, 0)) / 12.0;
         // SmartDashboard.putNumber("Shoulder ff", ff);
         // SmartDashboard.putNumber("Shoulder PID", pidOutput);
         setPercentOutputShoulder(pidOutput); // may need to negate ff voltage to get desired output
@@ -316,7 +315,7 @@ public class ArmSubsystem extends SubsystemBase {
         // System.out.println("running elbow="+m_elbowSetpoint);
         m_controllerElbow.setGoal(new TrapezoidProfile.State(m_elbowSetpoint, 0.0));
         double pidOutput = -m_controllerElbow.calculate(getElbowJointDegrees());
-        double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
+        // double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
         // SmartDashboard.putNumber("Elbow ff", ff);
         // SmartDashboard.putNumber("Elbow PID", pidOutput);
         setPercentOutputElbow(pidOutput); // may need to negate ff voltage to get desired output
@@ -340,14 +339,14 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setPercentOutputShoulder(double speed) {
-        double t = degreesPerSecondToPower(speed) * 750; // 750; //300;
+        double t = degreesPerSecondToPower(speed) * 800; // 750; //300;
         // SmartDashboard.putNumber("shoulder", t);
         // System.out.println("SHOULDER SPEED="+t);
         m_shoulderLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }
 
     public void setPercentOutputElbow(double speed) {
-        double t = degreesPerSecondToPower(speed) * 300; // 300; //120;
+        double t = degreesPerSecondToPower(speed) * 520; // 300; //120;
         // SmartDashboard.putNumber("elbow", t);
         m_elbowLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }

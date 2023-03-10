@@ -10,9 +10,7 @@ import com.playingwithfusion.TimeOfFlight.RangingMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.common.control.PidController;
 import frc.robot.Constants;
-import frc.robot.Robot;
 // import frc.robot.Robot;
 import frc.robot.RobotContainer;
 

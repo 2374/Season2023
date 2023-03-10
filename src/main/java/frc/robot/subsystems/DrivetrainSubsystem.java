@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -48,8 +47,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND
             / Math.hypot(DRIVETRAIN_LENGTH_METERS / 2.0, DRIVETRAIN_WIDTH_METERS / 2.0);
 
-    public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(0.891,
-            0.15, 0.13592);
+    public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(0.5,
+            0.1, 0.09);
 
     public static final double DRIVETRAIN_CURRENT_LIMIT = 50.0;
 
@@ -59,7 +58,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             new MaxAccelerationConstraint(5.0), new CentripetalAccelerationConstraint(5.0) };
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
-            new PidConstants(2.5, 0.05, .15), new PidConstants(2.5, 0.05, .15),
+            new PidConstants(1, 0.02, .06), new PidConstants(1, 0.02, .06),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS));
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
@@ -289,13 +288,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
             HolonomicDriveSignal driveSignal = driveSignalOpt.get();
             // System.out.println(driveSignal.getTranslation().x);
             if (driveSignalOpt.get().isFieldOriented()) {
-                chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveSignal.getTranslation().x * SPEED_MULTIPLIER,
-                        driveSignal.getTranslation().y * SPEED_MULTIPLIER, driveSignal.getRotation() * SPEED_MULTIPLIER,
+                chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveSignal.getTranslation().x / 2,
+                        driveSignal.getTranslation().y / 2, driveSignal.getRotation() / 2,
                         getPose().getRotation());
             } else {
-                chassisSpeeds = new ChassisSpeeds(driveSignal.getTranslation().x * SPEED_MULTIPLIER,
-                        driveSignal.getTranslation().y * SPEED_MULTIPLIER,
-                        driveSignal.getRotation() * SPEED_MULTIPLIER);
+                chassisSpeeds = new ChassisSpeeds(driveSignal.getTranslation().x,
+                        driveSignal.getTranslation().y,
+                        driveSignal.getRotation());
             }
         }
 
