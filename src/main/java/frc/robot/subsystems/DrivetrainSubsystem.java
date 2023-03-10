@@ -187,7 +187,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         });
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees());
         pigeon.configFactoryDefault();
-        Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME).add(m_field).withSize(3, 2).withPosition(1, 1);
+    }
+
+    public Field2d getField() {
+        return m_field;
     }
 
     private Rotation2d getGyroscopeRotation() {

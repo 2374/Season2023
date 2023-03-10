@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.XboxController;
@@ -92,10 +93,18 @@ public class RobotContainer {
         // m_ArmSubsystem.setpointFORWARD()));
         // tab.add("setPointDown", new InstantCommand(() ->
         // m_ArmSubsystem.setpointDOWN()));
-        tab.addNumber("Shoulder Setpoint", () -> m_ArmSubsystem.getShoulderSetpoint());
-        tab.addNumber("Elbow Setpoint", () -> m_ArmSubsystem.getElbowSetpoint());
-        tab.addNumber("Shoulder Angle", () -> m_ArmSubsystem.getShoulderJointDegrees());
-        tab.addNumber("Elbow Angle", () -> m_ArmSubsystem.getElbowJointDegrees());
+        tab.addNumber("Shoulder Setpoint", () -> m_ArmSubsystem.getShoulderSetpoint()).withPosition(3, 0);
+        tab.addNumber("Elbow Setpoint", () -> m_ArmSubsystem.getElbowSetpoint()).withPosition(5, 0);
+        tab.addNumber("Shoulder Angle", () -> m_ArmSubsystem.getShoulderJointDegrees()).withPosition(3, 2);
+        tab.addNumber("Elbow Angle", () -> m_ArmSubsystem.getElbowJointDegrees()).withPosition(5, 2);
+        tab.addString("CURRENT", () -> m_ArmSubsystem.getCurrentState()).withPosition(4, 1);
+        tab.addString("UP", () -> m_ArmSubsystem.getUpState()).withPosition(4, 0);
+        tab.addString("DOWN", () -> m_ArmSubsystem.getDownState()).withPosition(4, 2);
+        tab.addString("FORWARD", () -> m_ArmSubsystem.getForwardState()).withPosition(5, 1);
+        tab.addString("BACKWARD", () -> m_ArmSubsystem.getBackwardState()).withPosition(3, 1);
+        tab.add("Autonomous Mode", getAutonomousChooser().getModeChooser()).withSize(2, 1).withPosition(1, 0);
+        tab.add(m_drivetrainSubsystem.getField()).withSize(3, 2).withPosition(0, 1);
+        tab.add(CameraServer.startAutomaticCapture("Camera", 0)).withSize(3, 3).withPosition(6, 0);
     }
 
     /**

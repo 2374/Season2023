@@ -15,7 +15,6 @@ public class ChassisSubsystem extends SubsystemBase {
     private GamePieceType gamePiece = GamePieceType.None; // is the robot working with a Cone or a Cube? default to None
 
     private String serialNumber = "unknown";
-    // private UsbCamera camera = CameraServer.startAutomaticCapture("Camera", 0);
 
     private static ChassisSubsystem instance;
 

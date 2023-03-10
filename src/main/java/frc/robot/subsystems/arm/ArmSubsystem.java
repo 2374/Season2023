@@ -62,8 +62,6 @@ public class ArmSubsystem extends SubsystemBase {
 
     private RobotContainer container;
 
-    private ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
-
     private String cState = "REST";
     private String upState = "MID_READY";
     private String downState = "MID_READY";
@@ -181,11 +179,6 @@ public class ArmSubsystem extends SubsystemBase {
         m_shoulderEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         m_elbowEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         m_elbowEncoder.configSensorDirection(true);
-        tab.addString("CURRENT", () -> getCurrentState()).withPosition(5, 1);
-        tab.addString("UP", () -> getUpState());
-        tab.addString("DOWN", () -> getDownState());
-        tab.addString("FORWARD", () -> getForwardState());
-        tab.addString("BACKWARD", () -> getBackwardState());
 
         updateCurrentState();
 

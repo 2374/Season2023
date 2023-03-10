@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.automationCommands.AlignWithAprilTagCommand;
 import frc.robot.commands.automationCommands.AutoBalenceCommand;
-import frc.robot.util.DriverReadout;
 
 public class Robot extends TimedRobot {
     private final RobotContainer m_robotContainer = new RobotContainer();
@@ -18,9 +17,6 @@ public class Robot extends TimedRobot {
     // private final CharacterizeDrivetrainCommand characterizeCommand = new
     // CharacterizeDrivetrainCommand(
     // m_robotContainer.getDrivetrain());
-
-    @SuppressWarnings("unused")
-    private final DriverReadout driverReadout = new DriverReadout(m_robotContainer);
 
     @Override
     public void robotInit() {
