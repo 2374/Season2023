@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -24,6 +26,11 @@ public class RobotContainer {
 
     private final XboxController m_driveController = new XboxController(Constants.CONTROLLER_USB_PORT_DRIVER);
     private final XboxController m_operatorController = new XboxController(Constants.CONTROLLER_USB_PORT_OPERATOR);
+
+    private SlewRateLimiter xLimiter = new SlewRateLimiter(10);
+    private SlewRateLimiter yLimiter = new SlewRateLimiter(10);
+
+    private boolean slow = false;
 
     /**
      * The robot container. Need I say more?
@@ -77,11 +84,14 @@ public class RobotContainer {
      * Set up the Shuffleboard
      */
     public void configureShuffleBoard() {
-        ShuffleboardTab tab = Shuffleboard.getTab("Driver Readout");
-        tab.add("setPointUp", new InstantCommand(() -> m_ArmSubsystem.setpointUP()));
-        tab.add("setPointBack", new InstantCommand(() -> m_ArmSubsystem.setpointBACK()));
-        tab.add("setPointForward", new InstantCommand(() -> m_ArmSubsystem.setpointFORWARD()));
-        tab.add("setPointDown", new InstantCommand(() -> m_ArmSubsystem.setpointDOWN()));
+        ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
+        // tab.add("setPointUp", new InstantCommand(() -> m_ArmSubsystem.setpointUP()));
+        // tab.add("setPointBack", new InstantCommand(() ->
+        // m_ArmSubsystem.setpointBACK()));
+        // tab.add("setPointForward", new InstantCommand(() ->
+        // m_ArmSubsystem.setpointFORWARD()));
+        // tab.add("setPointDown", new InstantCommand(() ->
+        // m_ArmSubsystem.setpointDOWN()));
         tab.addNumber("Shoulder Setpoint", () -> m_ArmSubsystem.getShoulderSetpoint());
         tab.addNumber("Elbow Setpoint", () -> m_ArmSubsystem.getElbowSetpoint());
         tab.addNumber("Shoulder Angle", () -> m_ArmSubsystem.getShoulderJointDegrees());
@@ -95,6 +105,8 @@ public class RobotContainer {
         // Drivetrain
         new Trigger(m_driveController::getBackButton)
                 .onTrue(new InstantCommand(m_drivetrainSubsystem::zeroRotation, m_drivetrainSubsystem));
+        new Trigger(m_driveController::getRightBumper).debounce(0.1, DebounceType.kFalling)
+                .onTrue(new InstantCommand(this::toggleSpeed));
 
         // Chassis
         new Trigger(m_operatorController::getStartButton)
@@ -102,13 +114,13 @@ public class RobotContainer {
                         getChassisSubsystem()));
 
         // Arm Setpoints
-        new Trigger(m_operatorController::getYButton).onTrue(
+        new Trigger(m_operatorController::getYButton).debounce(0.5, DebounceType.kFalling).onTrue(
                 new InstantCommand(() -> m_ArmSubsystem.setpointUP()));
-        new Trigger(m_operatorController::getXButton).onTrue(
+        new Trigger(m_operatorController::getXButton).debounce(0.5, DebounceType.kFalling).onTrue(
                 new InstantCommand(() -> m_ArmSubsystem.setpointBACK()));
-        new Trigger(m_operatorController::getBButton).onTrue(
+        new Trigger(m_operatorController::getBButton).debounce(0.5, DebounceType.kFalling).onTrue(
                 new InstantCommand(() -> m_ArmSubsystem.setpointFORWARD()));
-        new Trigger(m_operatorController::getAButton).onTrue(
+        new Trigger(m_operatorController::getAButton).debounce(0.5, DebounceType.kFalling).onTrue(
                 new InstantCommand(() -> m_ArmSubsystem.setpointDOWN()));
 
         // Manipulator Commands
@@ -174,8 +186,15 @@ public class RobotContainer {
      * @return The adjusted Left Y axis of the main controller
      */
     private double getForwardInput() {
-        return -square(deadband(m_driveController.getLeftY(), 0.1)) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
-                * DrivetrainSubsystem.SPEED_MULTIPLIER;
+        if (slow) {
+            return xLimiter.calculate(-square(deadband(m_driveController.getLeftY(), 0.1))
+                    * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
+                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 0.25);
+        } else {
+            return xLimiter.calculate(-square(deadband(m_driveController.getLeftY(), 0.1))
+                    * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
+                    * DrivetrainSubsystem.SPEED_MULTIPLIER);
+        }
     }
 
     /**
@@ -184,8 +203,15 @@ public class RobotContainer {
      * @return The adjusted Left X axis of the main controller
      */
     private double getStrafeInput() {
-        return -square(deadband(m_driveController.getLeftX(), 0.1)) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
-                * DrivetrainSubsystem.SPEED_MULTIPLIER;
+        if (slow) {
+            return yLimiter.calculate(-square(deadband(m_driveController.getLeftX(), 0.1))
+                    * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
+                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 0.25);
+        } else {
+            return yLimiter.calculate(-square(deadband(m_driveController.getLeftX(), 0.1))
+                    * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
+                    * DrivetrainSubsystem.SPEED_MULTIPLIER);
+        }
     }
 
     /**
@@ -194,8 +220,17 @@ public class RobotContainer {
      * @return The adjusted Right X axis of the main controller
      */
     private double getRotationInput() {
-        return -square(deadband(m_driveController.getRightX(), 0.1))
-                * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * DrivetrainSubsystem.SPEED_MULTIPLIER;
+        if (slow) {
+            return -square(deadband(m_driveController.getRightX(), 0.1))
+                    * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .2 * 0.25;
+        } else {
+            return -square(deadband(m_driveController.getRightX(), 0.1))
+                    * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * .2;
+        }
+    }
+
+    public void toggleSpeed() {
+        slow = !slow;
     }
 
     /**

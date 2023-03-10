@@ -111,6 +111,10 @@ public class ManipulatorSubsystem extends SubsystemBase {
         wristRotationMotor.stopMotor();
     }
 
+    public void resetEncoder() {
+        wristRotationMotor.getSensorCollection().setIntegratedSensorPosition(0, 100);
+    }
+
     /**
      * @return The distance measured by the Time of Flight Sensor in millimeters
      */

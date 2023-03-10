@@ -53,6 +53,7 @@ public class Robot extends TimedRobot {
     public void disabledExit() {
         m_robotContainer.getArmSubsystem().reset();
         m_robotContainer.getChassisSubsystem().setWantACone();
+        m_robotContainer.getManipulatorSubsystem().resetEncoder();
         // robotContainer.getShooter().setHoodBrakeMode(false);
     }
 

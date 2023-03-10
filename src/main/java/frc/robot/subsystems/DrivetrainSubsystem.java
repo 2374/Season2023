@@ -40,7 +40,7 @@ import frc.common.util.HolonomicFeedforward;
 import static frc.robot.Constants.*;
 
 public class DrivetrainSubsystem extends SubsystemBase {
-    public static final double SPEED_MULTIPLIER = .1;
+    public static double SPEED_MULTIPLIER = .4;
     public static final double MAX_VOLTAGE = 12.0;
     public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0
             * SdsModuleConfigurations.MK3_FAST.getDriveReduction() * SdsModuleConfigurations.MK3_FAST.getWheelDiameter()
@@ -59,7 +59,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             new MaxAccelerationConstraint(5.0), new CentripetalAccelerationConstraint(5.0) };
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
-            new PidConstants(5.0, 0.1, .3), new PidConstants(5.0, 0.1, .3),
+            new PidConstants(2.5, 0.05, .15), new PidConstants(2.5, 0.05, .15),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS));
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
@@ -187,7 +187,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         });
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees());
         pigeon.configFactoryDefault();
-        Shuffleboard.getTab("Driver Readout").add(m_field);
+        Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME).add(m_field).withSize(3, 2).withPosition(1, 1);
     }
 
     private Rotation2d getGyroscopeRotation() {
@@ -206,7 +206,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * Resets the rotation of the drivetrain to zero.
      */
     public void zeroRotation() {
-        estimator.resetPosition(new Rotation2d(), getSwerveModulePositions(),
+        System.out.println("reset");
+        estimator.resetPosition(getGyroscopeRotation(), getSwerveModulePositions(),
                 new Pose2d(getPose().getX(), getPose().getY(), new Rotation2d()));
     }
 

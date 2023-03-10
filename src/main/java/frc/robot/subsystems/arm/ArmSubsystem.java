@@ -18,6 +18,8 @@ import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -59,6 +61,14 @@ public class ArmSubsystem extends SubsystemBase {
     private double m_elbowSetpoint;
 
     private RobotContainer container;
+
+    private ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
+
+    private String cState = "REST";
+    private String upState = "MID_READY";
+    private String downState = "MID_READY";
+    private String forwardState = "MID_READY";
+    private String backwardState = "MID_READY";
 
     private static final int NO_CHANGE = 500;
 
@@ -171,8 +181,13 @@ public class ArmSubsystem extends SubsystemBase {
         m_shoulderEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         m_elbowEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         m_elbowEncoder.configSensorDirection(true);
+        tab.addString("CURRENT", () -> getCurrentState()).withPosition(5, 1);
+        tab.addString("UP", () -> getUpState());
+        tab.addString("DOWN", () -> getDownState());
+        tab.addString("FORWARD", () -> getForwardState());
+        tab.addString("BACKWARD", () -> getBackwardState());
 
-        displayCurrentState();
+        updateCurrentState();
 
     }
 
@@ -199,15 +214,15 @@ public class ArmSubsystem extends SubsystemBase {
         // m_elbowRightJoint.setSelectedSensorPosition(degreesToCTREUnits(getElbowJointPos()),
         // 0, ArmConstants.TIMEOUT);
 
-        SmartDashboard.putNumber("Shoulder Setpoint", m_shoulderSetpoint);
-        SmartDashboard.putNumber("Elbow Setpoint", m_elbowSetpoint);
+        // SmartDashboard.putNumber("Shoulder Setpoint", m_shoulderSetpoint);
+        // SmartDashboard.putNumber("Elbow Setpoint", m_elbowSetpoint);
 
         // SmartDashboard.putBoolean("Game Peice", GamePiece.getGamePiece() ==
         // GamePieceType.Cone);
 
         // if (Constants.TEST_MODE) {
-        SmartDashboard.putNumber("Elbow Angle", getElbowJointDegrees());
-        SmartDashboard.putNumber("Shoulder Angle", getShoulderJointDegrees());
+        // SmartDashboard.putNumber("Elbow Angle", getElbowJointDegrees());
+        // SmartDashboard.putNumber("Shoulder Angle", getShoulderJointDegrees());
         // SmartDashboard.putNumber("Elbow Angle Uncorrected", getElbowJointPos());
         // SmartDashboard.putNumber("Shoulder Angle Uncorrected",
         // getShoulderJointPos());
@@ -263,7 +278,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void updateAllSetpoints(Setpoint setpoint) {
         currentState = setpoint;
-        displayCurrentState();
+        updateCurrentState();
         if (container.getChassisSubsystem().getWantACone()) {
             if (setpoint.m_shoulderCone != NO_CHANGE)
                 updateShoulderSetpoint(setpoint.m_shoulderCone);
@@ -299,8 +314,8 @@ public class ArmSubsystem extends SubsystemBase {
         m_controllerShoulder.setGoal(new TrapezoidProfile.State(m_shoulderSetpoint, 0.0));
         double pidOutput = -m_controllerShoulder.calculate(getShoulderJointDegrees());
         double ff = -(calculateFeedforwards().get(1, 0)) / 12.0;
-        SmartDashboard.putNumber("Shoulder ff", ff);
-        SmartDashboard.putNumber("Shoulder PID", pidOutput);
+        // SmartDashboard.putNumber("Shoulder ff", ff);
+        // SmartDashboard.putNumber("Shoulder PID", pidOutput);
         setPercentOutputShoulder(pidOutput); // may need to negate ff voltage to get desired output
     }
 
@@ -309,8 +324,8 @@ public class ArmSubsystem extends SubsystemBase {
         m_controllerElbow.setGoal(new TrapezoidProfile.State(m_elbowSetpoint, 0.0));
         double pidOutput = -m_controllerElbow.calculate(getElbowJointDegrees());
         double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
-        SmartDashboard.putNumber("Elbow ff", ff);
-        SmartDashboard.putNumber("Elbow PID", pidOutput);
+        // SmartDashboard.putNumber("Elbow ff", ff);
+        // SmartDashboard.putNumber("Elbow PID", pidOutput);
         setPercentOutputElbow(pidOutput); // may need to negate ff voltage to get desired output
     }
 
@@ -333,14 +348,14 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setPercentOutputShoulder(double speed) {
         double t = degreesPerSecondToPower(speed) * 750; // 750; //300;
-        SmartDashboard.putNumber("shoulder", t);
+        // SmartDashboard.putNumber("shoulder", t);
         // System.out.println("SHOULDER SPEED="+t);
         m_shoulderLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }
 
     public void setPercentOutputElbow(double speed) {
         double t = degreesPerSecondToPower(speed) * 300; // 300; //120;
-        SmartDashboard.putNumber("elbow", t);
+        // SmartDashboard.putNumber("elbow", t);
         m_elbowLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }
 
@@ -519,70 +534,90 @@ public class ArmSubsystem extends SubsystemBase {
         return null;
     }
 
-    public Object displayCurrentState() {
+    public String getCurrentState() {
+        return cState;
+    }
+
+    public String getUpState() {
+        return upState;
+    }
+
+    public String getDownState() {
+        return downState;
+    }
+
+    public String getForwardState() {
+        return forwardState;
+    }
+
+    public String getBackwardState() {
+        return backwardState;
+    }
+
+    public Object updateCurrentState() {
         switch (currentState.m_label) {
             case Constants.REST_Label:
-                SmartDashboard.putString("SETPOINT STATE", "REST");
-                SmartDashboard.putString("SETPOINT UP", "MID_READY");
-                SmartDashboard.putString("SETPOINT DOWN", "MID_READY");
-                SmartDashboard.putString("SETPOINT FORWARD", "MID_READY");
-                SmartDashboard.putString("SETPOINT BACK", "MID_READY");
+                cState = "REST";
+                upState = "MID_READY";
+                downState = "MID_READY";
+                forwardState = "MID_READY";
+                backwardState = "MID_READY";
                 break;
             case Constants.MID_READY_Label:
-                SmartDashboard.putString("SETPOINT STATE", "MID_READY");
-                SmartDashboard.putString("SETPOINT UP", "HIGH_SCORE");
-                SmartDashboard.putString("SETPOINT DOWN", "STOW");
-                SmartDashboard.putString("SETPOINT FORWARD", "MID_DROP");
-                SmartDashboard.putString("SETPOINT BACK", "REST");
+                cState = "MID_READY";
+                upState = "HIGH_SCORE";
+                downState = "STOW";
+                forwardState = "MID_DROP";
+                backwardState = "REST";
                 break;
             case Constants.MID_DROP_Label:
-                SmartDashboard.putString("SETPOINT STATE", "MID_DROP");
-                SmartDashboard.putString("SETPOINT UP", "STOW");
-                SmartDashboard.putString("SETPOINT DOWN", "STOW");
-                SmartDashboard.putString("SETPOINT FORWARD", "STOW");
-                SmartDashboard.putString("SETPOINT BACK", "STOW");
+                cState = "MID_DROP";
+                upState = "STOW";
+                downState = "STOW";
+                forwardState = "STOW";
+                backwardState = "STOW";
                 break;
             case Constants.STOW_Label:
-                SmartDashboard.putString("SETPOINT STATE", "STOW");
-                SmartDashboard.putString("SETPOINT UP", "MID_READY");
-                SmartDashboard.putString("SETPOINT DOWN", "STAB_READY");
-                SmartDashboard.putString("SETPOINT FORWARD", "STAB_READY");
-                SmartDashboard.putString("SETPOINT BACK", "NOTHING");
+                cState = "STOW";
+                upState = "MID_READY";
+                downState = "STAB_READY";
+                forwardState = "STAB_READY";
+                backwardState = "NOTHING";
                 break;
             case Constants.STAB_READY_Label:
-                SmartDashboard.putString("SETPOINT STATE", "STAB_READY");
-                SmartDashboard.putString("SETPOINT UP", "STOW");
-                SmartDashboard.putString("SETPOINT DOWN", "STAB");
-                SmartDashboard.putString("SETPOINT FORWARD", "LOW_SCORE");
-                SmartDashboard.putString("SETPOINT BACK", "STOW");
+                cState = "STAB_READY";
+                upState = "STOW";
+                downState = "STAB";
+                forwardState = "LOW_SCORE";
+                backwardState = "STOW";
                 break;
             case Constants.STAB_Label:
-                SmartDashboard.putString("SETPOINT STATE", "STAB");
-                SmartDashboard.putString("SETPOINT UP", "STAB_READY");
-                SmartDashboard.putString("SETPOINT DOWN", "NOTHING");
-                SmartDashboard.putString("SETPOINT FORWARD", "NOTHING");
-                SmartDashboard.putString("SETPOINT BACK", "STOW");
+                cState = "STAB";
+                upState = "STAB_READY";
+                downState = "NOTHING";
+                forwardState = "NOTHING";
+                backwardState = "STOW";
                 break;
             case Constants.LOW_SCORE_Label:
-                SmartDashboard.putString("SETPOINT STATE", "LOW_SCORE");
-                SmartDashboard.putString("SETPOINT UP", "SHOOT");
-                SmartDashboard.putString("SETPOINT DOWN", "SHOOT");
-                SmartDashboard.putString("SETPOINT FORWARD", "SHOOT");
-                SmartDashboard.putString("SETPOINT BACK", "STOW");
+                cState = "LOW_SCORE";
+                upState = "SHOOT";
+                downState = "SHOOT";
+                forwardState = "SHOOT";
+                backwardState = "STOW";
                 break;
             case Constants.HIGH_SCORE_Label:
-                SmartDashboard.putString("SETPOINT STATE", "HIGH_SCORE");
-                SmartDashboard.putString("SETPOINT UP", "SHOOT");
-                SmartDashboard.putString("SETPOINT DOWN", "SHOOT");
-                SmartDashboard.putString("SETPOINT FORWARD", "SHOOT");
-                SmartDashboard.putString("SETPOINT BACK", "MID_READY");
+                cState = "HIGH_SCORE";
+                upState = "SHOOT";
+                downState = "SHOOT";
+                forwardState = "SHOOT";
+                backwardState = "MID_READY";
                 break;
             default:
-                SmartDashboard.putString("SETPOINT STATE", "UNKNOWN");
-                SmartDashboard.putString("SETPOINT UP", "UNKNOWN");
-                SmartDashboard.putString("SETPOINT DOWN", "UNKNOWN");
-                SmartDashboard.putString("SETPOINT FORWARD", "UNKNOWN");
-                SmartDashboard.putString("SETPOINT BACK", "UNKNOWN");
+                cState = "UNKNOWN";
+                upState = "UNKNOWN";
+                downState = "UNKNOWN";
+                forwardState = "UNKNOWN";
+                backwardState = "UNKNOWN";
                 break;
         }
         return null;
