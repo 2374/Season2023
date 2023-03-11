@@ -53,7 +53,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public static final double DRIVETRAIN_CURRENT_LIMIT = 50.0;
 
     public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
-            new FeedforwardConstraint(4.0, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
+            new FeedforwardConstraint(1.3, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
                     FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
             new MaxAccelerationConstraint(5.0), new CentripetalAccelerationConstraint(5.0) };
 
@@ -288,8 +288,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
             HolonomicDriveSignal driveSignal = driveSignalOpt.get();
             // System.out.println(driveSignal.getTranslation().x);
             if (driveSignalOpt.get().isFieldOriented()) {
-                chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveSignal.getTranslation().x / 2,
-                        driveSignal.getTranslation().y / 2, driveSignal.getRotation() / 2,
+                chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(driveSignal.getTranslation().x,
+                        driveSignal.getTranslation().y, driveSignal.getRotation(),
                         getPose().getRotation());
             } else {
                 chassisSpeeds = new ChassisSpeeds(driveSignal.getTranslation().x,

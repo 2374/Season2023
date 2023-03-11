@@ -147,8 +147,8 @@ public class ArmSubsystem extends SubsystemBase {
         m_elbowRightJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
         m_shoulderRightJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
 
-        m_controllerShoulder.setTolerance(3, 3);
-        m_controllerElbow.setTolerance(3, 3);
+        m_controllerShoulder.setTolerance(5, 3);
+        m_controllerElbow.setTolerance(7, 3);
 
         // m_elbowLeftJoint.configForwardSoftLimitEnable(false, ArmConstants.TIMEOUT);
         // m_shoulderLeftJoint.configForwardSoftLimitEnable(false,
@@ -254,7 +254,7 @@ public class ArmSubsystem extends SubsystemBase {
         if (m_shoulderSetpoint != setpoint) {
             if (setpoint < 180 && setpoint > -180) {
                 m_shoulderSetpoint = setpoint;
-                System.out.println("Shoulder Change =" + setpoint);
+                // System.out.println("Shoulder Change =" + setpoint);
             }
         }
     }
@@ -263,7 +263,7 @@ public class ArmSubsystem extends SubsystemBase {
         if (m_elbowSetpoint != setpoint) {
             if (setpoint < 180 && setpoint > -180) {
                 m_elbowSetpoint = setpoint;
-                System.out.println("Elbow Change =" + setpoint);
+                // System.out.println("Elbow Change =" + setpoint);
             }
         }
     }

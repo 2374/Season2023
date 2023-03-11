@@ -4,17 +4,11 @@ package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
 import frc.robot.commands.*;
-import frc.robot.commands.automationCommands.AutoHorizontalIntake;
-import frc.robot.commands.automationCommands.ScoreTopCommand;
-import frc.robot.commands.helperCommands.AlignArmFrontGroundCommand;
-import frc.robot.commands.helperCommands.ArmToSetPointCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.arm.Setpoint;
 import frc.common.control.Path;
 import frc.common.control.SimplePathBuilder;
 import frc.common.control.Trajectory;
@@ -117,7 +111,7 @@ public class AutonomousChooser {
 
         command.addCommands(
                 resetRobotPose(container),
-                followLine(container, -3.7, 0));
+                followLine(container, -4, 0));
 
         return command;
     }
@@ -131,7 +125,7 @@ public class AutonomousChooser {
                 gotoSetpoint(container, () -> container.getArmSubsystem().setpointFORWARD()),
                 backWhileOuttake(container),
                 gotoSetpoint(container, () -> container.getArmSubsystem().setpointDOWN()),
-                followLine(container, -3.5, 0),
+                followLine(container, -3.7, 0),
                 followLine(container, 0, 0, 180),
                 resetRobotPose(container));
 
@@ -160,12 +154,12 @@ public class AutonomousChooser {
 
     private Command backWhileOuttake(RobotContainer container) {
         return new ParallelCommandGroup(new InstantCommand(() -> container.getManipulatorSubsystem().outtake(),
-                container.getManipulatorSubsystem()), followLine(container, -0.2, 0));
+                container.getManipulatorSubsystem()), followLine(container, -0.3, 0));
     }
 
     private Command gotoSetpoint(RobotContainer container,
             Runnable buttonDirectionMethod) {
-        return new InstantCommand(buttonDirectionMethod, container.getArmSubsystem()).andThen(new WaitCommand(0.1))
+        return new InstantCommand(buttonDirectionMethod).andThen(new WaitCommand(0.1))
                 .andThen(new WaitUntilCommand(() -> container.getArmSubsystem().bothJointsAtSetpoint()));
     }
 
