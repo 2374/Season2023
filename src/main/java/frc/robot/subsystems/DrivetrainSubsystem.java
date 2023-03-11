@@ -53,9 +53,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public static final double DRIVETRAIN_CURRENT_LIMIT = 50.0;
 
     public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
-            new FeedforwardConstraint(1.3, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
+            new FeedforwardConstraint(1.5, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
                     FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
-            new MaxAccelerationConstraint(5.0), new CentripetalAccelerationConstraint(5.0) };
+            new MaxAccelerationConstraint(4.0), new CentripetalAccelerationConstraint(5.0) };
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
             new PidConstants(1, 0.02, .06), new PidConstants(1, 0.02, .06),
@@ -95,6 +95,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         pcw = new PhotonCameraWrapper();
         pigeon.configMountPose(pigeon.getYaw(), pigeon.getPitch(), pigeon.getRoll());
         getGyroscopeRotation().getRadians();
+        Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME).addNumber("pitch", () -> pigeon.getPitch());
         // Mk4ModuleConfiguration mk4ModuleConfiguration = new Mk4ModuleConfiguration();
         // mk4ModuleConfiguration.setDriveCurrentLimit(DRIVETRAIN_CURRENT_LIMIT);
         Mk3ModuleConfiguration mk3ModuleConfiguration = new Mk3ModuleConfiguration();
@@ -299,8 +300,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
         }
 
         motorOutputLimiter = motorOutputPercentageLimiterEntry.getDouble(0.0) / 100;
-
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(chassisSpeeds);
+        // if (false) {
+        // states = new SwerveModuleState[] {
+        // new SwerveModuleState(0, -45)
+        // }
+        // }
+
         SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
         frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
                 states[0].angle.getRadians());
@@ -340,16 +346,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // Math.cos(Math.toRadians(theta)) * SPEED_MULTIPLIER, 0));
     // }
 
-    public boolean autoBalenceTick() {
+    public void autoBalenceTick() {
         double pitch = pigeon.getPitch();
         if (pitch > 2.5) {
-            drive(new ChassisSpeeds(0.05 * MAX_VELOCITY_METERS_PER_SECOND, 0, 0));
+            drive(new ChassisSpeeds(-1, 0, 0));
         } else if (pitch < -2.5) {
-            drive(new ChassisSpeeds(-0.05 * MAX_VELOCITY_METERS_PER_SECOND, 0, 0));
+            drive(new ChassisSpeeds(1, 0, 0));
         } else {
-            return true;
+            drive(new ChassisSpeeds(0, 0, 0));
         }
-        return false;
     }
 
     public void printAngles() {

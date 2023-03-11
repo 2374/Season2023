@@ -19,12 +19,12 @@ public class AutoBalenceCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (m_drivetrainSubsystem.autoBalenceTick()) {
-            count++;
-        }
-        if (count > 100) {
-            end(false);
-        }
+        // if (m_drivetrainSubsystem.autoBalenceTick()) {
+        // count++;
+        // }
+        // if (count > 100) {
+        // end(false);
+        // }
     }
 
     @Override

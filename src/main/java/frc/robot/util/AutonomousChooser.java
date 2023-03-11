@@ -9,9 +9,13 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
 import frc.robot.commands.*;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.common.control.CentripetalAccelerationConstraint;
+import frc.common.control.FeedforwardConstraint;
+import frc.common.control.MaxAccelerationConstraint;
 import frc.common.control.Path;
 import frc.common.control.SimplePathBuilder;
 import frc.common.control.Trajectory;
+import frc.common.control.TrajectoryConstraint;
 import frc.common.math.Rotation2;
 import frc.common.math.Vector2;
 
@@ -28,6 +32,7 @@ public class AutonomousChooser {
         // autonomousModeChooser.addOption("Figure Eight", AutonomousMode.FIGURE_EIGHT);
         autonomousModeChooser.addOption("Generic Back", AutonomousMode.GENERIC_BACK);
         autonomousModeChooser.addOption("Generic Score Back", AutonomousMode.GENERIC_SCORE_BACK);
+        autonomousModeChooser.addOption("Score Engage", AutonomousMode.SCORE_ENGAGE);
         autonomousModeChooser.addOption("Red Outer No Charge", AutonomousMode.RED_OUTER_NO_CHARGE);
         autonomousModeChooser.addOption("Red Outer Charge", AutonomousMode.RED_OUTER_CHARGE);
         autonomousModeChooser.addOption("Red Middle No Charge", AutonomousMode.RED_MIDDLE_NO_CHARGE);
@@ -130,7 +135,25 @@ public class AutonomousChooser {
                 resetRobotPose(container));
 
         return command;
+    }
 
+    public Command getScoreEngageAuto(RobotContainer container) {
+        SequentialCommandGroup command = new SequentialCommandGroup();
+
+        command.addCommands(
+                resetRobotPose(container),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointDOWN()),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointFORWARD()),
+                backWhileOuttake(container),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointDOWN()), // SKIPPING FOR SOME REASON
+                new WaitCommand(0.2),
+                mountChargeStation(container, -3), // POSSIBLY RESETTING THE GYROSCOPE
+                // new RunCommand(() -> container.getDrivetrain().autoBalenceTick(),
+                // container.getDrivetrain())
+                new WaitCommand(0.05),
+                followLine(container, -1, 0));
+
+        return command;
     }
 
     // private void scoreTop(SequentialCommandGroup command, RobotContainer
@@ -180,6 +203,18 @@ public class AutonomousChooser {
         return followLine(container, x, y, 0);
     }
 
+    private Command mountChargeStation(RobotContainer container, double x) {
+        TrajectoryConstraint[] contraints = {
+                new FeedforwardConstraint(2, DrivetrainSubsystem.FEEDFORWARD_CONSTANTS.getVelocityConstant(),
+                        DrivetrainSubsystem.FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
+                new MaxAccelerationConstraint(5.0), new CentripetalAccelerationConstraint(5.0) };
+        return new FollowTrajectoryCommand(container.getDrivetrain(),
+                new Trajectory(
+                        new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
+                                .lineTo(new Vector2(x, 0), Rotation2.ZERO).build(),
+                        contraints, 0.1));
+    }
+
     // private Command gotoSetPoint(RobotContainer container, Setpoint setpoint) {
     // return new ArmToSetPointCommand(container.getArmSubsystem(), setpoint);
     // }
@@ -209,6 +244,8 @@ public class AutonomousChooser {
                 return getGenericBackAuto(container);
             case GENERIC_SCORE_BACK:
                 return getGenericScoreBackAuto(container);
+            case SCORE_ENGAGE:
+                return getScoreEngageAuto(container);
             case RED_OUTER_NO_CHARGE:
                 return getRedOuterNoChargeCommand(container);
             case RED_OUTER_CHARGE:
@@ -244,6 +281,6 @@ public class AutonomousChooser {
         RED_MIDDLE_NO_CHARGE,
         RED_MIDDLE_CHARGE, RED_INNER_NO_CHARGE, RED_INNER_CHARGE,
         BLUE_OUTER_NO_CHARGE, BLUE_OUTER_CHARGE, BLUE_MIDDLE_NO_CHARGE, BLUE_MIDDLE_CHARGE, BLUE_INNER_NO_CHARGE,
-        BLUE_INNER_CHARGE
+        BLUE_INNER_CHARGE, SCORE_ENGAGE
     }
 }

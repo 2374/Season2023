@@ -178,11 +178,11 @@ public class Constants {
 
         // ELBOW | SHOULDER false/true
         public static final Setpoint TALL = new Setpoint(0, 1, 1, false, 1, 1, false);
-        public static final Setpoint REST = new Setpoint(REST_Label, -140, 132, false, -140, 132, false);
+        public static final Setpoint REST = new Setpoint(REST_Label, -150, 132, false, -150, 132, false);
         public static final Setpoint MID_READY = new Setpoint(MID_READY_Label, 35, 55, false, 35, 55, false);
         public static final Setpoint MID_DROP = new Setpoint(MID_DROP_Label, 64, 67, false, 64, 67, false);
         public static final Setpoint STOW = new Setpoint(STOW_Label, 135, 60, false, 135, 60, false);
-        public static final Setpoint STAB_READY = new Setpoint(STAB_READY_Label, 100, 62, false, 100, 62, false);
+        public static final Setpoint STAB_READY = new Setpoint(STAB_READY_Label, 102, 62, false, 102, 62, false);
         public static final Setpoint STAB = new Setpoint(STAB_Label, 73, 95, false, 73, 95, false);
         public static final Setpoint LOW_SCORE = new Setpoint(LOW_SCORE_Label, 90, 60, false, 90, 60, false);
         public static final Setpoint HIGH_SCORE = new Setpoint(HIGH_SCORE_Label, -35, 75, false, -35, 75, false);
