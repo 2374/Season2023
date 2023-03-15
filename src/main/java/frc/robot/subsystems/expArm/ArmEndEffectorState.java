@@ -12,7 +12,7 @@ public class ArmEndEffectorState {
     public double yvel;
     public boolean isReflex;
 
-    //TODO - add something here to fiture out if we should attempt to achieve the solution through a "concave" or "convex" joint solution
+    // add something here to fiture out if we should attempt to achieve the solution through a "concave" or "convex" joint solution
 
     public ArmEndEffectorState(double x, double y, boolean isReflex){
         this.x = x;
@@ -68,7 +68,7 @@ public class ArmEndEffectorState {
         return new ArmEndEffectorState(x, y, xVel, yVel, other.isReflex);
     }
 
-    //TODO - refine these 
+    // - refine these 
     // Requirements: rather than two methods for start/end, we should 
     // have a single method that supports confguring whether you want to approach the position
     // from the top or bottom or maybe side?

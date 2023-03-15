@@ -105,7 +105,7 @@ public class ReflexInvertingArmPath implements ArmPath {
 
         if(end.safeY > 0){
             //If the end has a configured safe height, add in an additional waypoint to account for it
-            // TODO - handle safe Y better
+            //  - handle safe Y better
             pathEndPos = end.get().toPoseFromTop();
         } else {
             // If we end outside the frame perimiter, approach from top.

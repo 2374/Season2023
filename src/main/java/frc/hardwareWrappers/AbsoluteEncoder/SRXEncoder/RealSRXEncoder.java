@@ -43,7 +43,6 @@ public class RealSRXEncoder extends AbstractAbsoluteEncoder {
 
     @Override
     public boolean isFaulted() {
-        // TODO Auto-generated method stub
         return false;
     }
 

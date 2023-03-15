@@ -51,13 +51,11 @@ public class SimGyro extends AbstractGyro {
 
     @Override
     public double getPitchRate() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public double getRawPitchAngle() {
-        // TODO Auto-generated method stub
         return 0;
     }   
     

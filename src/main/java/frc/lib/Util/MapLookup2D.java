@@ -166,9 +166,7 @@ public class MapLookup2D {
 }
 
 
-
-
-@SuppressWarnings("serial")
+//@SuppressWarnings("serial")
 class SortedArrayList<T> extends ArrayList<T> {
 
     @SuppressWarnings("unchecked")

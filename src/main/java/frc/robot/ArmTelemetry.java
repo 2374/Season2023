@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import frc.robot.Constants;
 import frc.lib.Signal.Annotations.Signal;
 import frc.lib.Util.Mechanism2DMarker;
 import frc.lib.Util.Mechanism2DPolygon;

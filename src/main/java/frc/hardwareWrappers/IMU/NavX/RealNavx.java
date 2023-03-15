@@ -46,12 +46,12 @@ public class RealNavx extends AbstractGyro {
 
     @Override
     public double getPitchRate() {
-        return 0; //TODO add support here
+        return 0; // add support here
     }
 
     @Override
     public double getRawPitchAngle() {
-        return 0; //TODO add support here
+        return 0; // add support here
     }
     
 }

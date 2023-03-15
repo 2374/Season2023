@@ -50,7 +50,7 @@ public class RealADIS16470 extends AbstractGyro {
 
     @Override
     public double getPitchRate() {
-        return 0; //TODO - apparently the gyro axis is not exposed??
+        return 0; // apparently the gyro axis is not exposed??
     }
 
     @Override

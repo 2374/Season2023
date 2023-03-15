@@ -120,7 +120,7 @@ public class RealTalonFX extends AbstractSimmableMotorController {
 
     @Override
     public void setClosedLoopCmd(double velocityCmd_radpersec, double arbFF_V) {
-        var arbFF_demand = arbFF_V / 12.0; // CTRE wants this in the range [-1, 1].  TODO use bbattery voltage?
+        var arbFF_demand = arbFF_V / 12.0; // CTRE wants this in the range [-1, 1].   use bbattery voltage?
         var velCmdRPM = Units.radiansPerSecondToRotationsPerMinute(velocityCmd_radpersec);
         _talon.set(TalonFXControlMode.Velocity, RPMtoCTRENativeUnits(velCmdRPM), DemandType.ArbitraryFeedForward, arbFF_demand); 
     }
