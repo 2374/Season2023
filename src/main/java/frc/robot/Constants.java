@@ -6,7 +6,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import frc.common.control.PidConstants;
+// import frc.common.control.PidConstants;
 // import edu.wpi.first.wpilibj.DutyCycle;
 import frc.robot.subsystems.arm.Setpoint;
 import frc.robot.util.Gains;
@@ -91,9 +91,10 @@ public class Constants {
     public static final int SHOULDER_JOINT_RIGHT_MOTOR_CAN_ID = 6; // the CAN ID for the RIO CAN Bus
     public static final int ELBOW_JOINT_LEFT_MOTOR_CAN_ID = 7; // the CAN ID for the RIO CAN Bus
     public static final int ELBOW_JOINT_RIGHT_MOTOR_CAN_ID = 8; // the CAN ID for the RIO CAN Bus
-    public static final int MANIPULATOR_WRIST_MOTOR_CAN_ID = 9;
-    public static final double WRIST_OFFSET = -68.3789;
-    public static final PidConstants WRIST_PID_CONSTANTS = new PidConstants(0.00002, 0, 0);
+    // public static final int MANIPULATOR_WRIST_MOTOR_CAN_ID = 9;
+    // public static final double WRIST_OFFSET = -68.3789;
+    // public static final PidConstants WRIST_PID_CONSTANTS = new
+    // PidConstants(0.00002, 0, 0);
 
     public static final class ArmConstants {
 

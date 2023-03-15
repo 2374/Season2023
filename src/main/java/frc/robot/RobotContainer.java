@@ -28,8 +28,8 @@ public class RobotContainer {
     private final XboxController m_driveController = new XboxController(Constants.CONTROLLER_USB_PORT_DRIVER);
     private final XboxController m_operatorController = new XboxController(Constants.CONTROLLER_USB_PORT_OPERATOR);
 
-    private SlewRateLimiter xLimiter = new SlewRateLimiter(5);
-    private SlewRateLimiter yLimiter = new SlewRateLimiter(5);
+    private SlewRateLimiter xLimiter = new SlewRateLimiter(15);
+    private SlewRateLimiter yLimiter = new SlewRateLimiter(15);
 
     private boolean slow = false;
     private boolean turbo = false;
@@ -207,7 +207,7 @@ public class RobotContainer {
         } else if (turbo) {
             return xLimiter.calculate(-square(deadband(m_driveController.getLeftY(), 0.1))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
-                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 1.4);
+                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 1.5);
         } else {
             return xLimiter.calculate(-square(deadband(m_driveController.getLeftY(), 0.1))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
