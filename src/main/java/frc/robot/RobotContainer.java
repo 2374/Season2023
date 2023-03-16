@@ -108,6 +108,7 @@ public class RobotContainer {
         tab.add(CameraServer.startAutomaticCapture("Camera", 0)).withSize(3, 3).withPosition(6, 0);
         tab.addBoolean("SLOW", () -> isSlow()).withPosition(2, 1);
         tab.addBoolean("TURBO", () -> isTurbo()).withPosition(1, 1);
+        tab.addBoolean("Auto", () -> m_drivetrainSubsystem.getFollower().getCurrentTrajectory().isPresent());
     }
 
     /**

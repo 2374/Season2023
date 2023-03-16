@@ -27,7 +27,7 @@ public class AutonomousChooser {
     public AutonomousChooser(AutonomousTrajectories trajectories) {
         this.trajectories = trajectories;
 
-        autonomousModeChooser.setDefaultOption("1 meter F", AutonomousMode.ONE_METER_F);
+        autonomousModeChooser.setDefaultOption("Test thing", AutonomousMode.ONE_METER_F);
         autonomousModeChooser.addOption("1 meter B", AutonomousMode.ONE_METER_B);
         // autonomousModeChooser.addOption("Figure Eight", AutonomousMode.FIGURE_EIGHT);
         autonomousModeChooser.addOption("Generic Back", AutonomousMode.GENERIC_BACK);
@@ -55,8 +55,9 @@ public class AutonomousChooser {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(
-                resetRobotPose(container, trajectories.getOneMeterF()),
-                follow(container, trajectories.getOneMeterF()));
+                // resetRobotPose(container, trajectories.getOneMeterF()),
+                // follow(container, trajectories.getOneMeterF())
+                new RunCommand(() -> container.getDrivetrain().autoBalenceTick(), container.getDrivetrain()));
 
         return command;
     }

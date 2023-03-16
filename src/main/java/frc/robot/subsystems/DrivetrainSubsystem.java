@@ -93,7 +93,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public DrivetrainSubsystem(RobotContainer container) {
         pcw = new PhotonCameraWrapper();
-        pigeon.configMountPose(pigeon.getYaw(), pigeon.getPitch(), pigeon.getRoll());
+        pigeon.configMountPose(180, 0, 0);
         getGyroscopeRotation().getRadians();
         Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME).addNumber("pitch", () -> pigeon.getPitch());
         // Mk4ModuleConfiguration mk4ModuleConfiguration = new Mk4ModuleConfiguration();
@@ -186,7 +186,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
             return Units.metersToFeet(lastState.getVelocity());
         });
         tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees());
-        pigeon.configFactoryDefault();
     }
 
     public Field2d getField() {
@@ -349,9 +348,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void autoBalenceTick() {
         double pitch = pigeon.getPitch();
         if (pitch > 2.5) {
-            drive(new ChassisSpeeds(-1, 0, 0));
+            drive(new ChassisSpeeds(Math.min(0.5, pitch / 20), 0, 0));
         } else if (pitch < -2.5) {
-            drive(new ChassisSpeeds(1, 0, 0));
+            drive(new ChassisSpeeds(Math.max(-0.5, pitch / 20), 0, 0));
         } else {
             drive(new ChassisSpeeds(0, 0, 0));
         }
