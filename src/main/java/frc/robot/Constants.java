@@ -202,21 +202,21 @@ public class Constants {
 
 
     // Experimental Arm Constants
-    public static final int ARM_BICEP_LENGTH = 0;
-    public static final double ARM_FOREARM_LENGTH = 0;
-    public static final double ARM_SHOULDER_MOUNT_HEIGHT = 0;
-    public static final double ARM_END_EFF_MAX_ACCEL_MPS2 = 0;
+    public static final double ARM_BICEP_LENGTH = Units.inchesToMeters(25.5);
+    public static final double ARM_FOREARM_LENGTH = Units.inchesToMeters(28.0);
+    public static final double ARM_SHOULDER_MOUNT_HEIGHT = Units.inchesToMeters(35.75);
+    public static final double ARM_END_EFF_MAX_VEL_MPS = Units.inchesToMeters(60.0);
+    public static final double ARM_END_EFF_MAX_ACCEL_MPS2 = ARM_END_EFF_MAX_VEL_MPS * 1.5;
     public static final double Ts = 0.02;
     public static final int ARM_SHOULDER_ENC_IDX = SHOULDER_ENCODER_ARM_CAN_ID;
-    public static final double ARM_SHOULDER_ENCODER_MOUNT_OFFSET_RAD = 0;
+    public static final double ARM_SHOULDER_ENCODER_MOUNT_OFFSET_RAD = Units.degreesToRadians(101.8);
     public static final int ARM_ELBOW_ENC_IDX = ELBOW_ENCODER_ARM_CAN_ID;
-    public static final double ARM_ELBOW_ENCODER_MOUNT_OFFSET_RAD = 0;
+    public static final double ARM_ELBOW_ENCODER_MOUNT_OFFSET_RAD = Units.degreesToRadians(170.7);
     public static final double WHEEL_BASE_HALF_LENGTH_M = DRIVETRAIN_LENGTH_METERS/2.0;
-    public static final double ARM_END_EFF_MAX_VEL_MPS = 0;
     public static final double BUMPER_THICKNESS_M = Units.inchesToMeters(3.125);
     public static final double SIM_SAMPLE_RATE_SEC = 0.001;
-    public static final int FAULT_LED_OUT_IDX = 0;
-    public static final int HEARTBEAT_LED_OUT_IDX = 0;
+    // public static final int FAULT_LED_OUT_IDX = 0;
+    // public static final int HEARTBEAT_LED_OUT_IDX = 0;
     public static final double WHEEL_RADIUS_IN = 2;
     public static final double WHEEL_GEAR_RATIO = 0;
     

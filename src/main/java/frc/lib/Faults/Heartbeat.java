@@ -1,13 +1,13 @@
 package frc.lib.Faults;
 
-import edu.wpi.first.wpilibj.DigitalOutput;
+// import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.Constants;
+// import frc.robot.Constants;
 import frc.lib.Signal.Annotations.Signal;
 
 public class Heartbeat {
 
-    DigitalOutput ledOut;
+    // DigitalOutput ledOut;
     private final double BLINK_FREQ_HZ = 1.0;
 
     @Signal
@@ -17,8 +17,8 @@ public class Heartbeat {
     public boolean isInit = false;
 
     public Heartbeat(){
-        ledOut = new DigitalOutput(Constants.HEARTBEAT_LED_OUT_IDX);
-        ledOut.enablePWM(0.0);
+        // ledOut = new DigitalOutput(Constants.HEARTBEAT_LED_OUT_IDX);
+        // ledOut.enablePWM(0.0);
 
     }
 
@@ -32,7 +32,8 @@ public class Heartbeat {
         } else {
             ledBrightness = 0;
         }
-        ledOut.updateDutyCycle(ledBrightness);
+        // ledOut.updateDutyCycle(ledBrightness);
+        System.out.println("ledUpdate Heartbeat="+ledBrightness);
     }
 
     

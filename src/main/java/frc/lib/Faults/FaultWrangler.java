@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import edu.wpi.first.wpilibj.DigitalOutput;
+// import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
+// import frc.robot.Constants;
 import frc.lib.Signal.Annotations.Signal;
 
 public class FaultWrangler {
@@ -34,7 +34,7 @@ public class FaultWrangler {
     final String faultActiveTopicName = "faultActive";
     final String faultDescriptionTopicName = "faultDescription";
 
-    DigitalOutput ledOut;
+    // DigitalOutput ledOut;
     private final double BLINK_FREQ_HZ = 2.0;
     @Signal
     double ledBrightness = 0;
@@ -42,10 +42,12 @@ public class FaultWrangler {
     boolean isInit = false;
 
     private FaultWrangler() {
+        // Effectively just ignore this subsystem as we don't have one
+        
         faultList = Collections.synchronizedList(new ArrayList<Fault>());
-        ledOut = new DigitalOutput(Constants.FAULT_LED_OUT_IDX);
-        ledOut.setPWMRate(500.0);
-        ledOut.enablePWM(0.0);
+        // ledOut = new DigitalOutput(Constants.FAULT_LED_OUT_IDX);
+        // ledOut.setPWMRate(500.0);
+        // ledOut.enablePWM(0.0);
 
         hb = new Heartbeat();
 
@@ -109,7 +111,9 @@ public class FaultWrangler {
         } else {
             ledBrightness = 0.0;
         }
-        ledOut.updateDutyCycle(ledBrightness);
+        // ledOut.updateDutyCycle(ledBrightness);
+        System.out.println("update faultwrangler="+ledBrightness);
+
 
     }
 
