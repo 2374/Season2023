@@ -18,6 +18,7 @@ import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -246,14 +247,15 @@ public class ArmSubsystem extends SubsystemBase {
         System.out.println("Resetting shoulder and elbow to current location");
         m_controllerShoulder.reset(getShoulderJointDegrees());
         m_controllerElbow.reset(getElbowJointDegrees());
-        m_shoulderSetpoint = getShoulderJointDegrees();
-        m_elbowSetpoint = getElbowJointDegrees();
+        updateShoulderSetpoint(getShoulderJointDegrees());
+        updateElbowSetpoint(getElbowJointDegrees());
     }
 
     public void updateShoulderSetpoint(double setpoint) {
         if (m_shoulderSetpoint != setpoint) {
             if (setpoint < 180 && setpoint > -180) {
                 m_shoulderSetpoint = setpoint;
+                m_controllerShoulder.setGoal(new TrapezoidProfile.State(m_shoulderSetpoint, 0.0));
                 // System.out.println("Shoulder Change =" + setpoint);
             }
         }
@@ -263,6 +265,7 @@ public class ArmSubsystem extends SubsystemBase {
         if (m_elbowSetpoint != setpoint) {
             if (setpoint < 180 && setpoint > -180) {
                 m_elbowSetpoint = setpoint;
+                m_controllerElbow.setGoal(new TrapezoidProfile.State(m_elbowSetpoint, 0.0));
                 // System.out.println("Elbow Change =" + setpoint);
             }
         }
@@ -303,7 +306,6 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void runShoulderProfiled() {
-        m_controllerShoulder.setGoal(new TrapezoidProfile.State(m_shoulderSetpoint, 0.0));
         double pidOutput = -m_controllerShoulder.calculate(getShoulderJointDegrees());
         // double ff = -(calculateFeedforwards().get(1, 0)) / 12.0;
         // SmartDashboard.putNumber("Shoulder ff", ff);
@@ -313,7 +315,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void runElbowProfiled() {
         // System.out.println("running elbow="+m_elbowSetpoint);
-        m_controllerElbow.setGoal(new TrapezoidProfile.State(m_elbowSetpoint, 0.0));
+        m_controllerElbow.setConstraints(new Constraints(elbowConstraints.maxVelocity
+                + m_shoulderEncoder.getVelocity(),
+                elbowConstraints.maxAcceleration));
         double pidOutput = -m_controllerElbow.calculate(getElbowJointDegrees());
         // double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
         // SmartDashboard.putNumber("Elbow ff", ff);
@@ -339,16 +343,22 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setPercentOutputShoulder(double speed) {
-        double t = degreesPerSecondToPower(speed) * 800; // 750; //300;
+        double t = degreesPerSecondToPower(speed) * 850; // 750; //300;
         // SmartDashboard.putNumber("shoulder", t);
         // System.out.println("SHOULDER SPEED="+t);
         m_shoulderLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }
 
     public void setPercentOutputElbow(double speed) {
-        double t = degreesPerSecondToPower(speed) * 520; // 300; //120;
+        double t = degreesPerSecondToPower(speed) * 600; // 300; //120;
         // SmartDashboard.putNumber("elbow", t);
         m_elbowLeftJoint.set(TalonFXControlMode.PercentOutput, t);
+    }
+
+    public double getElbowSpeed() {
+        // return m_elbowLeftJoint.getMotorOutputPercent();
+        // return m_controllerElbow.getSetpoint().position;
+        return m_shoulderEncoder.getVelocity();
     }
 
     public void neutralShoulder() {

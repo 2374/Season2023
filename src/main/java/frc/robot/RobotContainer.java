@@ -108,7 +108,9 @@ public class RobotContainer {
         tab.add(CameraServer.startAutomaticCapture("Camera", 0)).withSize(3, 3).withPosition(6, 0);
         tab.addBoolean("SLOW", () -> isSlow()).withPosition(2, 1);
         tab.addBoolean("TURBO", () -> isTurbo()).withPosition(1, 1);
-        tab.addBoolean("Auto", () -> m_drivetrainSubsystem.getFollower().getCurrentTrajectory().isPresent());
+        // tab.addBoolean("Auto", () ->
+        // m_drivetrainSubsystem.getFollower().getCurrentTrajectory().isPresent());
+        tab.addNumber("Elbow Speed", () -> m_ArmSubsystem.getElbowSpeed());
     }
 
     /**
@@ -202,15 +204,15 @@ public class RobotContainer {
      */
     private double getForwardInput() {
         if (slow) {
-            return xLimiter.calculate(-square(deadband(m_driveController.getLeftY(), 0.1))
+            return -square(yLimiter.calculate(deadband(m_driveController.getLeftY(), 0.1))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
-                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 0.33);
+                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 0.16);
         } else if (turbo) {
-            return xLimiter.calculate(-square(deadband(m_driveController.getLeftY(), 0.1))
+            return -square(yLimiter.calculate(deadband(m_driveController.getLeftY(), 0.1))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
                     * DrivetrainSubsystem.SPEED_MULTIPLIER * 1.5);
         } else {
-            return xLimiter.calculate(-square(deadband(m_driveController.getLeftY(), 0.1))
+            return -square(yLimiter.calculate(deadband(m_driveController.getLeftY(), 0.1))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
                     * DrivetrainSubsystem.SPEED_MULTIPLIER);
         }
@@ -223,15 +225,15 @@ public class RobotContainer {
      */
     private double getStrafeInput() {
         if (slow) {
-            return yLimiter.calculate(-square(deadband(m_driveController.getLeftX(), 0.1))
+            return -square(xLimiter.calculate(deadband(m_driveController.getLeftX(), 0.1))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
-                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 0.33);
+                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 0.16);
         } else if (turbo) {
-            return yLimiter.calculate(-square(deadband(m_driveController.getLeftX(), 0.1))
+            return -square(xLimiter.calculate(deadband(m_driveController.getLeftX(), 0.1))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
                     * DrivetrainSubsystem.SPEED_MULTIPLIER * 1.4);
         } else {
-            return yLimiter.calculate(-square(deadband(m_driveController.getLeftX(), 0.1))
+            return -square(xLimiter.calculate(deadband(m_driveController.getLeftX(), 0.1))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
                     * DrivetrainSubsystem.SPEED_MULTIPLIER);
         }

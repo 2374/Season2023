@@ -181,7 +181,7 @@ public class Constants {
         public static final Setpoint TALL = new Setpoint(0, 1, 1, false, 1, 1, false);
         public static final Setpoint REST = new Setpoint(REST_Label, -150, 132, false, -150, 132, false);
         public static final Setpoint MID_READY = new Setpoint(MID_READY_Label, 35, 55, false, 35, 55, false);
-        public static final Setpoint MID_DROP = new Setpoint(MID_DROP_Label, 64, 67, false, 64, 67, false);
+        public static final Setpoint MID_DROP = new Setpoint(MID_DROP_Label, 33, 73, false, 33, 73, false);
         public static final Setpoint STOW = new Setpoint(STOW_Label, 135, 60, false, 135, 60, false);
         public static final Setpoint STAB_READY = new Setpoint(STAB_READY_Label, 102, 62, false, 102, 62, false);
         public static final Setpoint STAB = new Setpoint(STAB_Label, 73, 95, false, 73, 95, false);
@@ -200,7 +200,6 @@ public class Constants {
     public static final int LOW_SCORE_Label = 7;
     public static final int HIGH_SCORE_Label = 8;
 
-
     // Experimental Arm Constants
     public static final double ARM_BICEP_LENGTH = Units.inchesToMeters(25.5);
     public static final double ARM_FOREARM_LENGTH = Units.inchesToMeters(28.0);
@@ -212,12 +211,12 @@ public class Constants {
     public static final double ARM_SHOULDER_ENCODER_MOUNT_OFFSET_RAD = Units.degreesToRadians(101.8);
     public static final int ARM_ELBOW_ENC_IDX = ELBOW_ENCODER_ARM_CAN_ID;
     public static final double ARM_ELBOW_ENCODER_MOUNT_OFFSET_RAD = Units.degreesToRadians(170.7);
-    public static final double WHEEL_BASE_HALF_LENGTH_M = DRIVETRAIN_LENGTH_METERS/2.0;
+    public static final double WHEEL_BASE_HALF_LENGTH_M = DRIVETRAIN_LENGTH_METERS / 2.0;
     public static final double BUMPER_THICKNESS_M = Units.inchesToMeters(3.125);
     public static final double SIM_SAMPLE_RATE_SEC = 0.001;
     // public static final int FAULT_LED_OUT_IDX = 0;
     // public static final int HEARTBEAT_LED_OUT_IDX = 0;
     public static final double WHEEL_RADIUS_IN = 2;
     public static final double WHEEL_GEAR_RATIO = 0;
-    
+
 }
