@@ -21,11 +21,11 @@ public class AutonomousTrajectories {
     public AutonomousTrajectories(TrajectoryConstraint[] trajectoryConstraints) {
         oneMeterF = new Trajectory(
                 new SimplePathBuilder(new Vector2(0.0, 0.0), Rotation2.fromDegrees(0.0))
-                        .lineTo(new Vector2(0.1, 0.0)).build(),
+                        .lineTo(new Vector2(1, 0.0)).build(),
                 trajectoryConstraints, SAMPLE_DISTANCE);
         oneMeterB = new Trajectory(
                 new SimplePathBuilder(new Vector2(0.0, 0.0), Rotation2.fromDegrees(0.0))
-                        .lineTo(new Vector2(6.0, 0.0)).build(),
+                        .lineTo(new Vector2(1, 0.0)).build(),
                 trajectoryConstraints, SAMPLE_DISTANCE);
         figureEight = new Trajectory(
                 new SimplePathBuilder(new Vector2(0, 0), Rotation2.fromDegrees(0.0))

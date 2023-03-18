@@ -55,21 +55,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
             new FeedforwardConstraint(1.5, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
                     FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
-            new MaxAccelerationConstraint(4.0), new CentripetalAccelerationConstraint(5.0) };
+            new MaxAccelerationConstraint(3.0), new CentripetalAccelerationConstraint(1.0) };
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
             new PidConstants(1, 0.02, .06), new PidConstants(1, 0.02, .06),
             new HolonomicFeedforward(FEEDFORWARD_CONSTANTS));
 
-    private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-            // Front left
-            new Translation2d(DRIVETRAIN_LENGTH_METERS / 2.0, DRIVETRAIN_WIDTH_METERS / 2.0),
-            // Front right
-            new Translation2d(DRIVETRAIN_LENGTH_METERS / 2.0, -DRIVETRAIN_WIDTH_METERS / 2.0),
-            // Back left
-            new Translation2d(-DRIVETRAIN_LENGTH_METERS / 2.0, DRIVETRAIN_WIDTH_METERS / 2.0),
-            // Back right
-            new Translation2d(-DRIVETRAIN_LENGTH_METERS / 2.0, -DRIVETRAIN_WIDTH_METERS / 2.0));
+    private final SwerveDriveKinematics kinematics;
 
     private final SwerveDrivePoseEstimator estimator;
 
@@ -94,13 +86,37 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public DrivetrainSubsystem(RobotContainer container) {
         pcw = new PhotonCameraWrapper();
         pigeon.configMountPose(180, 0, 0);
-        getGyroscopeRotation().getRadians();
-        Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME).addNumber("pitch", () -> pigeon.getPitch());
+        Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME).addNumber("yaw", () -> pigeon.getYaw());
         // Mk4ModuleConfiguration mk4ModuleConfiguration = new Mk4ModuleConfiguration();
         // mk4ModuleConfiguration.setDriveCurrentLimit(DRIVETRAIN_CURRENT_LIMIT);
         Mk3ModuleConfiguration mk3ModuleConfiguration = new Mk3ModuleConfiguration();
         mk3ModuleConfiguration.setDriveCurrentLimit(DRIVETRAIN_CURRENT_LIMIT);
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+        kinematics = new SwerveDriveKinematics(
+                // Front left
+                new Translation2d(
+                        (container.getChassisSubsystem().isTestRobot() ? Constants.DRIVETRAIN_LENGTH_METERS_TEST
+                                : Constants.DRIVETRAIN_LENGTH_METERS) / 2.0,
+                        (container.getChassisSubsystem().isTestRobot() ? Constants.DRIVETRAIN_WIDTH_METERS_TEST
+                                : Constants.DRIVETRAIN_WIDTH_METERS) / 2.0),
+                // Front right
+                new Translation2d(
+                        (container.getChassisSubsystem().isTestRobot() ? Constants.DRIVETRAIN_LENGTH_METERS_TEST
+                                : Constants.DRIVETRAIN_LENGTH_METERS) / 2.0,
+                        -(container.getChassisSubsystem().isTestRobot() ? Constants.DRIVETRAIN_WIDTH_METERS_TEST
+                                : Constants.DRIVETRAIN_WIDTH_METERS) / 2.0),
+                // Back left
+                new Translation2d(
+                        -(container.getChassisSubsystem().isTestRobot() ? Constants.DRIVETRAIN_LENGTH_METERS_TEST
+                                : Constants.DRIVETRAIN_LENGTH_METERS) / 2.0,
+                        (container.getChassisSubsystem().isTestRobot() ? Constants.DRIVETRAIN_WIDTH_METERS_TEST
+                                : Constants.DRIVETRAIN_WIDTH_METERS) / 2.0),
+                // Back right
+                new Translation2d(
+                        -(container.getChassisSubsystem().isTestRobot() ? Constants.DRIVETRAIN_LENGTH_METERS_TEST
+                                : Constants.DRIVETRAIN_LENGTH_METERS) / 2.0,
+                        -(container.getChassisSubsystem().isTestRobot() ? Constants.DRIVETRAIN_WIDTH_METERS_TEST
+                                : Constants.DRIVETRAIN_WIDTH_METERS) / 2.0));
         // frontLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
         // tab.getLayout("Front Left Module", BuiltInLayouts.kList).withSize(2,
         // 4).withPosition(0, 0),
@@ -359,5 +375,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void printAngles() {
         System.out.println("Pitch - " + pigeon.getPitch());
         System.out.println("Roll - " + pigeon.getRoll());
+    }
+
+    public double getPitch() {
+        return pigeon.getPitch();
+    }
+
+    public double getYaw() {
+        return pigeon.getYaw();
     }
 }

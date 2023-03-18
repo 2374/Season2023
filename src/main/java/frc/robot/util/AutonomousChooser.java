@@ -1,9 +1,12 @@
 package frc.robot.util;
 
+import java.util.function.BooleanSupplier;
+
 // import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
@@ -57,7 +60,44 @@ public class AutonomousChooser {
         command.addCommands(
                 // resetRobotPose(container, trajectories.getOneMeterF()),
                 // follow(container, trajectories.getOneMeterF())
-                new RunCommand(() -> container.getDrivetrain().autoBalenceTick(), container.getDrivetrain()));
+                /*
+                 * IDEA:
+                 * score, go back, wait till > 10, wait till < 2, wait .2, go forward,
+                 * wait till > 10, wait .1, slow down, wait till < 8, balence
+                 */
+                // new InstantCommand(() -> container.getDrivetrain().drive(new
+                // ChassisSpeeds(-1.6, 0, 0)),
+                // container.getDrivetrain()),
+                // new WaitUntilCommand(new BooleanSupplier() {
+                // public boolean getAsBoolean() {
+                // return container.getDrivetrain().getPitch() < -10;
+                // };
+                // }),
+                // new WaitCommand(.1),
+                // new InstantCommand(() -> container.getDrivetrain().drive(new
+                // ChassisSpeeds(-0.9, 0, 0)),
+                // container.getDrivetrain()),
+                // new WaitUntilCommand(new BooleanSupplier() {
+                // public boolean getAsBoolean() {
+                // return container.getDrivetrain().getPitch() > -8;
+                // };
+                // }),
+                // new RunCommand(() -> container.getDrivetrain().autoBalenceTick(),
+                // container.getDrivetrain()),
+
+                // new RunCommand(() -> {
+                // if (container.getDrivetrain().getYaw() % 360 > 90) {
+                // container.getDrivetrain().drive(new ChassisSpeeds(0, 0, 0.2));
+                // } else {
+                // container.getDrivetrain().drive(new ChassisSpeeds(0, 0, -0.2));
+                // }
+                // }).until(new BooleanSupplier() {
+                // public boolean getAsBoolean() {
+                // return Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5;
+                // };
+                // })
+
+                followLine(container, 1, 0, 90));
 
         return command;
     }
@@ -192,7 +232,7 @@ public class AutonomousChooser {
     }
 
     private Command followLine(RobotContainer container, double x, double y,
-            int rotationDegrees) {
+            double rotationDegrees) {
         return new FollowTrajectoryCommand(container.getDrivetrain(),
                 new Trajectory(
                         new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
