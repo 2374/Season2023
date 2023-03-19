@@ -85,19 +85,26 @@ public class AutonomousChooser {
                 // new RunCommand(() -> container.getDrivetrain().autoBalenceTick(),
                 // container.getDrivetrain()),
 
-                // new RunCommand(() -> {
-                // if (container.getDrivetrain().getYaw() % 360 > 90) {
-                // container.getDrivetrain().drive(new ChassisSpeeds(0, 0, 0.2));
-                // } else {
-                // container.getDrivetrain().drive(new ChassisSpeeds(0, 0, -0.2));
-                // }
-                // }).until(new BooleanSupplier() {
-                // public boolean getAsBoolean() {
-                // return Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5;
-                // };
-                // })
+                new RunCommand(() -> {
+                    if ((container.getDrivetrain().getYaw() - 90) % 360 > 0) {
+                        container.getDrivetrain().drive(
+                                new ChassisSpeeds(0, 0,
+                                        2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) + 0.2));
+                    } else {
+                        container.getDrivetrain().drive(
+                                new ChassisSpeeds(0, 0,
+                                        -2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) - 0.2));
+                    }
+                }).until(new BooleanSupplier() {
+                    public boolean getAsBoolean() {
+                        if (Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5) {
+                            System.out.println(true);
+                        }
+                        return Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5;
+                    };
+                }));
 
-                followLine(container, 1, 0, 90));
+        // followLine(container, 1, 0, 90));
 
         return command;
     }

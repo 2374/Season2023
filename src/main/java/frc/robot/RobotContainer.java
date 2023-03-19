@@ -28,8 +28,8 @@ public class RobotContainer {
     private final XboxController m_driveController = new XboxController(Constants.CONTROLLER_USB_PORT_DRIVER);
     private final XboxController m_operatorController = new XboxController(Constants.CONTROLLER_USB_PORT_OPERATOR);
 
-    private SlewRateLimiter xLimiter = new SlewRateLimiter(5);
-    private SlewRateLimiter yLimiter = new SlewRateLimiter(5);
+    private SlewRateLimiter xLimiter = new SlewRateLimiter(6);
+    private SlewRateLimiter yLimiter = new SlewRateLimiter(6);
 
     private boolean slow = false;
     private boolean turbo = false;
@@ -116,6 +116,8 @@ public class RobotContainer {
             tab.addString("FORWARD", () -> m_ArmSubsystem.getForwardState()).withPosition(5, 1);
             tab.addString("BACKWARD", () -> m_ArmSubsystem.getBackwardState()).withPosition(3, 1);
             tab.addNumber("Elbow Speed", () -> m_ArmSubsystem.getElbowSpeed());
+            tab.addNumber("TOF Distance", () -> m_ManipulatorSubsystem.getDistance());
+            tab.addNumber("Shoulder Velocity", () -> m_ArmSubsystem.getShoulderJointSpeed());
             tab.add(CameraServer.startAutomaticCapture("Camera", 0)).withSize(3, 3).withPosition(6, 0);
         }
         tab.add("Autonomous Mode", getAutonomousChooser().getModeChooser()).withSize(2, 1).withPosition(1, 0);

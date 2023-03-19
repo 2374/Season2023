@@ -179,7 +179,7 @@ public class ArmSubsystem extends SubsystemBase {
         m_elbowEncoder.configMagnetOffset(ArmConstants.ELBOW_ANGLE_OFFSET);
         m_shoulderEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         m_elbowEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
-        m_elbowEncoder.configSensorDirection(true);
+        m_elbowEncoder.configSensorDirection(false);
 
         updateCurrentState();
 
@@ -316,7 +316,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void runElbowProfiled() {
         // System.out.println("running elbow="+m_elbowSetpoint);
         m_controllerElbow.setConstraints(new Constraints(elbowConstraints.maxVelocity
-                + m_shoulderEncoder.getVelocity(),
+        /* + (m_shoulderEncoder.getVelocity() * 0.5) */,
                 elbowConstraints.maxAcceleration));
         double pidOutput = -m_controllerElbow.calculate(getElbowJointDegrees());
         // double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
@@ -343,16 +343,30 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setPercentOutputShoulder(double speed) {
-        double t = degreesPerSecondToPower(speed) * 850; // 750; //300;
+        double t = degreesPerSecondToPower(speed) * 550; // 750; //300;
         // SmartDashboard.putNumber("shoulder", t);
         // System.out.println("SHOULDER SPEED="+t);
         m_shoulderLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }
 
     public void setPercentOutputElbow(double speed) {
-        double t = degreesPerSecondToPower(speed) * 600; // 300; //120;
+        double t = degreesPerSecondToPower(speed) * 400; // 300; //120;
         // SmartDashboard.putNumber("elbow", t);
         m_elbowLeftJoint.set(TalonFXControlMode.PercentOutput, t);
+    }
+
+    public void brakeOn() {
+        m_elbowLeftJoint.setNeutralMode(NeutralMode.Brake);
+        m_elbowRightJoint.setNeutralMode(NeutralMode.Brake);
+        m_elbowLeftJoint.setNeutralMode(NeutralMode.Brake);
+        m_shoulderRightJoint.setNeutralMode(NeutralMode.Brake);
+    }
+
+    public void brakeOff() {
+        m_elbowLeftJoint.setNeutralMode(NeutralMode.Coast);
+        m_elbowRightJoint.setNeutralMode(NeutralMode.Coast);
+        m_elbowLeftJoint.setNeutralMode(NeutralMode.Coast);
+        m_shoulderRightJoint.setNeutralMode(NeutralMode.Coast);
     }
 
     public double getElbowSpeed() {
@@ -375,6 +389,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     public double getShoulderJointPos() {
         return m_shoulderEncoder.getAbsolutePosition();
+    }
+
+    public double getShoulderJointSpeed() {
+        return m_shoulderEncoder.getVelocity();
     }
 
     public double getElbowJointDegrees() {

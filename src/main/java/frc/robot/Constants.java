@@ -100,8 +100,8 @@ public class Constants {
 
     public static final class ArmConstants {
 
-        public static final double ELBOW_ANGLE_OFFSET = -5.27; // -36.29; //-244.4;
-        public static final double SHOULDER_ANGLE_OFFSET = -27.7;
+        public static final double ELBOW_ANGLE_OFFSET = -63; // -36.29; //-244.4;
+        public static final double SHOULDER_ANGLE_OFFSET = 119;
 
         // public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.01,
         // 0.0, 50);
@@ -181,8 +181,12 @@ public class Constants {
 
         // ELBOW | SHOULDER false/true
         public static final Setpoint TALL = new Setpoint(0, 1, 1, false, 1, 1, false);
-        public static final Setpoint REST = new Setpoint(REST_Label, -150, 132, false, -150, 132, false);
-        public static final Setpoint MID_READY = new Setpoint(MID_READY_Label, 35, 55, false, 35, 55, false);
+        // public static final Setpoint REST = new Setpoint(REST_Label, -150, 132,
+        // false, -150, 132, false);
+        public static final Setpoint REST = new Setpoint(REST_Label, -156, 128, false, -156, 128, false);
+        // public static final Setpoint MID_READY = new Setpoint(MID_READY_Label, 35,
+        // 55, false, 35, 55, false);
+        public static final Setpoint MID_READY = new Setpoint(MID_READY_Label, -45, 90, false, -45, 90, false);
         public static final Setpoint MID_DROP = new Setpoint(MID_DROP_Label, 33, 73, false, 33, 73, false);
         public static final Setpoint STOW = new Setpoint(STOW_Label, 135, 60, false, 135, 60, false);
         public static final Setpoint STAB_READY = new Setpoint(STAB_READY_Label, 102, 62, false, 102, 62, false);
