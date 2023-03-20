@@ -446,8 +446,20 @@ public class ArmSubsystem extends SubsystemBase {
                 currentState = Constants.ArmSetpoints.LOW_SCORE;
                 container.getManipulatorSubsystem().outtake();
                 break;
-            case Constants.HIGH_SCORE_Label:
-                currentState = Constants.ArmSetpoints.MID_READY;
+            case Constants.LONG_REST_Label:
+                currentState = Constants.ArmSetpoints.LONG_HIGH_SCORE;
+                break;
+            case Constants.LONG_HIGH_SCORE_Label:
+                currentState = Constants.ArmSetpoints.LONG_HIGH_SCORE;
+                break;
+            case Constants.LONG_MID_SCORE_Label:
+                currentState = Constants.ArmSetpoints.LONG_MID_SCORE;
+                break;
+            case Constants.LONG_MID_PICKUP_Label:
+                currentState = Constants.ArmSetpoints.LONG_MID_PICKUP;
+                break;
+            case Constants.LONG_LOW_SCORE_Label:
+                currentState = Constants.ArmSetpoints.LONG_LOW_SCORE;
                 break;
         }
         updateAllSetpoints(currentState);
@@ -482,6 +494,21 @@ public class ArmSubsystem extends SubsystemBase {
             case Constants.HIGH_SCORE_Label:
                 currentState = Constants.ArmSetpoints.MID_READY;
                 break;
+            case Constants.LONG_REST_Label:
+                currentState = Constants.ArmSetpoints.LONG_MID_PICKUP;
+                break;
+            case Constants.LONG_HIGH_SCORE_Label:
+                currentState = Constants.ArmSetpoints.LONG_REST;
+                break;
+            case Constants.LONG_MID_SCORE_Label:
+                currentState = Constants.ArmSetpoints.LONG_REST;
+                break;
+            case Constants.LONG_MID_PICKUP_Label:
+                currentState = Constants.ArmSetpoints.LONG_REST;
+                break;
+            case Constants.LONG_LOW_SCORE_Label:
+                currentState = Constants.ArmSetpoints.LONG_REST;
+                break;
         }
         updateAllSetpoints(currentState);
         return null;
@@ -514,6 +541,21 @@ public class ArmSubsystem extends SubsystemBase {
                 break;
             case Constants.HIGH_SCORE_Label:
                 currentState = Constants.ArmSetpoints.HIGH_SCORE;
+                break;
+            case Constants.LONG_REST_Label:
+                currentState = Constants.ArmSetpoints.LONG_MID_SCORE;
+                break;
+            case Constants.LONG_HIGH_SCORE_Label:
+                currentState = Constants.ArmSetpoints.LONG_HIGH_SCORE;
+                break;
+            case Constants.LONG_MID_SCORE_Label:
+                currentState = Constants.ArmSetpoints.LONG_MID_SCORE;
+                break;
+            case Constants.LONG_MID_PICKUP_Label:
+                currentState = Constants.ArmSetpoints.LONG_MID_PICKUP;
+                break;
+            case Constants.LONG_LOW_SCORE_Label:
+                currentState = Constants.ArmSetpoints.LONG_LOW_SCORE;
                 break;
         }
         updateAllSetpoints(currentState);
@@ -548,6 +590,21 @@ public class ArmSubsystem extends SubsystemBase {
                 break;
             case Constants.HIGH_SCORE_Label:
                 currentState = Constants.ArmSetpoints.HIGH_SCORE;
+                break;
+            case Constants.LONG_REST_Label:
+                currentState = Constants.ArmSetpoints.LONG_LOW_SCORE;
+                break;
+            case Constants.LONG_HIGH_SCORE_Label:
+                currentState = Constants.ArmSetpoints.LONG_HIGH_SCORE;
+                break;
+            case Constants.LONG_MID_SCORE_Label:
+                currentState = Constants.ArmSetpoints.LONG_MID_SCORE;
+                break;
+            case Constants.LONG_MID_PICKUP_Label:
+                currentState = Constants.ArmSetpoints.LONG_MID_PICKUP;
+                break;
+            case Constants.LONG_LOW_SCORE_Label:
+                currentState = Constants.ArmSetpoints.LONG_LOW_SCORE;
                 break;
         }
         updateAllSetpoints(currentState);
