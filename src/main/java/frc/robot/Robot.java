@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
         // lights
         if (!m_robotContainer.getChassisSubsystem().isTestRobot()) {
             m_robotContainer.getArmSubsystem().reset();
+            m_robotContainer.getArmSubsystem().brakeOff();
         }
         m_robotContainer.getChassisSubsystem().setWantNothing();
     }
@@ -51,6 +52,7 @@ public class Robot extends TimedRobot {
     public void disabledExit() {
         if (!m_robotContainer.getChassisSubsystem().isTestRobot()) {
             m_robotContainer.getArmSubsystem().reset();
+            m_robotContainer.getArmSubsystem().brakeOn();
         }
         m_robotContainer.getChassisSubsystem().setWantACone();
         // m_robotContainer.getManipulatorSubsystem().resetEncoder();
