@@ -15,6 +15,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -35,7 +36,7 @@ public class ArmSubsystem extends SubsystemBase {
     private CANCoder m_shoulderEncoder = new CANCoder(Constants.SHOULDER_ENCODER_ARM_CAN_ID);
     private CANCoder m_elbowEncoder = new CANCoder(Constants.ELBOW_ENCODER_ARM_CAN_ID);
 
-    private Setpoint currentState = Constants.ArmSetpoints.REST;
+    private Setpoint currentState = Constants.ArmSetpoints.LONG_REST;
 
     private TrapezoidProfile.Constraints elbowConstraints = new TrapezoidProfile.Constraints(
             ArmConstants.SHOULDER_CRUISE,
@@ -62,10 +63,10 @@ public class ArmSubsystem extends SubsystemBase {
     private RobotContainer container;
 
     private String cState = "REST";
-    private String upState = "MID_READY";
-    private String downState = "MID_READY";
-    private String forwardState = "MID_READY";
-    private String backwardState = "MID_READY";
+    private String upState = "HIGH_SCORE";
+    private String downState = "LOW_SCORE";
+    private String forwardState = "MID_SCORE";
+    private String backwardState = "PICKUP";
 
     private static final int NO_CHANGE = 500;
 
