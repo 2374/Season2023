@@ -100,8 +100,8 @@ public class Constants {
 
     public static final class ArmConstants {
 
-        public static final double ELBOW_ANGLE_OFFSET = -5.27; // -36.29; //-244.4;
-        public static final double SHOULDER_ANGLE_OFFSET = -27.7;
+        public static final double ELBOW_ANGLE_OFFSET = -63;
+        public static final double SHOULDER_ANGLE_OFFSET = 119;
 
         // public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.01,
         // 0.0, 50);
@@ -172,7 +172,7 @@ public class Constants {
 
         // public static final Gains GAINS_ELBOW_JOINT = new Gains(0.75, 0.75, 0.0,
         // 0.00, 50);
-        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.4, 0.3, 0.0, 0.00, 50);
+        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.8, 0.3, 0.0, 0.00, 50);
     }
 
     public static final class ArmSetpoints {

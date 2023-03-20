@@ -47,8 +47,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND
             / Math.hypot(DRIVETRAIN_LENGTH_METERS / 2.0, DRIVETRAIN_WIDTH_METERS / 2.0);
 
-    public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(0.5,
-            0.1, 0.09);
+    public static final DrivetrainFeedforwardConstants FEEDFORWARD_CONSTANTS = new DrivetrainFeedforwardConstants(0.891,
+            0.15, 0.13592);
 
     public static final double DRIVETRAIN_CURRENT_LIMIT = 50.0;
 
