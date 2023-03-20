@@ -689,6 +689,41 @@ public class ArmSubsystem extends SubsystemBase {
                 forwardState = "SHOOT";
                 backwardState = "MID_READY";
                 break;
+            case Constants.LONG_REST_Label:
+                cState = "REST";
+                upState = "HIGH";
+                downState = "LOW";
+                forwardState = "MID";
+                backwardState = "PICKUP";
+                break;
+            case Constants.LONG_HIGH_SCORE_Label:
+                cState = "HIGH";
+                upState = "HIGH";
+                downState = "HIGH";
+                forwardState = "HIGH";
+                backwardState = "REST";
+                break;
+            case Constants.LONG_MID_SCORE_Label:
+                cState = "MID";
+                upState = "MID";
+                downState = "MID";
+                forwardState = "MID";
+                backwardState = "REST";
+                break;
+            case Constants.LONG_LOW_SCORE_Label:
+                cState = "LOW";
+                upState = "LOW";
+                downState = "LOW";
+                forwardState = "LOW";
+                backwardState = "REST";
+                break;
+            case Constants.LONG_MID_PICKUP_Label:
+                cState = "PICKUP";
+                upState = "PICKUP";
+                downState = "PICKUP";
+                forwardState = "PICKUP";
+                backwardState = "REST";
+                break;
             default:
                 cState = "UNKNOWN";
                 upState = "UNKNOWN";
