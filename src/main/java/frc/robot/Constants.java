@@ -157,7 +157,7 @@ public class Constants {
 
         // Motion Magic constants
         public static final double ELBOW_CRUISE = 35.0;
-        public static final double ELBOW_ACCELERATION = 60.0;
+        public static final double ELBOW_ACCELERATION = 55.0;
 
         public static final double SHOULDER_CRUISE = 35.0;
         public static final double SHOULDER_ACCELERATION = 60.0;
@@ -172,7 +172,7 @@ public class Constants {
 
         // public static final Gains GAINS_ELBOW_JOINT = new Gains(0.75, 0.75, 0.0,
         // 0.00, 50);
-        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.8, 0.3, 0.0, 0.00, 50);
+        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.4, 0.15, 0.0, 0.00, 50);
     }
 
     public static final class ArmSetpoints {
@@ -191,11 +191,14 @@ public class Constants {
         public static final Setpoint HIGH_SCORE = new Setpoint(HIGH_SCORE_Label, -35, 75, false, -35, 75, false);
 
         public static final Setpoint LONG_REST = new Setpoint(LONG_REST_Label, -156, 128, false, -156, 128, false);
-        public static final Setpoint LONG_MID_SCORE = new Setpoint(LONG_MID_SCORE_Label, -45, 90, false, -45, 90, false);
-        public static final Setpoint LONG_HIGH_SCORE = new Setpoint(LONG_HIGH_SCORE_Label, -45, 90, false, -45, 90, false);
-        public static final Setpoint LONG_MID_PICKUP = new Setpoint(LONG_MID_PICKUP_Label, -45, 90, false, -45, 90, false);
-        public static final Setpoint LONG_LOW_SCORE = new Setpoint(LONG_LOW_SCORE_Label, -45, 90, false, -45, 90, false);
-        
+        public static final Setpoint LONG_MID_SCORE = new Setpoint(LONG_MID_SCORE_Label, -45, 90, false, -45, 90,
+                false);
+        public static final Setpoint LONG_HIGH_SCORE = new Setpoint(LONG_HIGH_SCORE_Label, -45, 90, false, -45, 90,
+                false);
+        public static final Setpoint LONG_MID_PICKUP = new Setpoint(LONG_MID_PICKUP_Label, -45, 90, false, -45, 90,
+                false);
+        public static final Setpoint LONG_LOW_SCORE = new Setpoint(LONG_LOW_SCORE_Label, -45, 90, false, -45, 90,
+                false);
 
         public static final double INTERMEDIATE_ELBOW_POSITION = 90;
     }
@@ -213,7 +216,6 @@ public class Constants {
     public static final int LONG_MID_PICKUP_Label = 11;
     public static final int LONG_MID_SCORE_Label = 12;
     public static final int LONG_LOW_SCORE_Label = 13;
-
 
     // Experimental Arm Constants
     public static final double ARM_BICEP_LENGTH = Units.inchesToMeters(25.5);

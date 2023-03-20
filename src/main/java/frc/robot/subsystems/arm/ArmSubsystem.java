@@ -19,6 +19,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -310,7 +311,8 @@ public class ArmSubsystem extends SubsystemBase {
         // double ff = -(calculateFeedforwards().get(1, 0)) / 12.0;
         // SmartDashboard.putNumber("Shoulder ff", ff);
         // SmartDashboard.putNumber("Shoulder PID", pidOutput);
-        setPercentOutputShoulder(pidOutput); // may need to negate ff voltage to get desired output
+        setPercentOutputShoulder(pidOutput); // may need to negate ff voltage to get
+        // desired output
     }
 
     public void runElbowProfiled() {
@@ -322,7 +324,8 @@ public class ArmSubsystem extends SubsystemBase {
         // double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
         // SmartDashboard.putNumber("Elbow ff", ff);
         // SmartDashboard.putNumber("Elbow PID", pidOutput);
-        setPercentOutputElbow(pidOutput); // may need to negate ff voltage to get desired output
+        // setPercentOutputElbow(pidOutput); // may need to negate ff voltage to get
+        // desired output
     }
 
     public void setToCurrent() {
