@@ -190,6 +190,13 @@ public class Constants {
         public static final Setpoint LOW_SCORE = new Setpoint(LOW_SCORE_Label, 90, 60, false, 90, 60, false);
         public static final Setpoint HIGH_SCORE = new Setpoint(HIGH_SCORE_Label, -35, 75, false, -35, 75, false);
 
+        public static final Setpoint LONG_REST = new Setpoint(LONG_REST_Label, -156, 128, false, -156, 128, false);
+        public static final Setpoint LONG_MID_SCORE = new Setpoint(LONG_MID_SCORE_Label, -45, 90, false, -45, 90, false);
+        public static final Setpoint LONG_HIGH_SCORE = new Setpoint(LONG_HIGH_SCORE_Label, -45, 90, false, -45, 90, false);
+        public static final Setpoint LONG_MID_PICKUP = new Setpoint(LONG_MID_PICKUP_Label, -45, 90, false, -45, 90, false);
+        public static final Setpoint LONG_LOW_SCORE = new Setpoint(LONG_LOW_SCORE_Label, -45, 90, false, -45, 90, false);
+        
+
         public static final double INTERMEDIATE_ELBOW_POSITION = 90;
     }
 
@@ -201,6 +208,12 @@ public class Constants {
     public static final int STAB_Label = 6;
     public static final int LOW_SCORE_Label = 7;
     public static final int HIGH_SCORE_Label = 8;
+    public static final int LONG_HIGH_SCORE_Label = 9;
+    public static final int LONG_REST_Label = 10;
+    public static final int LONG_MID_PICKUP_Label = 11;
+    public static final int LONG_MID_SCORE_Label = 12;
+    public static final int LONG_LOW_SCORE_Label = 13;
+
 
     // Experimental Arm Constants
     public static final double ARM_BICEP_LENGTH = Units.inchesToMeters(25.5);
