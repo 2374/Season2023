@@ -193,10 +193,11 @@ public class Constants {
         public static final Setpoint LONG_REST = new Setpoint(LONG_REST_Label, -156, 128, false, -156, 128, false);
         public static final Setpoint LONG_MID_SCORE = new Setpoint(LONG_MID_SCORE_Label, -95, 128, false, -45, 90,
                 false);
-        public static final Setpoint LONG_HIGH_SCORE = new Setpoint(LONG_HIGH_SCORE_Label, -45, 90, false, -45, 90,
+        public static final Setpoint LONG_HIGH_SCORE = new Setpoint(LONG_HIGH_SCORE_Label, -40, 85, false, -45, 90,
                 false);
-        public static final Setpoint LONG_MID_PICKUP = new Setpoint(LONG_MID_PICKUP_Label, -45, 90, false, -45, 90,
+        public static final Setpoint LONG_MID_PICKUP = new Setpoint(LONG_MID_PICKUP_Label, -36, 92, false, -45, 90,
                 false);
+        // NOT used anymore
         public static final Setpoint LONG_LOW_SCORE = new Setpoint(LONG_LOW_SCORE_Label, -45, 90, false, -45, 90,
                 false);
 
