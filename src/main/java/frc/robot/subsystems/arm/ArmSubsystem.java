@@ -39,11 +39,11 @@ public class ArmSubsystem extends SubsystemBase {
     private Setpoint currentState = Constants.ArmSetpoints.LONG_REST;
 
     private TrapezoidProfile.Constraints elbowConstraints = new TrapezoidProfile.Constraints(
-            ArmConstants.SHOULDER_CRUISE,
-            ArmConstants.SHOULDER_ACCELERATION);
-    private TrapezoidProfile.Constraints shoulderConstraints = new TrapezoidProfile.Constraints(
             ArmConstants.ELBOW_CRUISE,
             ArmConstants.ELBOW_ACCELERATION);
+    private TrapezoidProfile.Constraints shoulderConstraints = new TrapezoidProfile.Constraints(
+            ArmConstants.SHOULDER_CRUISE,
+            ArmConstants.SHOULDER_ACCELERATION);
 
     private ProfiledPIDController m_controllerElbow = new ProfiledPIDController(ArmConstants.GAINS_ELBOW_JOINT.kP,
             ArmConstants.GAINS_ELBOW_JOINT.kI, ArmConstants.GAINS_ELBOW_JOINT.kD, elbowConstraints);
@@ -294,24 +294,20 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public Vector<N2> calculateFeedforwards() {
-        // To set elbow constant, move forearm and bicep to
-        // vertical, set to elbow encoder value minus 90 (for horizontal)
-        Vector<N2> positionVector = VecBuilder.fill(Math.toRadians(m_elbowSetpoint),
-                // to set shoulder constant, move bicep and forearm to vertical
-                // and set to shoulder encoder value
-                Math.toRadians(-m_shoulderSetpoint + (180)));
-
-        Vector<N2> velocityVector = VecBuilder.fill(0.0, 0.0);
-        Vector<N2> accelVector = VecBuilder.fill(0.0, 0.0);
-        Vector<N2> vectorFF = m_doubleJointedFeedForwards.calculate(positionVector, velocityVector, accelVector);
+        double inputUpper = Math.toRadians(m_shoulderSetpoint);
+        double inputLower = Math.toRadians(m_elbowSetpoint);
+        Vector<N2> angles = VecBuilder.fill(inputLower, inputUpper);
+        Vector<N2> velocities = VecBuilder.fill(Math.toRadians(m_elbowEncoder.getVelocity()),
+                Math.toRadians(m_shoulderEncoder.getVelocity()));
+        Vector<N2> vectorFF = m_doubleJointedFeedForwards.feedforward(angles, velocities, VecBuilder.fill(0, 0));
         return vectorFF;
     }
 
     public void runShoulderProfiled() {
         double pidOutput = -m_controllerShoulder.calculate(getShoulderJointDegrees());
-        // double ff = -(calculateFeedforwards().get(1, 0)) / 12.0;
-        // SmartDashboard.putNumber("Shoulder ff", ff);
-        // SmartDashboard.putNumber("Shoulder PID", pidOutput);
+        double ff = -(calculateFeedforwards().get(1, 0)) / 12.0;
+        SmartDashboard.putNumber("Shoulder ff", ff);
+        SmartDashboard.putNumber("Shoulder PID", pidOutput);
         setPercentOutputShoulder(pidOutput); // may need to negate ff voltage to get
         // desired output
     }
@@ -322,10 +318,10 @@ public class ArmSubsystem extends SubsystemBase {
                 + m_shoulderEncoder.getVelocity(),
                 elbowConstraints.maxAcceleration));
         double pidOutput = -m_controllerElbow.calculate(getElbowJointDegrees());
-        // double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
-        // SmartDashboard.putNumber("Elbow ff", ff);
-        // SmartDashboard.putNumber("Elbow PID", pidOutput);
-        // setPercentOutputElbow(pidOutput); // may need to negate ff voltage to get
+        double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
+        SmartDashboard.putNumber("Elbow ff", ff);
+        SmartDashboard.putNumber("Elbow PID", pidOutput);
+        setPercentOutputElbow(pidOutput); // may need to negate ff voltage to get
         // desired output
     }
 

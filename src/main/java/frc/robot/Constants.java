@@ -157,7 +157,7 @@ public class Constants {
 
         // Motion Magic constants
         public static final double ELBOW_CRUISE = 35.0;
-        public static final double ELBOW_ACCELERATION = 55.0;
+        public static final double ELBOW_ACCELERATION = 60.0;
 
         public static final double SHOULDER_CRUISE = 35.0;
         public static final double SHOULDER_ACCELERATION = 60.0;
@@ -191,7 +191,7 @@ public class Constants {
         public static final Setpoint HIGH_SCORE = new Setpoint(HIGH_SCORE_Label, -35, 75, false, -35, 75, false);
 
         public static final Setpoint LONG_REST = new Setpoint(LONG_REST_Label, -156, 128, false, -156, 128, false);
-        public static final Setpoint LONG_MID_SCORE = new Setpoint(LONG_MID_SCORE_Label, -45, 90, false, -45, 90,
+        public static final Setpoint LONG_MID_SCORE = new Setpoint(LONG_MID_SCORE_Label, -95, 128, false, -45, 90,
                 false);
         public static final Setpoint LONG_HIGH_SCORE = new Setpoint(LONG_HIGH_SCORE_Label, -45, 90, false, -45, 90,
                 false);
