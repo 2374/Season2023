@@ -16,7 +16,9 @@ import com.ctre.phoenix.sensors.CANCoder;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -69,6 +71,12 @@ public class ArmSubsystem extends SubsystemBase {
     private String backwardState = "PICKUP";
 
     private static final int NO_CHANGE = 500;
+
+    protected ArmFeedforward shoulderfeedforwardController = new ArmFeedforward(Constants.Shoulder.KS, Constants.Shoulder.KG,
+            Constants.Shoulder.KV, Constants.Shoulder.KA);
+
+    protected final PIDController shoulderpidController = new PIDController(Constants.Shoulder.KP, Constants.Shoulder.KI,
+            Constants.Shoulder.KD);
 
     public ArmSubsystem(RobotContainer robotContainer) {
         container = robotContainer;
@@ -309,7 +317,15 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Shoulder ff", ff);
         SmartDashboard.putNumber("Shoulder PID", pidOutput);
         setPercentOutputShoulder(pidOutput); // may need to negate ff voltage to get
+
+
         // desired output
+        // Rotation2d velocity = Rotation2d.fromRadians(velocity.getRadians() + shoulderpidController.calculate(velocity.getRadians(), Math.toRadians(getShoulderJointDegrees())));
+
+        // double voltage = shoulderfeedforwardController.calculate(Math.toRadians(m_shoulderEncoder.getAbsolutePosition()) -Math.PI/2,  velocity.getRadians(),
+        //         new Rotation2d().getRadians());
+
+        // m_shoulderLeftJoint.setVoltage(voltage);
     }
 
     public void runElbowProfiled() {
