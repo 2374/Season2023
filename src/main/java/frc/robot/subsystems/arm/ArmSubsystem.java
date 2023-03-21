@@ -295,7 +295,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public Vector<N2> calculateFeedforwards() {
         double inputUpper = Math.toRadians(m_shoulderSetpoint);
-        double inputLower = Math.toRadians(m_elbowSetpoint);
+        double inputLower = Math.toRadians(m_elbowSetpoint + m_shoulderSetpoint);
         Vector<N2> angles = VecBuilder.fill(inputLower, inputUpper);
         Vector<N2> velocities = VecBuilder.fill(Math.toRadians(m_elbowEncoder.getVelocity()),
                 Math.toRadians(m_shoulderEncoder.getVelocity()));
@@ -315,7 +315,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void runElbowProfiled() {
         // System.out.println("running elbow="+m_elbowSetpoint);
         m_controllerElbow.setConstraints(new Constraints(elbowConstraints.maxVelocity
-                + m_shoulderEncoder.getVelocity(),
+        /* + m_shoulderEncoder.getVelocity() */,
                 elbowConstraints.maxAcceleration));
         double pidOutput = -m_controllerElbow.calculate(getElbowJointDegrees());
         double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
