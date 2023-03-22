@@ -159,11 +159,11 @@ public class Constants {
         public final static int TIMEOUT = 10;
 
         // Motion Magic constants
-        public static final double ELBOW_CRUISE = 35.0; // in units/s   DEGREES
-        public static final double ELBOW_ACCELERATION = 60.0; // in units/s   DEGREES
+        public static final double ELBOW_CRUISE = 75.0; // in units/s DEGREES
+        public static final double ELBOW_ACCELERATION = 60.0; // in units/s DEGREES
 
-        public static final double SHOULDER_CRUISE = 35.0; // in units/s   DEGREES
-        public static final double SHOULDER_ACCELERATION = 60.0; // in units/s   DEGREES
+        public static final double SHOULDER_CRUISE = 27.0; // in units/s DEGREES
+        public static final double SHOULDER_ACCELERATION = 45.0; // in units/s DEGREES
 
         public static final double DUTY_CYCLE_MIN = 1.0 / 1025.0;
         public static final double DUTY_CYCLE_MAX = 1024.0 / 1025.0;
@@ -175,7 +175,7 @@ public class Constants {
 
         // public static final Gains GAINS_ELBOW_JOINT = new Gains(0.75, 0.75, 0.0,
         // 0.00, 50);
-        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.4, 0.15, 0.0, 0.00, 50);
+        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.4, 0.15, 0.05, 0.00, 50);
     }
 
     public static final class ArmSetpoints {
@@ -193,10 +193,10 @@ public class Constants {
         public static final Setpoint LOW_SCORE = new Setpoint(LOW_SCORE_Label, 90, 60, false, 90, 60, false);
         public static final Setpoint HIGH_SCORE = new Setpoint(HIGH_SCORE_Label, -35, 75, false, -35, 75, false);
 
-        public static final Setpoint LONG_REST = new Setpoint(LONG_REST_Label, -156, 128, false, -156, 128, false);
+        public static final Setpoint LONG_REST = new Setpoint(LONG_REST_Label, -158, 128, false, -158, 128, false);
         public static final Setpoint LONG_MID_SCORE = new Setpoint(LONG_MID_SCORE_Label, -95, 128, false, -45, 90,
                 false);
-        public static final Setpoint LONG_HIGH_SCORE = new Setpoint(LONG_HIGH_SCORE_Label, -40, 85, false, -45, 90,
+        public static final Setpoint LONG_HIGH_SCORE = new Setpoint(LONG_HIGH_SCORE_Label, -40, 93, false, -53, 103,
                 false);
         public static final Setpoint LONG_MID_PICKUP = new Setpoint(LONG_MID_PICKUP_Label, -36, 92, false, -45, 90,
                 false);
@@ -240,8 +240,7 @@ public class Constants {
     public static final double WHEEL_RADIUS_IN = 2;
     public static final double WHEEL_GEAR_RATIO = 0;
 
-
-public static class Arm {
+    public static class Arm {
         public static final double HUMERUS_LENGTH = 0.969432;
         public static final double MANIPULATOR_LENGTH = 0.32;
         public static final double PIVOT_HEIGHT = 1.162025;
@@ -293,7 +292,8 @@ public static class Arm {
 
         public static final double FINISH_TOLERANCE = Units.degreesToRadians(0);
 
-        public static final TrapezoidProfile.Constraints TRAPEZOID_PROFILE_CONSTRAINTS = new TrapezoidProfile.Constraints(8, 8);
+        public static final TrapezoidProfile.Constraints TRAPEZOID_PROFILE_CONSTRAINTS = new TrapezoidProfile.Constraints(
+                8, 8);
     }
 
     public static class Wrist {
@@ -328,11 +328,10 @@ public static class Arm {
 
         public static final Rotation2d LIMIT_SWITCH_OFFSET = Rotation2d.fromDegrees(56);
 
-        //Min Angle
+        // Min Angle
         public static final double HORIZONTAL_TO_CORNER_ANGLE = 0.2985176246;
         public static final double JOINT_TO_CORNER_DISTANCE = Units.inchesToMeters(14);
         public static final double CLEARANCE_HEIGHT = 1;
     }
 
 }
-

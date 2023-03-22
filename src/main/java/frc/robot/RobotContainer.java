@@ -28,11 +28,11 @@ public class RobotContainer {
     private final XboxController m_driveController = new XboxController(Constants.CONTROLLER_USB_PORT_DRIVER);
     private final XboxController m_operatorController = new XboxController(Constants.CONTROLLER_USB_PORT_OPERATOR);
 
-    private SlewRateLimiter xLimiter = new SlewRateLimiter(6);
-    private SlewRateLimiter yLimiter = new SlewRateLimiter(6);
+    private SlewRateLimiter xLimiter = new SlewRateLimiter(5);
+    private SlewRateLimiter yLimiter = new SlewRateLimiter(5);
 
     private boolean slow = false;
-    private boolean turbo = false;
+    private boolean roll = false;
 
     /**
      * The robot container. Need I say more?
@@ -123,7 +123,7 @@ public class RobotContainer {
         tab.add("Autonomous Mode", getAutonomousChooser().getModeChooser()).withSize(2, 1).withPosition(1, 0);
         // tab.add(m_drivetrainSubsystem.getField()).withSize(3, 2).withPosition(0, 1);
         tab.addBoolean("SLOW", () -> isSlow()).withPosition(2, 1);
-        tab.addBoolean("TURBO", () -> isTurbo()).withPosition(1, 1);
+        tab.addBoolean("ROLL", () -> isRoll()).withPosition(1, 1);
         // tab.addBoolean("Auto", () ->
         // m_drivetrainSubsystem.getFollower().getCurrentTrajectory().isPresent());
     }
@@ -135,10 +135,10 @@ public class RobotContainer {
         // Drivetrain
         new Trigger(m_driveController::getBackButton)
                 .onTrue(new InstantCommand(m_DrivetrainSubsystem::zeroRotation, m_DrivetrainSubsystem));
-        new Trigger(m_driveController::getRightBumper).debounce(0.1, DebounceType.kFalling)
-                .onTrue(new InstantCommand(this::toggleSlow));
         new Trigger(m_driveController::getLeftBumper).debounce(0.1, DebounceType.kFalling)
-                .onTrue(new InstantCommand(this::toggleTurbo));
+                .onTrue(new InstantCommand(this::toggleSlow));
+        new Trigger(m_driveController::getRightBumper).debounce(0.1, DebounceType.kFalling)
+                .onTrue(new InstantCommand(this::toggleRoll));
 
         // Chassis
         new Trigger(m_operatorController::getStartButton)
@@ -222,10 +222,10 @@ public class RobotContainer {
             return -square(yLimiter.calculate(deadband(m_driveController.getLeftY(), 0.1))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
                     * DrivetrainSubsystem.SPEED_MULTIPLIER * 0.2);
-        } else if (turbo) {
+        } else if (roll) {
             return -square(yLimiter.calculate(deadband(m_driveController.getLeftY(), 0.1))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
-                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 1.5);
+                    * DrivetrainSubsystem.SPEED_MULTIPLIER * .5);
         } else {
             return -square(yLimiter.calculate(deadband(m_driveController.getLeftY(), 0.1))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
@@ -243,10 +243,10 @@ public class RobotContainer {
             return -square(xLimiter.calculate(deadband(m_driveController.getLeftX(), 0.1))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
                     * DrivetrainSubsystem.SPEED_MULTIPLIER * 0.2);
-        } else if (turbo) {
+        } else if (roll) {
             return -square(xLimiter.calculate(deadband(m_driveController.getLeftX(), 0.1))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
-                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 1.4);
+                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 0.5);
         } else {
             return -square(xLimiter.calculate(deadband(m_driveController.getLeftX(), 0.1))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
@@ -273,16 +273,16 @@ public class RobotContainer {
         return slow;
     }
 
-    public boolean isTurbo() {
-        return turbo;
+    public boolean isRoll() {
+        return roll;
     }
 
     public void toggleSlow() {
         slow = !slow;
     }
 
-    public void toggleTurbo() {
-        turbo = !turbo;
+    public void toggleRoll() {
+        roll = !roll;
     }
 
     /**

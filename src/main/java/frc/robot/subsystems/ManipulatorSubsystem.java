@@ -164,7 +164,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
             if (intakeMode) { // intake mode?
                 if (robotContainer.getChassisSubsystem().getSomething()) { // want something?
                     if (robotContainer.getChassisSubsystem().getWantACone()) { // want cone?
-                        if (sensor.getRange() < 60) {
+                        if (sensor.getRange() < 70) {
                             foundCounter++;
                             if (foundCounter > 10) {
                                 System.out.println("stopping due to enough results for cube less than 60");

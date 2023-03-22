@@ -72,10 +72,12 @@ public class ArmSubsystem extends SubsystemBase {
 
     private static final int NO_CHANGE = 500;
 
-    protected ArmFeedforward shoulderfeedforwardController = new ArmFeedforward(Constants.Shoulder.KS, Constants.Shoulder.KG,
+    protected ArmFeedforward shoulderfeedforwardController = new ArmFeedforward(Constants.Shoulder.KS,
+            Constants.Shoulder.KG,
             Constants.Shoulder.KV, Constants.Shoulder.KA);
 
-    protected final PIDController shoulderpidController = new PIDController(Constants.Shoulder.KP, Constants.Shoulder.KI,
+    protected final PIDController shoulderpidController = new PIDController(Constants.Shoulder.KP,
+            Constants.Shoulder.KI,
             Constants.Shoulder.KD);
 
     public ArmSubsystem(RobotContainer robotContainer) {
@@ -318,12 +320,15 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Shoulder PID", pidOutput);
         setPercentOutputShoulder(pidOutput); // may need to negate ff voltage to get
 
-
         // desired output
-        // Rotation2d velocity = Rotation2d.fromRadians(velocity.getRadians() + shoulderpidController.calculate(velocity.getRadians(), Math.toRadians(getShoulderJointDegrees())));
+        // Rotation2d velocity = Rotation2d.fromRadians(velocity.getRadians() +
+        // shoulderpidController.calculate(velocity.getRadians(),
+        // Math.toRadians(getShoulderJointDegrees())));
 
-        // double voltage = shoulderfeedforwardController.calculate(Math.toRadians(m_shoulderEncoder.getAbsolutePosition()) -Math.PI/2,  velocity.getRadians(),
-        //         new Rotation2d().getRadians());
+        // double voltage =
+        // shoulderfeedforwardController.calculate(Math.toRadians(m_shoulderEncoder.getAbsolutePosition())
+        // -Math.PI/2, velocity.getRadians(),
+        // new Rotation2d().getRadians());
 
         // m_shoulderLeftJoint.setVoltage(voltage);
     }
@@ -366,7 +371,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setPercentOutputElbow(double speed) {
-        double t = degreesPerSecondToPower(speed) * 400; // 300; //120;
+        double t = degreesPerSecondToPower(speed) * 450; // 300; //120;
         // SmartDashboard.putNumber("elbow", t);
         m_elbowLeftJoint.set(TalonFXControlMode.PercentOutput, t);
     }
