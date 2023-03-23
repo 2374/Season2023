@@ -160,10 +160,10 @@ public class Constants {
 
         // Motion Magic constants
         public static final double ELBOW_CRUISE = 75.0; // in units/s DEGREES
-        public static final double ELBOW_ACCELERATION = 60.0; // in units/s DEGREES
+        public static final double ELBOW_ACCELERATION = 70.0; // in units/s DEGREES
 
-        public static final double SHOULDER_CRUISE = 27.0; // in units/s DEGREES
-        public static final double SHOULDER_ACCELERATION = 45.0; // in units/s DEGREES
+        public static final double SHOULDER_CRUISE = 35.0; // in units/s DEGREES
+        public static final double SHOULDER_ACCELERATION = 50.0; // in units/s DEGREES
 
         public static final double DUTY_CYCLE_MIN = 1.0 / 1025.0;
         public static final double DUTY_CYCLE_MAX = 1024.0 / 1025.0;
@@ -175,7 +175,7 @@ public class Constants {
 
         // public static final Gains GAINS_ELBOW_JOINT = new Gains(0.75, 0.75, 0.0,
         // 0.00, 50);
-        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.4, 0.15, 0.05, 0.00, 50);
+        public static final Gains GAINS_ELBOW_JOINT = new Gains(0.4, 0.15, 0.0, 0.00, 50);
     }
 
     public static final class ArmSetpoints {

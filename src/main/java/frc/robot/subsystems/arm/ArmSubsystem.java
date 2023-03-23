@@ -18,7 +18,6 @@ import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -82,9 +81,6 @@ public class ArmSubsystem extends SubsystemBase {
 
     public ArmSubsystem(RobotContainer robotContainer) {
         container = robotContainer;
-
-        m_controllerElbow.setTolerance(1, 1);
-        m_controllerShoulder.setTolerance(1, 1);
         // following
         m_elbowRightJoint.follow(m_elbowLeftJoint);
         m_shoulderRightJoint.follow(m_shoulderLeftJoint);
@@ -160,8 +156,8 @@ public class ArmSubsystem extends SubsystemBase {
         m_elbowRightJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
         m_shoulderRightJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
 
-        m_controllerShoulder.setTolerance(5, 3);
-        m_controllerElbow.setTolerance(7, 3);
+        m_controllerShoulder.setTolerance(5, 4);
+        m_controllerElbow.setTolerance(5, 4);
 
         // m_elbowLeftJoint.configForwardSoftLimitEnable(false, ArmConstants.TIMEOUT);
         // m_shoulderLeftJoint.configForwardSoftLimitEnable(false,

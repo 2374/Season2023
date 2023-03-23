@@ -2,6 +2,9 @@ package frc.robot.util;
 
 import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 // import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -9,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.*;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -65,42 +69,52 @@ public class AutonomousChooser {
                  * score, go back, wait till > 10, wait till < 2, wait .2, go forward,
                  * wait till > 10, wait .1, slow down, wait till < 8, balence
                  */
-                new InstantCommand(() -> container.getDrivetrain().drive(new ChassisSpeeds(-1.6, 0, 0)),
-                        container.getDrivetrain()),
-                new WaitUntilCommand(new BooleanSupplier() {
-                    public boolean getAsBoolean() {
-                        return container.getDrivetrain().getPitch() < -10;
-                    };
-                }),
-                new WaitCommand(.1),
-                new InstantCommand(() -> container.getDrivetrain().drive(new ChassisSpeeds(-0.6, 0, 0)),
-                        container.getDrivetrain()),
-                new WaitUntilCommand(new BooleanSupplier() {
-                    public boolean getAsBoolean() {
-                        return container.getDrivetrain().getPitch() > -8;
-                    };
-                }),
-                new RunCommand(() -> container.getDrivetrain().autoBalenceTick(),
-                        container.getDrivetrain())
+                // BALENCING
+                // new InstantCommand(() -> container.getDrivetrain().drive(new
+                // ChassisSpeeds(-1.6, 0, 0)),
+                // container.getDrivetrain()),
+                // new WaitUntilCommand(new BooleanSupplier() {
+                // public boolean getAsBoolean() {
+                // return container.getDrivetrain().getPitch() < -10;
+                // };
+                // }),
+                // new WaitCommand(.1),
+                // new InstantCommand(() -> container.getDrivetrain().drive(new
+                // ChassisSpeeds(-0.6, 0, 0)),
+                // container.getDrivetrain()),
+                // new WaitUntilCommand(new BooleanSupplier() {
+                // public boolean getAsBoolean() {
+                // return container.getDrivetrain().getPitch() > -8;
+                // };
+                // }),
+                // new RunCommand(() -> container.getDrivetrain().autoBalenceTick(),
+                // container.getDrivetrain())
 
-        // new RunCommand(() -> {
-        // if ((container.getDrivetrain().getYaw() - 90) % 360 > 0) {
-        // container.getDrivetrain().drive(
-        // new ChassisSpeeds(0, 0,
-        // 2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) + 0.2));
-        // } else {
-        // container.getDrivetrain().drive(
-        // new ChassisSpeeds(0, 0,
-        // -2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) - 0.2));
-        // }
-        // }).until(new BooleanSupplier() {
-        // public boolean getAsBoolean() {
-        // if (Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5) {
-        // System.out.println(true);
-        // }
-        // return Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5;
-        // };
-        // }));
+                // ALIGNING
+                // new RunCommand(() -> {
+                // if ((container.getDrivetrain().getYaw() - 90) % 360 > 0) {
+                // container.getDrivetrain().drive(
+                // new ChassisSpeeds(0, 0,
+                // 2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) + 0.2));
+                // } else {
+                // container.getDrivetrain().drive(
+                // new ChassisSpeeds(0, 0,
+                // -2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) - 0.2));
+                // }
+                // }).until(new BooleanSupplier() {
+                // public boolean getAsBoolean() {
+                // if (Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5) {
+                // System.out.println(true);
+                // }
+                // return Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5;
+                // };
+                // })
+
+                // SCORING
+                resetRobotPose(container),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointUP()),
+                backWhileOuttake(container),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK())
 
         // followLine(container, 1, 0, 90)
         );
@@ -163,7 +177,25 @@ public class AutonomousChooser {
 
         command.addCommands(
                 resetRobotPose(container),
-                followLine(container, -4, 0));
+                followLine(container, -2, 0),
+                new RunCommand(() -> {
+                    if ((container.getDrivetrain().getYaw() - 90) % 360 > 180) {
+                        container.getDrivetrain().drive(
+                                new ChassisSpeeds(0, 0,
+                                        2 * ((container.getDrivetrain().getYaw() - 90 + 180) % 360 / 360) + 0.2));
+                    } else {
+                        container.getDrivetrain().drive(
+                                new ChassisSpeeds(0, 0,
+                                        -2 * ((container.getDrivetrain().getYaw() - 90 + 180) % 360 / 360) - 0.2));
+                    }
+                }).until(new BooleanSupplier() {
+                    public boolean getAsBoolean() {
+                        if (Math.abs(((container.getDrivetrain().getYaw() - 90) % 360) - 180) < 5) {
+                            System.out.println(true);
+                        }
+                        return Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5;
+                    };
+                }));
 
         return command;
     }
@@ -173,14 +205,26 @@ public class AutonomousChooser {
 
         command.addCommands(
                 resetRobotPose(container),
-                gotoSetpoint(container, () -> container.getArmSubsystem().setpointDOWN()),
-                gotoSetpoint(container, () -> container.getArmSubsystem().setpointFORWARD()),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointUP()),
                 backWhileOuttake(container),
-                gotoSetpoint(container, () -> container.getArmSubsystem().setpointDOWN()),
-                followLine(container, -3.7, 0),
-                followLine(container, 0, 0, 180),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK()),
+                followLine(container, -3.5, 0),
+                new RunCommand(() -> {
+                    if ((container.getDrivetrain().getYaw() - 90) % 360 > 180) {
+                        container.getDrivetrain().drive(
+                                new ChassisSpeeds(0, 0,
+                                        2 * ((container.getDrivetrain().getYaw() - 90 + 180) % 360 / 360) + 0.3));
+                    } else {
+                        container.getDrivetrain().drive(
+                                new ChassisSpeeds(0, 0,
+                                        -2 * ((container.getDrivetrain().getYaw() - 90 + 180) % 360 / 360) - 0.3));
+                    }
+                }).until(new BooleanSupplier() {
+                    public boolean getAsBoolean() {
+                        return Math.abs(((container.getDrivetrain().getYaw() - 90) % 360) - 180) < 5;
+                    };
+                }),
                 resetRobotPose(container));
-
         return command;
     }
 
@@ -189,16 +233,26 @@ public class AutonomousChooser {
 
         command.addCommands(
                 resetRobotPose(container),
-                gotoSetpoint(container, () -> container.getArmSubsystem().setpointDOWN()),
-                gotoSetpoint(container, () -> container.getArmSubsystem().setpointFORWARD()),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointUP()),
                 backWhileOuttake(container),
-                gotoSetpoint(container, () -> container.getArmSubsystem().setpointDOWN()), // SKIPPING FOR SOME REASON
-                new WaitCommand(0.2),
-                mountChargeStation(container, -3), // POSSIBLY RESETTING THE GYROSCOPE
-                // new RunCommand(() -> container.getDrivetrain().autoBalenceTick(),
-                // container.getDrivetrain())
-                new WaitCommand(0.05),
-                followLine(container, -1, 0));
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK()),
+                new InstantCommand(() -> container.getDrivetrain().drive(new ChassisSpeeds(-1.6, 0, 0)),
+                        container.getDrivetrain()),
+                new WaitUntilCommand(new BooleanSupplier() {
+                    public boolean getAsBoolean() {
+                        return container.getDrivetrain().getPitch() < -10;
+                    };
+                }),
+                new WaitCommand(.1),
+                new InstantCommand(() -> container.getDrivetrain().drive(new ChassisSpeeds(-0.5, 0, 0)),
+                        container.getDrivetrain()),
+                new WaitUntilCommand(new BooleanSupplier() {
+                    public boolean getAsBoolean() {
+                        return container.getDrivetrain().getPitch() > -8;
+                    };
+                }),
+                new RunCommand(() -> container.getDrivetrain().autoBalenceTick(),
+                        container.getDrivetrain()));
 
         return command;
     }

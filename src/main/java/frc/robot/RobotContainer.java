@@ -122,8 +122,8 @@ public class RobotContainer {
         }
         tab.add("Autonomous Mode", getAutonomousChooser().getModeChooser()).withSize(2, 1).withPosition(1, 0);
         // tab.add(m_drivetrainSubsystem.getField()).withSize(3, 2).withPosition(0, 1);
-        tab.addBoolean("SLOW", () -> isSlow()).withPosition(2, 1);
-        tab.addBoolean("ROLL", () -> isRoll()).withPosition(1, 1);
+        tab.addBoolean("SLOW", () -> isSlow()).withPosition(1, 1);
+        tab.addBoolean("ROLL", () -> isRoll()).withPosition(2, 1);
         // tab.addBoolean("Auto", () ->
         // m_drivetrainSubsystem.getFollower().getCurrentTrajectory().isPresent());
     }
