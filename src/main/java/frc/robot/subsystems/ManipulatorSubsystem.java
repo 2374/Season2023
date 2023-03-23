@@ -18,12 +18,10 @@ public class ManipulatorSubsystem extends SubsystemBase {
     private TimeOfFlight sensor = new TimeOfFlight(Constants.MANIPULATOR_DISTANCE_SENSOR_CAN_ID);
     private Boolean intakeMode = false; // we start the match with a cone in the manipulator ready to deploy
     private Boolean active = false; // are we actively intaking or outtaking?
-    private Boolean direction = false;
     private RobotContainer robotContainer;
     private int foundCounter = 0;
-    // private PidController controller = new
-    // PidController(Constants.WRIST_PID_CONSTANTS);
-
+    private Boolean pulseToggle = true;
+    
     /**
      * The subsystem for managing the manipulator and the wrist
      * 
@@ -34,24 +32,16 @@ public class ManipulatorSubsystem extends SubsystemBase {
                 Constants.CAN_BUS_NAME_ROBORIO);
         intakeMotor.setNeutralMode(NeutralMode.Brake);
         intakeMotor.setInverted(true);
-        // wristRotationMotor = new
-        // WPI_TalonFX(Constants.MANIPULATOR_WRIST_MOTOR_CAN_ID,
-        // Constants.CAN_BUS_NAME_ROBORIO);
+        
         // set the sensor to short range 1300 or less and sample evry 200ms
         sensor.setRangingMode(RangingMode.Short, 50);
         // // restrict the image to the center of the sensor 16x16 is the full grid
         sensor.setRangeOfInterest(7, 7, 9, 9);
         robotContainer = container; // give us a pointer back to the robot container to reference cube/cone desire
-        // wristRotationMotor.getSensorCollection().setIntegratedSensorPosition(0, 100);
-        // controller.setContinuous(false);
-        // controller.setInputRange(0, 9216);
-        // controller.setOutputRange(-.1, 0.1);
-        // controller.setSetpoint(0);
-        // wristRotationMotor.setInverted(TalonFXInvertType.CounterClockwise);
-        // wristRotationMotor.configNeutralDeadband(0.01);
-        // wristRotationMotor.setNeutralMode(NeutralMode.Brake);
+        
     }
 
+    
     /**
      * Starts intaking
      */
@@ -80,40 +70,6 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     /**
-     * rotate wrist left
-     */
-    // public void rotateLeft() { // Use PID for this later
-    // wristRotationMotor.set(-.1);
-    // }
-
-    /**
-     * rotate wrist right
-     */
-    // public void rotateRight() {
-    // wristRotationMotor.set(.1);
-    // }
-
-    public void toggleRotate() {
-        // if (direction) {
-        // controller.setSetpoint(0);
-        // } else {
-        // controller.setSetpoint(9216);
-        // }
-        direction = !direction;
-    }
-
-    /**
-     * stops rotating wrist
-     */
-    // public void stopRotation() {
-    // wristRotationMotor.stopMotor();
-    // }
-
-    // public void resetEncoder() {
-    // wristRotationMotor.getSensorCollection().setIntegratedSensorPosition(0, 100);
-    // }
-
-    /**
      * @return The distance measured by the Time of Flight Sensor in millimeters
      */
     public double getDistance() {
@@ -139,22 +95,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         // The distance from the TOF Sensor comes back in cm from 10->1400ish
         // We want to stop the motor automatically when the intakeMode is true
         // at the correct distance for each object
-        // wristRotationMotor.set(controller.calculate(
-        // wristRotationMotor.getSensorCollection().getIntegratedSensorPosition(),
-        // Robot.kDefaultPeriod));
-        // SmartDashboard.putNumber("Wrist Encoder",
-        // wristRotationMotor.getSensorCollection().getIntegratedSensorPosition());
-        // if (direction &&
-        // wristRotationMotor.getSensorCollection().getIntegratedSensorPosition() <
-        // 8500) {
-        // wristRotationMotor.set(0.05);
-        // } else if (!direction &&
-        // wristRotationMotor.getSensorCollection().getIntegratedSensorPosition() >
-        // 1500) {
-        // wristRotationMotor.set(-0.05);
-        // } else {
-        // wristRotationMotor.stopMotor();
-        // }
+       
         if (active) { // is active?
             // System.out.println("Sensor=" +
             // robotContainer.getChassisSubsystem().getWantACone() + " "
@@ -198,6 +139,19 @@ public class ManipulatorSubsystem extends SubsystemBase {
                     }
                 }
             }
+        } else {
+            if (robotContainer.getChassisSubsystem().getWantACube()) { 
+                // make motor pulse on intake to hold cubes
+                if (pulseToggle) {
+                    intakeMotor.set(.4);
+                    pulseToggle = false;
+                } else {
+                    intakeMotor.stopMotor();
+                    pulseToggle = true;
+                }
+            } else {
+                pulseToggle = false;
+            }
         }
-    }
+    } 
 }

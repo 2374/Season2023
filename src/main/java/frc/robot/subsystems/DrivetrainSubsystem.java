@@ -372,9 +372,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         }
     }
 
-    public void setBrakeMode() {
-    }
-
     public void printAngles() {
         System.out.println("Pitch - " + pigeon.getPitch());
         System.out.println("Roll - " + pigeon.getRoll());
