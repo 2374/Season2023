@@ -21,6 +21,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     private RobotContainer robotContainer;
     private int foundCounter = 0;
     private Boolean pulseToggle = true;
+    private int toggleCounter = 0;
     
     /**
      * The subsystem for managing the manipulator and the wrist
@@ -142,7 +143,8 @@ public class ManipulatorSubsystem extends SubsystemBase {
         } else {
             if (robotContainer.getChassisSubsystem().getWantACube()) { 
                 // make motor pulse on intake to hold cubes
-                if (pulseToggle) {
+                toggleCounter++;
+                if ((toggleCounter % 50 == 0) && pulseToggle) {
                     intakeMotor.set(.4);
                     pulseToggle = false;
                 } else {
