@@ -348,11 +348,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public boolean shoulderAtSetpoint() {
-        return m_controllerShoulder.atSetpoint();
+        return m_controllerShoulder.atGoal();
     }
 
     public boolean elbowAtSetpoint() {
-        return m_controllerElbow.atSetpoint();
+        return m_controllerElbow.atGoal();
     }
 
     public boolean bothJointsAtSetpoint() {

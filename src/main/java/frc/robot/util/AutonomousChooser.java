@@ -161,6 +161,12 @@ public class AutonomousChooser {
     public Command getRedOuterChargeCommand(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
+        command.addCommands(
+                resetRobotPose(container),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointUP()),
+                backWhileOuttake(container),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK()));
+
         // assumes robot starts in front of the outer scoring poles
         // score the cone on the top row
         // move 4.7 meters toward the center of the field so as to clear the charge
@@ -244,7 +250,7 @@ public class AutonomousChooser {
                     };
                 }),
                 new WaitCommand(.1),
-                new InstantCommand(() -> container.getDrivetrain().drive(new ChassisSpeeds(-0.5, 0, 0)),
+                new InstantCommand(() -> container.getDrivetrain().drive(new ChassisSpeeds(-0.6, 0, 0)),
                         container.getDrivetrain()),
                 new WaitUntilCommand(new BooleanSupplier() {
                     public boolean getAsBoolean() {
