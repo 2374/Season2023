@@ -85,32 +85,33 @@ public class AutonomousChooser {
                 // }),
                 // new RunCommand(() -> container.getDrivetrain().autoBalenceTick(),
                 // container.getDrivetrain())
+                mountAndBalence(container)
 
-                // ALIGNING
-                // new RunCommand(() -> {
-                // if ((container.getDrivetrain().getYaw() - 90) % 360 > 0) {
-                // container.getDrivetrain().drive(
-                // new ChassisSpeeds(0, 0,
-                // 2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) + 0.2));
-                // } else {
-                // container.getDrivetrain().drive(
-                // new ChassisSpeeds(0, 0,
-                // -2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) - 0.2));
-                // }
-                // }).until(new BooleanSupplier() {
-                // public boolean getAsBoolean() {
-                // if (Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5) {
-                // System.out.println(true);
-                // }
-                // return Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5;
-                // };
-                // })
+        // ALIGNING
+        // new RunCommand(() -> {
+        // if ((container.getDrivetrain().getYaw() - 90) % 360 > 0) {
+        // container.getDrivetrain().drive(
+        // new ChassisSpeeds(0, 0,
+        // 2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) + 0.2));
+        // } else {
+        // container.getDrivetrain().drive(
+        // new ChassisSpeeds(0, 0,
+        // -2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) - 0.2));
+        // }
+        // }).until(new BooleanSupplier() {
+        // public boolean getAsBoolean() {
+        // if (Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5) {
+        // System.out.println(true);
+        // }
+        // return Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5;
+        // };
+        // })
 
-                // SCORING
-                resetRobotPose(container),
-                gotoSetpoint(container, () -> container.getArmSubsystem().setpointUP()),
-                backWhileOuttake(container),
-                gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK())
+        // SCORING
+        // resetRobotPose(container),
+        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointUP()),
+        // backWhileOuttake(container),
+        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK())
 
         // followLine(container, 1, 0, 90)
         );
@@ -238,24 +239,7 @@ public class AutonomousChooser {
                 gotoSetpoint(container, () -> container.getArmSubsystem().setpointUP()),
                 backWhileOuttake(container),
                 gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK()),
-                new InstantCommand(() -> container.getDrivetrain().drive(new ChassisSpeeds(-1.6, 0, 0)),
-                        container.getDrivetrain()),
-                new WaitUntilCommand(new BooleanSupplier() {
-                    public boolean getAsBoolean() {
-                        return container.getDrivetrain().getPitch() < -10;
-                    };
-                }),
-                new WaitCommand(.1),
-                new InstantCommand(() -> container.getDrivetrain().drive(new ChassisSpeeds(-0.6, 0, 0)),
-                        container.getDrivetrain()),
-                new WaitUntilCommand(new BooleanSupplier() {
-                    public boolean getAsBoolean() {
-                        return container.getDrivetrain().getPitch() > -8;
-                    };
-                }),
-                new RunCommand(() -> container.getDrivetrain().autoBalenceTick(),
-                        container.getDrivetrain()));
-
+                mountAndBalence(container));
         return command;
     }
 
@@ -306,16 +290,28 @@ public class AutonomousChooser {
         return followLine(container, x, y, 0);
     }
 
-    private Command mountChargeStation(RobotContainer container, double x) {
-        TrajectoryConstraint[] contraints = {
-                new FeedforwardConstraint(2, DrivetrainSubsystem.FEEDFORWARD_CONSTANTS.getVelocityConstant(),
-                        DrivetrainSubsystem.FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
-                new MaxAccelerationConstraint(5.0), new CentripetalAccelerationConstraint(5.0) };
-        return new FollowTrajectoryCommand(container.getDrivetrain(),
-                new Trajectory(
-                        new SimplePathBuilder(new Vector2(0, 0), Rotation2.ZERO)
-                                .lineTo(new Vector2(x, 0), Rotation2.ZERO).build(),
-                        contraints, 0.1));
+    private Command mountAndBalence(RobotContainer container) {
+        return new InstantCommand(() -> container.getDrivetrain().drive(new ChassisSpeeds(-1.6, 0, 0)),
+                container.getDrivetrain()).andThen(
+                        new WaitUntilCommand(new BooleanSupplier() {
+                            public boolean getAsBoolean() {
+                                return container.getDrivetrain().getPitch() < -10;
+                            };
+                        }))
+                .andThen(
+                        new WaitCommand(.2))
+                .andThen(
+                        new InstantCommand(() -> container.getDrivetrain().drive(new ChassisSpeeds(-0.6, 0, 0)),
+                                container.getDrivetrain()))
+                .andThen(
+                        new WaitUntilCommand(new BooleanSupplier() {
+                            public boolean getAsBoolean() {
+                                return container.getDrivetrain().getPitch() > -8;
+                            };
+                        }))
+                .andThen(
+                        new RunCommand(() -> container.getDrivetrain().autoBalenceTick(),
+                                container.getDrivetrain()));
     }
 
     // private Command gotoSetPoint(RobotContainer container, Setpoint setpoint) {

@@ -22,7 +22,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     private int foundCounter = 0;
     private Boolean pulseToggle = true;
     private int toggleCounter = 0;
-    
+
     /**
      * The subsystem for managing the manipulator and the wrist
      * 
@@ -33,16 +33,15 @@ public class ManipulatorSubsystem extends SubsystemBase {
                 Constants.CAN_BUS_NAME_ROBORIO);
         intakeMotor.setNeutralMode(NeutralMode.Brake);
         intakeMotor.setInverted(true);
-        
+
         // set the sensor to short range 1300 or less and sample evry 200ms
         sensor.setRangingMode(RangingMode.Short, 50);
         // // restrict the image to the center of the sensor 16x16 is the full grid
         sensor.setRangeOfInterest(7, 7, 9, 9);
         robotContainer = container; // give us a pointer back to the robot container to reference cube/cone desire
-        
+
     }
 
-    
     /**
      * Starts intaking
      */
@@ -96,7 +95,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         // The distance from the TOF Sensor comes back in cm from 10->1400ish
         // We want to stop the motor automatically when the intakeMode is true
         // at the correct distance for each object
-       
+
         if (active) { // is active?
             // System.out.println("Sensor=" +
             // robotContainer.getChassisSubsystem().getWantACone() + " "
@@ -141,11 +140,11 @@ public class ManipulatorSubsystem extends SubsystemBase {
                 }
             }
         } else {
-            if (robotContainer.getChassisSubsystem().getWantACube()) { 
+            if (robotContainer.getChassisSubsystem().getWantACube()) {
                 // make motor pulse on intake to hold cubes
                 toggleCounter++;
-                if ((toggleCounter % 50 == 0) && pulseToggle) {
-                    intakeMotor.set(.4);
+                if ((toggleCounter % 20 == 0) && pulseToggle) {
+                    intakeMotor.set(.6);
                     pulseToggle = false;
                 } else {
                     intakeMotor.stopMotor();
@@ -155,5 +154,5 @@ public class ManipulatorSubsystem extends SubsystemBase {
                 pulseToggle = false;
             }
         }
-    } 
+    }
 }

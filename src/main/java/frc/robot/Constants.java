@@ -104,7 +104,7 @@ public class Constants {
     public static final class ArmConstants {
 
         public static final double ELBOW_ANGLE_OFFSET = -63;
-        public static final double SHOULDER_ANGLE_OFFSET = 119;
+        public static final double SHOULDER_ANGLE_OFFSET = 61; // TODO recalibrate
 
         // public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.01,
         // 0.0, 50);
@@ -196,7 +196,7 @@ public class Constants {
         public static final Setpoint LONG_REST = new Setpoint(LONG_REST_Label, -158, 128, false, -158, 128, false);
         public static final Setpoint LONG_MID_SCORE = new Setpoint(LONG_MID_SCORE_Label, -95, 128, false, -45, 90,
                 false);
-        public static final Setpoint LONG_HIGH_SCORE = new Setpoint(LONG_HIGH_SCORE_Label, -40, 93, false, -53, 103,
+        public static final Setpoint LONG_HIGH_SCORE = new Setpoint(LONG_HIGH_SCORE_Label, -42, 94, false, -53, 103,
                 false);
         public static final Setpoint LONG_MID_PICKUP = new Setpoint(LONG_MID_PICKUP_Label, -36, 92, false, -45, 90,
                 false);

@@ -364,9 +364,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void autoBalenceTick() {
         double pitch = pigeon.getPitch();
         if (pitch > 2.5) {
-            drive(new ChassisSpeeds(Math.min(0.35, pitch / 25), 0, 0));
+            drive(new ChassisSpeeds(Math.min(0.4, pitch / 30), 0, 0));
         } else if (pitch < -2.5) {
-            drive(new ChassisSpeeds(Math.max(-0.35, pitch / 25), 0, 0));
+            drive(new ChassisSpeeds(Math.max(-0.4, pitch / 30), 0, 0));
         } else {
             drive(new ChassisSpeeds(0, 0, 0));
         }
