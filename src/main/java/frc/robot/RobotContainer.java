@@ -221,17 +221,17 @@ public class RobotContainer {
      */
     private double getForwardInput() {
         if (slow) {
-            return -square(yLimiter.calculate(deadband(m_driveController.getLeftY(), 0.1))
+            return -square(yLimiter.calculate(deadband(m_driveController.getLeftY(), 0.1)))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
-                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 0.2);
+                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 0.2;
         } else if (roll) {
-            return -square(yLimiter.calculate(deadband(m_driveController.getLeftY(), 0.1))
+            return -square(yLimiter.calculate(deadband(m_driveController.getLeftY(), 0.1)))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
-                    * DrivetrainSubsystem.SPEED_MULTIPLIER * .5);
+                    * DrivetrainSubsystem.SPEED_MULTIPLIER * .5;
         } else {
-            return -square(yLimiter.calculate(deadband(m_driveController.getLeftY(), 0.1))
+            return -square(yLimiter.calculate(deadband(m_driveController.getLeftY(), 0.1)))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
-                    * DrivetrainSubsystem.SPEED_MULTIPLIER);
+                    * DrivetrainSubsystem.SPEED_MULTIPLIER;
         }
     }
 
@@ -242,17 +242,17 @@ public class RobotContainer {
      */
     private double getStrafeInput() {
         if (slow) {
-            return -square(xLimiter.calculate(deadband(m_driveController.getLeftX(), 0.1))
+            return -square(xLimiter.calculate(deadband(m_driveController.getLeftX(), 0.1)))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
-                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 0.2);
+                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 0.2;
         } else if (roll) {
-            return -square(xLimiter.calculate(deadband(m_driveController.getLeftX(), 0.1))
+            return -square(xLimiter.calculate(deadband(m_driveController.getLeftX(), 0.1)))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
-                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 0.5);
+                    * DrivetrainSubsystem.SPEED_MULTIPLIER * 0.5;
         } else {
-            return -square(xLimiter.calculate(deadband(m_driveController.getLeftX(), 0.1))
+            return -square(xLimiter.calculate(deadband(m_driveController.getLeftX(), 0.1)))
                     * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND
-                    * DrivetrainSubsystem.SPEED_MULTIPLIER);
+                    * DrivetrainSubsystem.SPEED_MULTIPLIER;
         }
     }
 

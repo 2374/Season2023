@@ -39,7 +39,7 @@ import frc.common.util.HolonomicFeedforward;
 import static frc.robot.Constants.*;
 
 public class DrivetrainSubsystem extends SubsystemBase {
-    public static double SPEED_MULTIPLIER = .65;
+    public static double SPEED_MULTIPLIER = .25;
     public static final double MAX_VOLTAGE = 12.0;
     public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0
             * SdsModuleConfigurations.MK3_FAST.getDriveReduction() * SdsModuleConfigurations.MK3_FAST.getWheelDiameter()
