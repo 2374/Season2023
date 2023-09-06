@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
             m_robotContainer.getArmSubsystem().reset();
             m_robotContainer.getArmSubsystem().brakeOff();
         }
-        m_robotContainer.getChassisSubsystem().setWantNothing();
+        // m_robotContainer.getChassisSubsystem().setWantNothing();
     }
 
     @Override

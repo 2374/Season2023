@@ -37,7 +37,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         // set the sensor to short range 1300 or less and sample evry 200ms
         sensor.setRangingMode(RangingMode.Short, 50);
         // // restrict the image to the center of the sensor 16x16 is the full grid
-        sensor.setRangeOfInterest(7, 7, 9, 9);
+        sensor.setRangeOfInterest(7, 7, 8, 8);
         robotContainer = container; // give us a pointer back to the robot container to reference cube/cone desire
 
     }
@@ -116,7 +116,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
                         }
                     } else if (robotContainer.getChassisSubsystem().getWantACube()) { // want cube?
 
-                        if (sensor.getRange() < 130) {
+                        if (sensor.getRange() < 100) {
                             foundCounter++;
                             if (foundCounter > 15) {
                                 System.out.println("stopping due to enough results for cube less than 130");
@@ -140,18 +140,14 @@ public class ManipulatorSubsystem extends SubsystemBase {
                 }
             }
         } else {
-            if (robotContainer.getChassisSubsystem().getWantACube()) {
-                // make motor pulse on intake to hold cubes
-                toggleCounter++;
-                if ((toggleCounter % 20 == 0) && pulseToggle) {
-                    intakeMotor.set(.6);
-                    pulseToggle = false;
-                } else {
-                    intakeMotor.stopMotor();
-                    pulseToggle = true;
-                }
-            } else {
+            // make motor pulse on intake to hold cubes
+            toggleCounter++;
+            if (robotContainer.getChassisSubsystem().getWantACube() && (toggleCounter % 20 == 0) && pulseToggle) {
+                intakeMotor.set(.6);
                 pulseToggle = false;
+            } else {
+                intakeMotor.stopMotor();
+                pulseToggle = true;
             }
         }
     }

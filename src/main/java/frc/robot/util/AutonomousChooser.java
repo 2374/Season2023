@@ -85,33 +85,33 @@ public class AutonomousChooser {
                 // }),
                 // new RunCommand(() -> container.getDrivetrain().autoBalenceTick(),
                 // container.getDrivetrain())
-                mountAndBalence(container)
+                // mountAndBalence(container)
 
-        // ALIGNING
-        // new RunCommand(() -> {
-        // if ((container.getDrivetrain().getYaw() - 90) % 360 > 0) {
-        // container.getDrivetrain().drive(
-        // new ChassisSpeeds(0, 0,
-        // 2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) + 0.2));
-        // } else {
-        // container.getDrivetrain().drive(
-        // new ChassisSpeeds(0, 0,
-        // -2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) - 0.2));
-        // }
-        // }).until(new BooleanSupplier() {
-        // public boolean getAsBoolean() {
-        // if (Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5) {
-        // System.out.println(true);
-        // }
-        // return Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5;
-        // };
-        // })
+                // ALIGNING
+                // new RunCommand(() -> {
+                // if ((container.getDrivetrain().getYaw() - 90) % 360 > 0) {
+                // container.getDrivetrain().drive(
+                // new ChassisSpeeds(0, 0,
+                // 2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) + 0.2));
+                // } else {
+                // container.getDrivetrain().drive(
+                // new ChassisSpeeds(0, 0,
+                // -2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) - 0.2));
+                // }
+                // }).until(new BooleanSupplier() {
+                // public boolean getAsBoolean() {
+                // if (Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5) {
+                // System.out.println(true);
+                // }
+                // return Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5;
+                // };
+                // })
 
-        // SCORING
-        // resetRobotPose(container),
-        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointUP()),
-        // backWhileOuttake(container),
-        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK())
+                // SCORING
+                resetRobotPose(container),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointUP()),
+                backWhileOuttake(container),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK())
 
         // followLine(container, 1, 0, 90)
         );
@@ -212,22 +212,22 @@ public class AutonomousChooser {
                 backWhileOuttake(container),
                 gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK()),
                 followLine(container, -3.5, 0),
-                new RunCommand(() -> {
-                    if ((container.getDrivetrain().getYaw() - 90) % 360 > 180) {
-                        container.getDrivetrain().drive(
-                                new ChassisSpeeds(0, 0,
-                                        2 * ((container.getDrivetrain().getYaw() - 90 + 180) % 360 / 360) + 0.3));
-                    } else {
-                        container.getDrivetrain().drive(
-                                new ChassisSpeeds(0, 0,
-                                        -2 * ((container.getDrivetrain().getYaw() - 90 + 180) % 360 / 360) - 0.3));
-                    }
-                }).until(new BooleanSupplier() {
-                    public boolean getAsBoolean() {
-                        return Math.abs(((container.getDrivetrain().getYaw() - 90) % 360) - 180) < 5;
-                    };
-                }),
-                resetRobotPose(container));
+                // new RunCommand(() -> {
+                // if ((container.getDrivetrain().getYaw() - 90) % 360 > 180) {
+                // container.getDrivetrain().drive(
+                // new ChassisSpeeds(0, 0,
+                // 2 * ((container.getDrivetrain().getYaw() - 90 + 180) % 360 / 360) + 0.3));
+                // } else {
+                // container.getDrivetrain().drive(
+                // new ChassisSpeeds(0, 0,
+                // -2 * ((container.getDrivetrain().getYaw() - 90 + 180) % 360 / 360) - 0.3));
+                // }
+                // }).until(new BooleanSupplier() {
+                // public boolean getAsBoolean() {
+                // return Math.abs(((container.getDrivetrain().getYaw() - 90) % 360) - 180) < 5;
+                // };
+                // }),
+                resetRobotPose(container, new Pose2d(0, 0, Rotation2d.fromDegrees(180))));
         return command;
     }
 
@@ -239,7 +239,8 @@ public class AutonomousChooser {
                 gotoSetpoint(container, () -> container.getArmSubsystem().setpointUP()),
                 backWhileOuttake(container),
                 gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK()),
-                mountAndBalence(container));
+                mountAndBalence(container),
+                resetRobotPose(container, new Pose2d(0, 0, Rotation2d.fromDegrees(180))));
         return command;
     }
 
@@ -327,6 +328,11 @@ public class AutonomousChooser {
     public Command resetRobotPose(RobotContainer container) {
         return new InstantCommand(
                 () -> container.getDrivetrain().setPose(new Pose2d(0, 0, Rotation2d.fromDegrees(0))));
+    }
+
+    public Command resetRobotPose(RobotContainer container, Pose2d pose) {
+        return new InstantCommand(
+                () -> container.getDrivetrain().setPose(pose));
     }
 
     // Handler to determine what command was requested for the autonmous routine to

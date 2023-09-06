@@ -15,17 +15,15 @@ import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.numbers.N2;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.util.AdvancedProfiledPIDController;
+import frc.robot.util.AdvancedTrapezoidProfile;
+import frc.robot.util.AdvancedTrapezoidProfile.Constraints;
 
 public class ArmSubsystem extends SubsystemBase {
     /** Creates a new ArmSubsystem. */
@@ -39,16 +37,20 @@ public class ArmSubsystem extends SubsystemBase {
 
     private Setpoint currentState = Constants.ArmSetpoints.LONG_REST;
 
-    private TrapezoidProfile.Constraints elbowConstraints = new TrapezoidProfile.Constraints(
+    private AdvancedTrapezoidProfile.Constraints elbowConstraints = new AdvancedTrapezoidProfile.Constraints(
             ArmConstants.ELBOW_CRUISE,
+            ArmConstants.ELBOW_ACCELERATION,
             ArmConstants.ELBOW_ACCELERATION);
-    private TrapezoidProfile.Constraints shoulderConstraints = new TrapezoidProfile.Constraints(
+    private AdvancedTrapezoidProfile.Constraints shoulderConstraints = new AdvancedTrapezoidProfile.Constraints(
             ArmConstants.SHOULDER_CRUISE,
+            ArmConstants.SHOULDER_ACCELERATION,
             ArmConstants.SHOULDER_ACCELERATION);
 
-    private ProfiledPIDController m_controllerElbow = new ProfiledPIDController(ArmConstants.GAINS_ELBOW_JOINT.kP,
+    private AdvancedProfiledPIDController m_controllerElbow = new AdvancedProfiledPIDController(
+            ArmConstants.GAINS_ELBOW_JOINT.kP,
             ArmConstants.GAINS_ELBOW_JOINT.kI, ArmConstants.GAINS_ELBOW_JOINT.kD, elbowConstraints);
-    private ProfiledPIDController m_controllerShoulder = new ProfiledPIDController(ArmConstants.GAINS_SHOULDER_JOINT.kP,
+    private AdvancedProfiledPIDController m_controllerShoulder = new AdvancedProfiledPIDController(
+            ArmConstants.GAINS_SHOULDER_JOINT.kP,
             ArmConstants.GAINS_SHOULDER_JOINT.kI, ArmConstants.GAINS_SHOULDER_JOINT.kD, shoulderConstraints);
 
     private JointConfig joint_Shoulder = new JointConfig(ArmConstants.SHOULDER_MASS, ArmConstants.SHOULDER_LENGTH,
@@ -71,13 +73,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     private static final int NO_CHANGE = 500;
 
-    protected ArmFeedforward shoulderfeedforwardController = new ArmFeedforward(Constants.Shoulder.KS,
-            Constants.Shoulder.KG,
-            Constants.Shoulder.KV, Constants.Shoulder.KA);
-
-    protected final PIDController shoulderpidController = new PIDController(Constants.Shoulder.KP,
-            Constants.Shoulder.KI,
-            Constants.Shoulder.KD);
+    // protected ArmFeedforward shoulderfeedforwardController = new
+    // ArmFeedforward(0,0,0,0);
 
     public ArmSubsystem(RobotContainer robotContainer) {
         container = robotContainer;
@@ -156,8 +153,8 @@ public class ArmSubsystem extends SubsystemBase {
         m_elbowRightJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
         m_shoulderRightJoint.configFeedbackNotContinuous(true, ArmConstants.TIMEOUT);
 
-        m_controllerShoulder.setTolerance(5, 4);
-        m_controllerElbow.setTolerance(5, 4);
+        m_controllerShoulder.setTolerance(5, 6);
+        m_controllerElbow.setTolerance(5, 6);
 
         // m_elbowLeftJoint.configForwardSoftLimitEnable(false, ArmConstants.TIMEOUT);
         // m_shoulderLeftJoint.configForwardSoftLimitEnable(false,
@@ -263,7 +260,7 @@ public class ArmSubsystem extends SubsystemBase {
         if (m_shoulderSetpoint != setpoint) {
             if (setpoint < 180 && setpoint > -180) {
                 m_shoulderSetpoint = setpoint;
-                m_controllerShoulder.setGoal(new TrapezoidProfile.State(m_shoulderSetpoint, 0.0));
+                m_controllerShoulder.setGoal(new AdvancedTrapezoidProfile.State(m_shoulderSetpoint, 0.0));
                 // System.out.println("Shoulder Change =" + setpoint);
             }
         }
@@ -273,7 +270,7 @@ public class ArmSubsystem extends SubsystemBase {
         if (m_elbowSetpoint != setpoint) {
             if (setpoint < 180 && setpoint > -180) {
                 m_elbowSetpoint = setpoint;
-                m_controllerElbow.setGoal(new TrapezoidProfile.State(m_elbowSetpoint, 0.0));
+                m_controllerElbow.setGoal(new AdvancedTrapezoidProfile.State(m_elbowSetpoint, 0.0));
                 // System.out.println("Elbow Change =" + setpoint);
             }
         }
@@ -333,7 +330,7 @@ public class ArmSubsystem extends SubsystemBase {
         // System.out.println("running elbow="+m_elbowSetpoint);
         m_controllerElbow.setConstraints(new Constraints(elbowConstraints.maxVelocity
         /* + m_shoulderEncoder.getVelocity() */,
-                elbowConstraints.maxAcceleration));
+                elbowConstraints.maxAcceleration, elbowConstraints.maxDecceleration));
         double pidOutput = -m_controllerElbow.calculate(getElbowJointDegrees());
         double ff = -(calculateFeedforwards().get(0, 0)) / 12.0;
         SmartDashboard.putNumber("Elbow ff", ff);

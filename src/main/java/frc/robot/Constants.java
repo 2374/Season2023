@@ -103,8 +103,8 @@ public class Constants {
 
     public static final class ArmConstants {
 
-        public static final double ELBOW_ANGLE_OFFSET = -63;
-        public static final double SHOULDER_ANGLE_OFFSET = 61; // TODO recalibrate
+        public static final double ELBOW_ANGLE_OFFSET = 149;
+        public static final double SHOULDER_ANGLE_OFFSET = 61;
 
         // public static final Gains GAINS_SHOULDER_JOINT = new Gains(0.9, 0.1, 0.01,
         // 0.0, 50);
@@ -159,11 +159,11 @@ public class Constants {
         public final static int TIMEOUT = 10;
 
         // Motion Magic constants
-        public static final double ELBOW_CRUISE = 75.0; // in units/s DEGREES
-        public static final double ELBOW_ACCELERATION = 70.0; // in units/s DEGREES
+        public static final double ELBOW_CRUISE = 80.0; // in units/s DEGREES
+        public static final double ELBOW_ACCELERATION = 50.0; // in units/s DEGREES
 
         public static final double SHOULDER_CRUISE = 35.0; // in units/s DEGREES
-        public static final double SHOULDER_ACCELERATION = 50.0; // in units/s DEGREES
+        public static final double SHOULDER_ACCELERATION = 30.0; // in units/s DEGREES
 
         public static final double DUTY_CYCLE_MIN = 1.0 / 1025.0;
         public static final double DUTY_CYCLE_MAX = 1024.0 / 1025.0;
@@ -176,6 +176,8 @@ public class Constants {
         // public static final Gains GAINS_ELBOW_JOINT = new Gains(0.75, 0.75, 0.0,
         // 0.00, 50);
         public static final Gains GAINS_ELBOW_JOINT = new Gains(0.4, 0.15, 0.0, 0.00, 50);
+        public static final double SHOULDER_DECCELERATION = 15;
+        public static final double ELBOW_DECCELERATION = 25;
     }
 
     public static final class ArmSetpoints {
@@ -194,11 +196,11 @@ public class Constants {
         public static final Setpoint HIGH_SCORE = new Setpoint(HIGH_SCORE_Label, -35, 75, false, -35, 75, false);
 
         public static final Setpoint LONG_REST = new Setpoint(LONG_REST_Label, -158, 128, false, -158, 128, false);
-        public static final Setpoint LONG_MID_SCORE = new Setpoint(LONG_MID_SCORE_Label, -95, 128, false, -45, 90,
+        public static final Setpoint LONG_MID_SCORE = new Setpoint(LONG_MID_SCORE_Label, -100, 138, false, -100, 138,
                 false);
         public static final Setpoint LONG_HIGH_SCORE = new Setpoint(LONG_HIGH_SCORE_Label, -42, 94, false, -53, 103,
                 false);
-        public static final Setpoint LONG_MID_PICKUP = new Setpoint(LONG_MID_PICKUP_Label, -36, 92, false, -45, 90,
+        public static final Setpoint LONG_MID_PICKUP = new Setpoint(LONG_MID_PICKUP_Label, -43, 97, false, -43, 97,
                 false);
         // NOT used anymore
         public static final Setpoint LONG_LOW_SCORE = new Setpoint(LONG_LOW_SCORE_Label, -45, 90, false, -45, 90,

@@ -168,6 +168,8 @@ public class RobotContainer {
             // StopTake
             new Trigger(m_driveController::getStartButton)
                     .onTrue(new InstantCommand(m_ManipulatorSubsystem::stoptake, m_ManipulatorSubsystem));
+            new Trigger(m_operatorController::getBackButton)
+                    .onTrue(new InstantCommand(m_ManipulatorSubsystem::stoptake, m_ManipulatorSubsystem));
         }
         // new Trigger(m_operatorController::getXButton)
         // .onTrue(new InstantCommand(m_ManipulatorSubsystem::rotateLeft,
