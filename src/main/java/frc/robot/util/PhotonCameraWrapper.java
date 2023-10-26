@@ -23,17 +23,13 @@ public class PhotonCameraWrapper {
     public PhotonTrackedTarget lastTarget;
 
     public PhotonCameraWrapper() {
-        final AprilTag tag1 = new AprilTag(1, Constants.TAG_1_POSE3D);
         ArrayList<AprilTag> tagList = new ArrayList<>();
+        final AprilTag tag1 = new AprilTag(1, Constants.TAG_1_POSE3D);
         tagList.add(tag1);
+        final AprilTag tag2 = new AprilTag(2, Constants.TAG_2_POSE3D);
+        tagList.add(tag2);
         fieldLayout = new AprilTagFieldLayout(tagList, Constants.FIELD_LENGTH,
                 Constants.FIELD_WIDTH);
-        try {
-            fieldLayout = AprilTagFieldLayout
-                    .loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         camera = new PhotonCamera(Constants.CAMERA_NAME);
         estimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera,
                 Constants.ROBOT_TO_CAMERA);

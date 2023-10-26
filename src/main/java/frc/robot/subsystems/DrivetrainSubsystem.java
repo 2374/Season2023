@@ -1,6 +1,10 @@
 package frc.robot.subsystems;
 
 import java.util.Map;
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.swervedrivespecialties.swervelib.Mk3ModuleConfiguration;
 import com.swervedrivespecialties.swervelib.Mk3SwerveModuleHelper;
@@ -8,6 +12,8 @@ import com.swervedrivespecialties.swervelib.Mk3SwerveModuleHelper;
 // import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
+
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -55,7 +61,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public static final TrajectoryConstraint[] TRAJECTORY_CONSTRAINTS = {
             new FeedforwardConstraint(1.5, FEEDFORWARD_CONSTANTS.getVelocityConstant(),
                     FEEDFORWARD_CONSTANTS.getAccelerationConstant(), false),
-            new MaxAccelerationConstraint(3.0), new CentripetalAccelerationConstraint(1.0) };
+            new MaxAccelerationConstraint(1.0), new CentripetalAccelerationConstraint(1.0) };
 
     private final HolonomicMotionProfiledTrajectoryFollower follower = new HolonomicMotionProfiledTrajectoryFollower(
             new PidConstants(1, 0.02, .06), new PidConstants(1, 0.02, .06),
@@ -170,38 +176,38 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 container.getChassisSubsystem().isTestRobot() ? BACK_RIGHT_MODULE_STEER_OFFSET_TEST
                         : BACK_RIGHT_MODULE_STEER_OFFSET);
 
+        // estimator = new SwerveDrivePoseEstimator(kinematics, getGyroscopeRotation(),
+        // getSwerveModulePositions(),
+        // new Pose2d()); // Vision (x, y, rotation) std-devs
         estimator = new SwerveDrivePoseEstimator(kinematics, getGyroscopeRotation(), getSwerveModulePositions(),
-                new Pose2d()); // Vision (x, y, rotation) std-devs
-        // estimator = new SwerveDrivePoseEstimator(getGyroscopeRotation(), new
-        // Pose2d(), kinematics,
-        // VecBuilder.fill(0.02, 0.02, 0.01), // estimator values (x, y, rotation)
-        // std-devs
-        // VecBuilder.fill(0.01), // Gyroscope rotation std-dev
-        // VecBuilder.fill(0.1, 0.1, 0.01)); // Vision (x, y, rotation) std-devs
+                new Pose2d(),
+                VecBuilder.fill(0.2, 0.2, 0.2), // Gyroscope rotation std-dev
+                VecBuilder.fill(0.8, 0.8, 0.8)); // Vision (x, y, rotation) std-devs
         motorOutputPercentageLimiterEntry = tab.add("Motor Percentage", 100.0).withWidget(BuiltInWidgets.kNumberSlider)
                 .withProperties(Map.of("min", 0.0, "max", 100.0, "Block increment", 10.0)).withPosition(0, 3)
                 .getEntry();
 
-        tab.addNumber("Odometry X", () -> Units.metersToFeet(getPose().getX()));
-        tab.addNumber("Odometry Y", () -> Units.metersToFeet(getPose().getY()));
-        tab.addNumber("Odometry Angle", () -> getPose().getRotation().getDegrees());
-        tab.addNumber("Velocity X", () -> Units.metersToFeet(getCurrentVelocity().vxMetersPerSecond));
-        tab.addNumber("Trajectory Position X", () -> {
-            var lastState = follower.getLastState();
-            if (lastState == null)
-                return 0;
+        // tab.addNumber("Odometry X", () -> Units.metersToFeet(getPose().getX()));
+        // tab.addNumber("Odometry Y", () -> Units.metersToFeet(getPose().getY()));
+        // tab.addNumber("Odometry Angle", () -> getPose().getRotation().getDegrees());
+        // tab.addNumber("Velocity X", () ->
+        // Units.metersToFeet(getCurrentVelocity().vxMetersPerSecond));
+        // tab.addNumber("Trajectory Position X", () -> {
+        // var lastState = follower.getLastState();
+        // if (lastState == null)
+        // return 0;
 
-            return Units.metersToFeet(lastState.getPathState().getPosition().x);
-        });
+        // return Units.metersToFeet(lastState.getPathState().getPosition().x);
+        // });
 
-        tab.addNumber("Trajectory Velocity X", () -> {
-            var lastState = follower.getLastState();
-            if (lastState == null)
-                return 0;
+        // tab.addNumber("Trajectory Velocity X", () -> {
+        // var lastState = follower.getLastState();
+        // if (lastState == null)
+        // return 0;
 
-            return Units.metersToFeet(lastState.getVelocity());
-        });
-        tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees());
+        // return Units.metersToFeet(lastState.getVelocity());
+        // });
+        // tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees());
     }
 
     public Field2d getField() {
@@ -254,6 +260,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     public void setPose(Pose2d pose) {
         estimator.resetPosition(getGyroscopeRotation(), getSwerveModulePositions(), pose);
+        m_field.getObject("Actual Pos").setPose(getPose());
+        m_field.setRobotPose(estimator.getEstimatedPosition());
     }
 
     /**
@@ -282,19 +290,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // Vision stuff // No Field relative until need to align // do not uncomment
         // Optional<EstimatedRobotPose> result =
         // pcw.getEstimatedGlobalPose(estimator.getEstimatedPosition());
+        // m_field.getObject("Actual Pos").setPose(getPose());
+
+        // m_field.setRobotPose(estimator.getEstimatedPosition());
         // if (result.isPresent()) {
         // EstimatedRobotPose camPose = result.get();
-        // estimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), // REMOVE
-        // THE ROTATION PART
-        // camPose.timestampSeconds);
+        // // estimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), // REMOVE
+        // // THE ROTATION PART
+        // // camPose.timestampSeconds);
         // m_field.getObject("Cam Est Pos").setPose(camPose.estimatedPose.toPose2d());
         // } else {
         // m_field.getObject("Cam Est Pos").setPose(new Pose2d(-100, -100, new
         // Rotation2d()));
         // }
-        // m_field.getObject("Actual Pos").setPose(getPose());
-
-        m_field.setRobotPose(estimator.getEstimatedPosition());
 
         var driveSignalOpt = follower.update(Utilities.poseToRigidTransform(getPose()),
                 new Vector2(currentVelocity.vxMetersPerSecond, currentVelocity.vyMetersPerSecond),
@@ -337,29 +345,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return pcw;
     }
 
-    // public void autoBalenceTick() {
-    // double theta;
-    // double pitch = pigeon.getPitch();
-    // double roll = pigeon.getRoll();
-    // if (Math.abs(roll) <= 2)
-    // if (Math.abs(pitch) <= 2)
-    // theta = Double.NaN;
-    // else
-    // theta = 0;
-    // else if (Math.abs(pitch) <= 2)
-    // theta = 90;
-    // else
-    // theta = Math.toDegrees(Math
-    // .atan(Math.sin(Math.toRadians(roll)) / Math.sin(Math.toRadians(pitch)))) +
-    // 90;
-    // System.out.println("Pitch - " + pitch);
-    // System.out.println("Roll - " + roll);
-    // System.out.println("Theta - " + theta);
-    // SmartDashboard.putNumber("Theta", theta);
-    // if (theta != Double.NaN)
-    // drive(new ChassisSpeeds(Math.sin(Math.toRadians(theta)) * SPEED_MULTIPLIER,
-    // Math.cos(Math.toRadians(theta)) * SPEED_MULTIPLIER, 0));
-    // }
+    public void useVisionPosition() {
+        Optional<EstimatedRobotPose> result = pcw.getEstimatedGlobalPose(estimator.getEstimatedPosition());
+        if (result.isPresent()) {
+            EstimatedRobotPose camPose = result.get();
+            estimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), // REMOVE THE ROTATION PART
+                    camPose.timestampSeconds);
+            System.out.println(estimator.getEstimatedPosition().getX() + " " + estimator.getEstimatedPosition().getY());
+            m_field.getObject("Cam Est Pos").setPose(camPose.estimatedPose.toPose2d());
+        } else {
+            m_field.getObject("Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
+        }
+        m_field.getObject("Actual Pos").setPose(getPose());
+        m_field.setRobotPose(estimator.getEstimatedPosition());
+    }
 
     public void autoBalenceTick() {
         double pitch = pigeon.getPitch();

@@ -81,14 +81,15 @@ public class Constants {
     public static final int MANIPULATOR_DISTANCE_SENSOR_CAN_ID = 18; // the CAN ID for the RIO CAN Bus
 
     // Field measurements
-    public static final double FIELD_LENGTH = Units.feetToMeters(54);
-    public static final double FIELD_WIDTH = Units.feetToMeters(27);
+    public static final double FIELD_LENGTH = 4;
+    public static final double FIELD_WIDTH = 1;
 
     // Vision Stuff
     public static final String CAMERA_NAME = "photonvision";
-    public static final Transform3d ROBOT_TO_CAMERA = new Transform3d(new Translation3d(.3, 0, 0.2),
+    public static final Transform3d ROBOT_TO_CAMERA = new Transform3d(new Translation3d(.375, 0.16, 0.22),
             new Rotation3d(0, 0, 0));
-    public static final Pose3d TAG_1_POSE3D = new Pose3d(FIELD_LENGTH, FIELD_WIDTH / 2, 4.5, new Rotation3d(0, 0, 180));
+    public static final Pose3d TAG_1_POSE3D = new Pose3d(0, FIELD_WIDTH / 2, .33, new Rotation3d(0, 0, 0));
+    public static final Pose3d TAG_2_POSE3D = new Pose3d(FIELD_LENGTH, FIELD_WIDTH / 2, .33, new Rotation3d(0, 0, 180));
     public static final boolean TEST_MODE = false;
     public static final int SHOULDER_ENCODER_ARM_CAN_ID = 25; // the CAN ID for the RIO CAN Bus
     public static final int ELBOW_ENCODER_ARM_CAN_ID = 26; // the CAN ID for the RIO CAN Bus

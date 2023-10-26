@@ -11,14 +11,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
 import frc.robot.commands.*;
+import frc.robot.commands.automationCommands.goToAutoPositionCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.common.control.CentripetalAccelerationConstraint;
-import frc.common.control.FeedforwardConstraint;
-import frc.common.control.MaxAccelerationConstraint;
 import frc.common.control.Path;
 import frc.common.control.SimplePathBuilder;
 import frc.common.control.Trajectory;
-import frc.common.control.TrajectoryConstraint;
 import frc.common.math.Rotation2;
 import frc.common.math.Vector2;
 
@@ -30,175 +27,94 @@ public class AutonomousChooser {
     public AutonomousChooser(AutonomousTrajectories trajectories) {
         this.trajectories = trajectories;
 
-        autonomousModeChooser.setDefaultOption("Test thing", AutonomousMode.ONE_METER_F);
-        autonomousModeChooser.addOption("1 meter B", AutonomousMode.ONE_METER_B);
+        autonomousModeChooser.setDefaultOption("Openhouse Autonomus", AutonomousMode.OPENHOUSE_AUTO);
+        // autonomousModeChooser.addOption("1 meter B", AutonomousMode.ONE_METER_B);
         // autonomousModeChooser.addOption("Figure Eight", AutonomousMode.FIGURE_EIGHT);
-        autonomousModeChooser.addOption("Generic Back", AutonomousMode.GENERIC_BACK);
+        // autonomousModeChooser.addOption("Generic Back", AutonomousMode.GENERIC_BACK);
         autonomousModeChooser.addOption("Generic Score Back", AutonomousMode.GENERIC_SCORE_BACK);
         autonomousModeChooser.addOption("Score Engage", AutonomousMode.SCORE_ENGAGE);
-        autonomousModeChooser.addOption("Red Outer No Charge", AutonomousMode.RED_OUTER_NO_CHARGE);
-        autonomousModeChooser.addOption("Red Outer Charge", AutonomousMode.RED_OUTER_CHARGE);
-        autonomousModeChooser.addOption("Red Middle No Charge", AutonomousMode.RED_MIDDLE_NO_CHARGE);
-        autonomousModeChooser.addOption("Red Middle Charge", AutonomousMode.RED_MIDDLE_CHARGE);
-        autonomousModeChooser.addOption("Red Inner No Charge", AutonomousMode.RED_INNER_NO_CHARGE);
-        autonomousModeChooser.addOption("Red Inner  Charge", AutonomousMode.RED_INNER_CHARGE);
-        autonomousModeChooser.addOption("Blue Outer No Charge", AutonomousMode.BLUE_OUTER_NO_CHARGE);
-        autonomousModeChooser.addOption("Blue Outer Charge", AutonomousMode.BLUE_OUTER_CHARGE);
-        autonomousModeChooser.addOption("Blue Middle No Charge", AutonomousMode.BLUE_MIDDLE_NO_CHARGE);
-        autonomousModeChooser.addOption("Blue Middle Charge", AutonomousMode.BLUE_MIDDLE_CHARGE);
-        autonomousModeChooser.addOption("Blue Inner No Charge", AutonomousMode.BLUE_INNER_NO_CHARGE);
-        autonomousModeChooser.addOption("Blue Inner Charge", AutonomousMode.BLUE_INNER_CHARGE);
+        // autonomousModeChooser.addOption("Red Outer No Charge",
+        // AutonomousMode.RED_OUTER_NO_CHARGE);
+        // autonomousModeChooser.addOption("Red Outer Charge",
+        // AutonomousMode.RED_OUTER_CHARGE);
+        // autonomousModeChooser.addOption("Red Middle No Charge",
+        // AutonomousMode.RED_MIDDLE_NO_CHARGE);
+        // autonomousModeChooser.addOption("Red Middle Charge",
+        // AutonomousMode.RED_MIDDLE_CHARGE);
+        // autonomousModeChooser.addOption("Red Inner No Charge",
+        // AutonomousMode.RED_INNER_NO_CHARGE);
+        // autonomousModeChooser.addOption("Red Inner Charge",
+        // AutonomousMode.RED_INNER_CHARGE);
+        // autonomousModeChooser.addOption("Blue Outer No Charge",
+        // AutonomousMode.BLUE_OUTER_NO_CHARGE);
+        // autonomousModeChooser.addOption("Blue Outer Charge",
+        // AutonomousMode.BLUE_OUTER_CHARGE);
+        // autonomousModeChooser.addOption("Blue Middle No Charge",
+        // AutonomousMode.BLUE_MIDDLE_NO_CHARGE);
+        // autonomousModeChooser.addOption("Blue Middle Charge",
+        // AutonomousMode.BLUE_MIDDLE_CHARGE);
+        // autonomousModeChooser.addOption("Blue Inner No Charge",
+        // AutonomousMode.BLUE_INNER_NO_CHARGE);
+        // autonomousModeChooser.addOption("Blue Inner Charge",
+        // AutonomousMode.BLUE_INNER_CHARGE);
     }
 
     public SendableChooser<AutonomousMode> getModeChooser() {
         return autonomousModeChooser;
     }
 
-    public Command getOneMeterFAuto(RobotContainer container) {
+    public Command getOpenhouseAuto(RobotContainer container) {
         SequentialCommandGroup command = new SequentialCommandGroup();
 
         command.addCommands(
-                // resetRobotPose(container, trajectories.getOneMeterF()),
-                // follow(container, trajectories.getOneMeterF())
-                /*
-                 * IDEA:
-                 * score, go back, wait till > 10, wait till < 2, wait .2, go forward,
-                 * wait till > 10, wait .1, slow down, wait till < 8, balence
-                 */
-                // BALENCING
-                // new InstantCommand(() -> container.getDrivetrain().drive(new
-                // ChassisSpeeds(-1.6, 0, 0)),
-                // container.getDrivetrain()),
-                // new WaitUntilCommand(new BooleanSupplier() {
-                // public boolean getAsBoolean() {
-                // return container.getDrivetrain().getPitch() < -10;
-                // };
-                // }),
-                // new WaitCommand(.1),
-                // new InstantCommand(() -> container.getDrivetrain().drive(new
-                // ChassisSpeeds(-0.6, 0, 0)),
-                // container.getDrivetrain()),
-                // new WaitUntilCommand(new BooleanSupplier() {
-                // public boolean getAsBoolean() {
-                // return container.getDrivetrain().getPitch() > -8;
-                // };
-                // }),
-                // new RunCommand(() -> container.getDrivetrain().autoBalenceTick(),
-                // container.getDrivetrain())
-                mountAndBalence(container)
-
-        // ALIGNING
-        // new RunCommand(() -> {
-        // if ((container.getDrivetrain().getYaw() - 90) % 360 > 0) {
-        // container.getDrivetrain().drive(
-        // new ChassisSpeeds(0, 0,
-        // 2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) + 0.2));
-        // } else {
-        // container.getDrivetrain().drive(
-        // new ChassisSpeeds(0, 0,
-        // -2 * ((container.getDrivetrain().getYaw() - 90) % 360 / 360) - 0.2));
-        // }
-        // }).until(new BooleanSupplier() {
-        // public boolean getAsBoolean() {
-        // if (Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5) {
-        // System.out.println(true);
-        // }
-        // return Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5;
-        // };
-        // })
-
-        // SCORING
-        // resetRobotPose(container),
+                // TODO Align with Apriltags (at position 1 pickup)
+                resetRobotPose(container, new Pose2d(2, .5, new Rotation2d(Math.PI))),
+                visionReset(container),
+                goToAutoPosition(container, 1),
+                gotoSetpoint(container, () -> container.getArmSubsystem().setpointUP()),
+                backWhileOuttake(container)
+        // TODO forwardWhileIntake
+        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK())
+        // TODO backward
+        // TODO Rotate 180 degrees
+        // TODO Align with Apriltags (at position 2 deposit)
         // gotoSetpoint(container, () -> container.getArmSubsystem().setpointUP()),
         // backWhileOuttake(container),
+        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK()),
+        // TODO Rotate 180 degrees
+        // TODO Align with Apriltags (at position 1 pickup)
+        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointRIGHT()),
+        // TODO forwardWhileIntake
         // gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK())
+        // TODO backward
+        // TODO Rotate 180 degrees
+        // TODO Align with Apriltags (at position 2 deposit)
+        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointRIGHT()),
+        // backWhileOuttake(container),
+        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK()),
 
-        // followLine(container, 1, 0, 90)
+        // TODO Align with Apriltags (at position 2 pickup)
+        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointUP()),
+        // TODO forwardWhileIntake
+        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK())
+        // TODO backward
+        // TODO Rotate 180 degrees
+        // TODO Align with Apriltags (at position 1 deposit)
+        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointUP()),
+        // backWhileOuttake(container),
+        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK()),
+        // TODO Rotate 180 degrees
+        // TODO Align with Apriltags (at position 2 pickup)
+        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointRIGHT()),
+        // TODO forwardWhileIntake
+        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK())
+        // TODO backward
+        // TODO Rotate 180 degrees
+        // TODO Align with Apriltags (at position 1 deposit)
+        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointRIGHT()),
+        // backWhileOuttake(container),
+        // gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK()),
         );
-
-        return command;
-    }
-
-    public Command getOneMeterBAuto(RobotContainer container) {
-        SequentialCommandGroup command = new SequentialCommandGroup();
-
-        command.addCommands(
-                resetRobotPose(container, trajectories.getOneMeterB()),
-                follow(container, trajectories.getOneMeterB()));
-
-        return command;
-    }
-
-    public Command getFigureEightAuto(RobotContainer container) {
-        SequentialCommandGroup command = new SequentialCommandGroup();
-
-        command.addCommands(
-                resetRobotPose(container, trajectories.getFigureEight()),
-                follow(container, trajectories.getFigureEight()));
-
-        return command;
-    }
-
-    public Command getRedOuterNoChargeCommand(RobotContainer container) {
-        SequentialCommandGroup command = new SequentialCommandGroup();
-
-        // assumes robot starts in front of the outer scoring poles
-        // score the cone on the top row
-        // move the arm to rest while moving to pickup the cube 4.7 meters toward the
-        // middle of the field
-        // intake the cone from the ground
-        // move back toward the scoring area and slide toward the middle to align to
-        // score
-        // score the top row of the 2nd cone in from the outer wall
-        // topConeScore(command, container);
-
-        return command;
-    }
-
-    public Command getRedOuterChargeCommand(RobotContainer container) {
-        SequentialCommandGroup command = new SequentialCommandGroup();
-
-        command.addCommands(
-                resetRobotPose(container),
-                gotoSetpoint(container, () -> container.getArmSubsystem().setpointUP()),
-                backWhileOuttake(container),
-                gotoSetpoint(container, () -> container.getArmSubsystem().setpointBACK()));
-
-        // assumes robot starts in front of the outer scoring poles
-        // score the cone on the top row
-        // move 4.7 meters toward the center of the field so as to clear the charge
-        // station
-        // move 2 meters toward the middle of the charge station to align for climbing
-        // move 1.5 meeters to get onto charge station
-        // auto balance
-
-        return command;
-    }
-
-    public Command getGenericBackAuto(RobotContainer container) {
-        SequentialCommandGroup command = new SequentialCommandGroup();
-
-        command.addCommands(
-                resetRobotPose(container),
-                followLine(container, -2, 0),
-                new RunCommand(() -> {
-                    if ((container.getDrivetrain().getYaw() - 90) % 360 > 180) {
-                        container.getDrivetrain().drive(
-                                new ChassisSpeeds(0, 0,
-                                        2 * ((container.getDrivetrain().getYaw() - 90 + 180) % 360 / 360) + 0.2));
-                    } else {
-                        container.getDrivetrain().drive(
-                                new ChassisSpeeds(0, 0,
-                                        -2 * ((container.getDrivetrain().getYaw() - 90 + 180) % 360 / 360) - 0.2));
-                    }
-                }).until(new BooleanSupplier() {
-                    public boolean getAsBoolean() {
-                        if (Math.abs(((container.getDrivetrain().getYaw() - 90) % 360) - 180) < 5) {
-                            System.out.println(true);
-                        }
-                        return Math.abs((container.getDrivetrain().getYaw() - 90) % 360) < 5;
-                    };
-                }));
 
         return command;
     }
@@ -243,24 +159,13 @@ public class AutonomousChooser {
         return command;
     }
 
-    // private void scoreTop(SequentialCommandGroup command, RobotContainer
-    // container) {
-    // command.addCommands(new ScoreTopCommand(container.getArmSubsystem(),
-    // container.getManipulatorSubsystem()));
-    // }
+    private Command goToAutoPosition(RobotContainer container, int number) {
+        return new goToAutoPositionCommand(container.getDrivetrain(), number);
+    }
 
-    // private void fourPointSevenMeterWithFrontArmMovement(SequentialCommandGroup
-    // command, RobotContainer container) {
-    // command.addCommands(follow(container, trajectories.getFourPointSevenMeterB())
-    // .alongWith(new AlignArmFrontGroundCommand(container.getArmSubsystem())));
-    // }
-
-    // private void intakeGroundThenRest(SequentialCommandGroup command,
-    // RobotContainer container) {
-    // command.addCommands(new AutoHorizontalIntake(container.getDrivetrain(),
-    // container.getArmSubsystem(),
-    // container.getManipulatorSubsystem(), true));
-    // }
+    private Command visionReset(RobotContainer container) {
+        return new WaitCommand(1.5).andThen(new InstantCommand(() -> container.getDrivetrain().useVisionPosition()));
+    }
 
     private Command backWhileOuttake(RobotContainer container) {
         return new ParallelCommandGroup(new InstantCommand(() -> container.getManipulatorSubsystem().outtake(),
@@ -324,6 +229,10 @@ public class AutonomousChooser {
                 start.getPosition().y, new Rotation2d(start.getRotation().toRadians()))));
     }
 
+    public Command resetRobotPose(RobotContainer container, Pose2d pose) {
+        return new InstantCommand(() -> container.getDrivetrain().setPose(pose));
+    }
+
     public Command resetRobotPose(RobotContainer container) {
         return new InstantCommand(
                 () -> container.getDrivetrain().setPose(new Pose2d(0, 0, Rotation2d.fromDegrees(0))));
@@ -333,42 +242,12 @@ public class AutonomousChooser {
     // execute
     public Command getCommand(RobotContainer container) {
         switch (autonomousModeChooser.getSelected()) {
-            case ONE_METER_F:
-                return getOneMeterFAuto(container);
-            case ONE_METER_B:
-                return getOneMeterBAuto(container);
-            case FIGURE_EIGHT:
-                return getFigureEightAuto(container);
-            case GENERIC_BACK:
-                return getGenericBackAuto(container);
+            case OPENHOUSE_AUTO:
+                return getOpenhouseAuto(container);
             case GENERIC_SCORE_BACK:
                 return getGenericScoreBackAuto(container);
             case SCORE_ENGAGE:
                 return getScoreEngageAuto(container);
-            case RED_OUTER_NO_CHARGE:
-                return getRedOuterNoChargeCommand(container);
-            case RED_OUTER_CHARGE:
-                return getRedOuterChargeCommand(container);
-            case RED_MIDDLE_NO_CHARGE:
-                return getRedOuterNoChargeCommand(container);
-            case RED_MIDDLE_CHARGE:
-                return getRedOuterChargeCommand(container);
-            case RED_INNER_NO_CHARGE:
-                return getRedOuterNoChargeCommand(container);
-            case RED_INNER_CHARGE:
-                return getRedOuterChargeCommand(container);
-            case BLUE_OUTER_NO_CHARGE:
-                return getRedOuterChargeCommand(container);
-            case BLUE_OUTER_CHARGE:
-                return getRedOuterChargeCommand(container);
-            case BLUE_MIDDLE_NO_CHARGE:
-                return getRedOuterNoChargeCommand(container);
-            case BLUE_MIDDLE_CHARGE:
-                return getRedOuterChargeCommand(container);
-            case BLUE_INNER_NO_CHARGE:
-                return getRedOuterNoChargeCommand(container);
-            case BLUE_INNER_CHARGE:
-                return getRedOuterChargeCommand(container);
             default:
                 break;
         }
@@ -376,10 +255,6 @@ public class AutonomousChooser {
     }
 
     private enum AutonomousMode {
-        ONE_METER_F, ONE_METER_B, FIGURE_EIGHT, GENERIC_BACK, GENERIC_SCORE_BACK, RED_OUTER_NO_CHARGE, RED_OUTER_CHARGE,
-        RED_MIDDLE_NO_CHARGE,
-        RED_MIDDLE_CHARGE, RED_INNER_NO_CHARGE, RED_INNER_CHARGE,
-        BLUE_OUTER_NO_CHARGE, BLUE_OUTER_CHARGE, BLUE_MIDDLE_NO_CHARGE, BLUE_MIDDLE_CHARGE, BLUE_INNER_NO_CHARGE,
-        BLUE_INNER_CHARGE, SCORE_ENGAGE
+        OPENHOUSE_AUTO, GENERIC_SCORE_BACK, SCORE_ENGAGE
     }
 }

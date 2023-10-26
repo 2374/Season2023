@@ -118,10 +118,11 @@ public class RobotContainer {
             tab.addNumber("Elbow Speed", () -> m_ArmSubsystem.getElbowSpeed());
             tab.addNumber("TOF Distance", () -> m_ManipulatorSubsystem.getDistance());
             tab.addNumber("Shoulder Velocity", () -> m_ArmSubsystem.getShoulderJointSpeed());
-            tab.add(CameraServer.startAutomaticCapture("Camera", 0)).withSize(3, 3).withPosition(6, 0);
+            // tab.add(CameraServer.startAutomaticCapture("Camera", 0)).withSize(3,
+            // 3).withPosition(6, 0);
         }
         tab.add("Autonomous Mode", getAutonomousChooser().getModeChooser()).withSize(2, 1).withPosition(1, 0);
-        // tab.add(m_drivetrainSubsystem.getField()).withSize(3, 2).withPosition(0, 1);
+        tab.add(m_DrivetrainSubsystem.getField()).withSize(3, 2).withPosition(0, 1);
         tab.addBoolean("SLOW", () -> isSlow()).withPosition(1, 1);
         tab.addBoolean("ROLL", () -> isRoll()).withPosition(2, 1);
         // tab.addBoolean("Auto", () ->
@@ -185,6 +186,8 @@ public class RobotContainer {
         // new Trigger(m_controller::getBButton)
         // .onTrue(new InstantCommand(() ->
         // m_ArmSubsystem.updateAllSetpoints(ArmSetpoints.MID_NODE)));
+        new Trigger(m_driveController::getAButton).debounce(0.5, DebounceType.kFalling)
+                .onTrue(new InstantCommand(() -> m_DrivetrainSubsystem.useVisionPosition()));
     }
 
     /**
